@@ -253,6 +253,11 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
 .stat .num{font-family:var(--f-display);font-weight:500;font-size:clamp(2.8rem,6vw,4.4rem);line-height:1;letter-spacing:-.03em}
 .stat .num .u{color:var(--signal);font-size:.55em;vertical-align:.18em;margin-left:.04em}
 .stat .lbl{margin-top:14px;color:var(--muted);font-size:.95rem;max-width:30ch}
+.ownline{padding-block:clamp(54px,8vw,92px);max-width:1000px}
+.ownline .eyebrow{margin-bottom:24px}
+.ownline p{font-family:var(--f-display);font-weight:500;font-size:clamp(1.55rem,3.5vw,2.55rem);
+  line-height:1.16;letter-spacing:-.012em;color:var(--paper);margin:0}
+.ownline p .it{font-style:italic;color:var(--signal)}
 
 /* ============================================================
    CONTACT
@@ -402,7 +407,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="wrap">
       <div class="hero-inner">
         <span class="eyebrow" data-boot>Next Level Management Advisors</span>
-        <h1 data-boot>Systems that<br><span class="grad">do the work.</span></h1>
+        <h1 data-boot>Systems that<br><span class="it">do the work.</span></h1>
         <p class="lede" data-boot>NLMA designs and builds custom software and AI&nbsp;automation that turns operational complexity into systems that run themselves, for commercial and government teams.</p>
         <div class="hero-cta" data-boot>
           <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
@@ -413,7 +418,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
           <span class="sep"></span>
           <span><b>40+</b> services</span>
           <span class="sep"></span>
-          <span>self-hosted on owned infrastructure</span>
+          <span>shipping to production daily</span>
         </div>
       </div>
     </div>
@@ -500,7 +505,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div class="section-head">
         <span class="eyebrow reveal">The proof</span>
         <h2 class="reveal" data-d="1">Software we don't just pitch.<br>We run it in production.</h2>
-        <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates: dozens of self-hosted services, AI agents, and integrations doing real work every day. This is what "we'll build it" actually looks like.</p>
+        <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates &mdash; dozens of services, AI agents, and integrations spanning finance, records, documents, comms, and operations, doing real work every day. This is what "we'll build it" actually looks like.</p>
       </div>
       <div class="sys-grid">
         <article class="syscard reveal" data-d="1">
@@ -553,19 +558,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <!-- ===================== STATS ===================== -->
   <section class="stats">
     <div class="wrap">
-      <div class="stat-row">
-        <div class="stat reveal" data-d="1">
-          <div class="num"><span data-count="40">0</span><span class="u">+</span></div>
-          <div class="lbl">production services running on owned infrastructure</div>
-        </div>
-        <div class="stat reveal" data-d="2">
-          <div class="num"><span data-count="25">0</span><span class="u">+</span></div>
-          <div class="lbl">third-party platforms integrated into one system</div>
-        </div>
-        <div class="stat reveal" data-d="3">
-          <div class="num"><span data-count="100">0</span><span class="u">%</span></div>
-          <div class="lbl">of what we build is yours to keep, no lock-in</div>
-        </div>
+      <div class="ownline reveal">
+        <span class="eyebrow">No lock-in</span>
+        <p>Everything we build is <span class="it">yours to keep</span> &mdash; the code, the data, the infrastructure it runs on. We operate it as long as it's useful, then hand you the keys.</p>
       </div>
     </div>
   </section>
@@ -585,7 +580,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <span class="k">Phone</span>
             <a href="tel:+15712002032">+1 571 200 2032<span class="u"></span></a>
           </div>
-          <p class="meta">Next Level Management Advisors, LLC<br>Serving commercial &amp; government workflows</p>
+          <p class="meta">Next Level Management Advisors, LLC<br>Serving commercial &amp; government workflows<br>Your data stays on infrastructure you own &mdash; never shared with third parties.</p>
         </div>
         <div class="form">
           <div class="fhead">Tell us what you're building</div>
@@ -746,12 +741,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   // normalized layout (x,y in 0..1 of canvas), right-biased so headline stays clear
   var NODES=[
     {x:.635,y:.44,r:8,core:true,label:'agent'},
-    {x:.845,y:.215,r:3.4,label:'guesty'},
-    {x:.905,y:.45,r:3.4,label:'doorloop'},
+    {x:.845,y:.215,r:3.4,label:'quickbooks'},
+    {x:.905,y:.45,r:3.4,label:'stripe'},
     {x:.825,y:.70,r:3.4,label:'baselane'},
     {x:.655,y:.745,r:3.4,label:'attom'},
     {x:.495,y:.625,r:3.4,label:'sign'},
-    {x:.50,y:.295,r:3.4,label:'vacourts'},
+    {x:.50,y:.295,r:3.4,label:'guesty'},
     {x:.61,y:.205,r:3.0,label:'twilio'},
     {x:.915,y:.625,r:3.0,label:'n8n'},
     {x:.755,y:.34,r:2.4},
