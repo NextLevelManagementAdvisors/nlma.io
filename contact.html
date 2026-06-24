@@ -128,6 +128,12 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
 .form .status{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;line-height:1.5;min-height:1.1em;margin:8px 0 0}
 .form .status.ok{color:var(--signal)}
 .form .status.err{color:#e89a86}
+.vcard-save{margin-top:30px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.vcard-btn{padding:.72em 1.2em}
+.vcard-btn svg{width:16px;height:16px}
+.vcard-qr{display:flex;align-items:center;gap:12px}
+.vcard-qr img{width:104px;height:104px;border-radius:12px;border:1px solid var(--line-2);background:var(--paper);padding:7px;flex:none}
+.vcard-qr span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);line-height:1.5}
 .contact-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;
   display:grid;grid-template-columns:1.05fr .95fr;
   background:linear-gradient(135deg,rgba(46,106,85,.14),rgba(15,61,86,.18));}
@@ -267,6 +273,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
           <a href="mailto:info@nlma.io">info@nlma.io<span class="u"></span></a>
           <span class="k" style="margin-top:20px">Phone</span>
           <a href="tel:+15712002032">+1 571 200 2032<span class="u"></span></a>
+        </div>
+        <div class="vcard-save">
+          <a class="btn btn-ghost vcard-btn" href="/nlma.vcf" download="Forrest Surprenant - NLMA.vcf" aria-label="Download contact card to your phone">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Save my contact
+          </a>
+          <div class="vcard-qr">
+            <img src="/contact-qr.png" width="104" height="104" alt="QR code — scan to save Forrest Surprenant's contact" loading="lazy" />
+            <span>Scan to<br>save</span>
+          </div>
         </div>
         <div class="reach meta">
           Virginia, USA &nbsp;&middot;&nbsp; Available Mon&ndash;Fri<br>

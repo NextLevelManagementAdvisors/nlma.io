@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Surprenant;Forrest;;;
+FN:Forrest Surprenant
+ORG:Next Level Management Advisors, LLC
+TITLE:Managing Partner
+TEL;TYPE=CELL,VOICE:+15712002032
+EMAIL;TYPE=WORK,INTERNET:forrest@nlma.io
+URL:https://nlma.io
+ADR;TYPE=WORK:;;;;Virginia;;;USA
+NOTE:Custom software & AI automation that turns operational complexity into systems that run themselves.
+REV:2026-06-24T00:00:00Z
+END:VCARD
