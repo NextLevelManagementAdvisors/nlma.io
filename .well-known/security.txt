@@ -1,0 +1,4 @@
+Contact: mailto:info@nlma.io
+Expires: 2027-12-31T23:59:59Z
+Preferred-Languages: en
+Canonical: https://nlma.io/.well-known/security.txt

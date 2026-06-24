@@ -1,0 +1,14 @@
+{
+  "name": "NLMA · Next Level Management Advisors",
+  "short_name": "NLMA",
+  "description": "Custom software and AI automation that turns operational complexity into systems that run themselves.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1418",
+  "theme_color": "#0B1418",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any maskable" }
+  ]
+}

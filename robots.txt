@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nlma.io/sitemap.xml
