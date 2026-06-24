@@ -289,6 +289,11 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--signal);background:rgba(79,194,149,.06)}
 .field input::placeholder,.field textarea::placeholder{color:var(--faint)}
 .form .btn-primary{justify-content:center;margin-top:6px}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .status{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;line-height:1.5;min-height:1.1em;margin:0}
+.form .status.ok{color:var(--signal)}
+.form .status.err{color:#e89a86}
+.btn[aria-busy="true"]{opacity:.65;pointer-events:none}
 
 /* ============================================================
    FOOTER
@@ -582,22 +587,27 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
           </div>
           <p class="meta">Next Level Management Advisors, LLC<br>Serving commercial &amp; government workflows<br>Your data stays on infrastructure you own &mdash; never shared with third parties.</p>
         </div>
-        <div class="form">
+        <form class="form" id="contactForm" novalidate>
           <div class="fhead">Tell us what you're building</div>
           <div class="field">
             <label for="f-name">Name</label>
-            <input id="f-name" type="text" placeholder="Your name" autocomplete="name" />
+            <input id="f-name" name="name" type="text" placeholder="Your name" autocomplete="name" required />
           </div>
           <div class="field">
             <label for="f-email">Email</label>
-            <input id="f-email" type="email" placeholder="you@company.com" autocomplete="email" />
+            <input id="f-email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required />
           </div>
           <div class="field">
             <label for="f-msg">What needs a system?</label>
-            <textarea id="f-msg" rows="4" placeholder="The operation, the friction, what you wish ran itself…"></textarea>
+            <textarea id="f-msg" name="message" rows="4" placeholder="The operation, the friction, what you wish ran itself…" required></textarea>
           </div>
-          <button class="btn btn-primary" id="composeBtn"><span class="dot"></span>Send enquiry</button>
-        </div>
+          <div class="hp" aria-hidden="true">
+            <label for="f-company">Company website</label>
+            <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+          <button class="btn btn-primary" id="sendBtn" type="submit"><span class="dot"></span>Send enquiry</button>
+          <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
   </section>
@@ -714,16 +724,34 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 })();
 
 /* ============================================================
-   4. CONTACT FORM → mailto compose (no backend)
+   4. CONTACT FORM → n8n webhook (POST JSON)
    ============================================================ */
 (function(){
-  var btn=document.getElementById('composeBtn'); if(!btn)return;
-  btn.addEventListener('click',function(){
-    var n=(document.getElementById('f-name').value||'').trim();
-    var e=(document.getElementById('f-email').value||'').trim();
-    var m=(document.getElementById('f-msg').value||'').trim();
-    var body='Name: '+n+'\nEmail: '+e+'\n\n'+m;
-    window.location.href='mailto:info@nlma.io?subject='+encodeURIComponent('New project enquiry'+(n?': '+n:''))+'&body='+encodeURIComponent(body);
+  var form=document.getElementById('contactForm'); if(!form)return;
+  var btn=document.getElementById('sendBtn');
+  var statusEl=document.getElementById('formStatus');
+  var ENDPOINT='https://n8n.nlma.io/webhook/nlma-contact';
+  var IDLE='<span class="dot"></span>Send enquiry';
+  var sending=false;
+  function setStatus(msg,kind){ statusEl.textContent=msg||''; statusEl.className='status'+(kind?' '+kind:''); }
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    if(sending)return;
+    var name=(document.getElementById('f-name').value||'').trim();
+    var email=(document.getElementById('f-email').value||'').trim();
+    var message=(document.getElementById('f-msg').value||'').trim();
+    var company=(document.getElementById('f-company').value||'');
+    if(!name||!email||!message){ setStatus('Add your name, email, and a note so we can reply.','err'); return; }
+    sending=true; btn.setAttribute('aria-busy','true'); btn.innerHTML='<span class="dot"></span>Sending…'; setStatus('');
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:name,email:email,message:message,company_website:company,source:'nlma.io'})})
+      .then(function(r){ return r.json().catch(function(){return {ok:r.ok};}); })
+      .then(function(d){
+        if(d&&d.ok){ form.reset(); setStatus('Sent. We’ll reply within a business day.','ok'); btn.innerHTML='<span class="dot"></span>Sent ✓'; }
+        else { throw new Error('rejected'); }
+      })
+      .catch(function(){ setStatus('Couldn’t send right now. Email info@nlma.io and we’ll pick it up.','err'); btn.innerHTML=IDLE; })
+      .finally(function(){ sending=false; btn.removeAttribute('aria-busy'); });
   });
 })();
 
