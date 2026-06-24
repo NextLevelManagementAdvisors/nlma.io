@@ -12,20 +12,23 @@
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Systems that do the work · NLMA" />
-<meta name="twitter:description" content="Custom software and AI automation that turns operational complexity into systems that run themselves." />
+<meta name="twitter:title" content="Tools we run · NLMA" />
+<meta name="twitter:description" content="The platforms and programs NLMA uses in production — with referral offers." />
 <meta name="twitter:image" content="https://nlma.io/og-image.png" />
-<title>Contact · NLMA · Next Level Management Advisors</title>
-<meta name="description" content="Start a project with NLMA. Reach us at info@nlma.io or +1 571 200 2032." />
-<link rel="canonical" href="https://nlma.io/contact" />
+<title>Referrals · NLMA · Next Level Management Advisors</title>
+<meta name="description" content="The tools, platforms, and programs NLMA uses in production every day — with referral links and offers for the ones we recommend." />
+<link rel="canonical" href="https://nlma.io/referrals" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NLMA · Next Level Management Advisors" />
+<meta property="og:title" content="Referrals · NLMA" />
+<meta property="og:description" content="The tools and programs we actually run in production — with referral offers." />
+<meta property="og:url" content="https://nlma.io/referrals" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
 
-/* ============================================================
-   TOKENS
-   ============================================================ */
+/* ============================================================ TOKENS ============================================================ */
 :root{
   --ink:#0B1418;--ink-2:#0E1E28;--ink-3:#10212c;
   --ocean:#0F3D56;--pine:#2E6A55;--signal:#4FC295;--signal-dim:#2E6A55;
@@ -101,62 +104,13 @@ body.menu-open .menu-toggle span::before{transform:rotate(45deg)}
 body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5px)}
 /* SECTION RHYTHM */
 .section{padding-block:clamp(84px,11vw,140px);position:relative}
-.section-head{max-width:760px;margin-bottom:clamp(40px,6vw,72px)}
+.section-head{max-width:760px;margin-bottom:clamp(36px,5vw,56px)}
 .section-head h2{margin-top:.5em}
 .section-head .lede{margin-top:1.1em}
-/* CAP GRID */
-.cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.cap{position:relative;border:1px solid var(--line);border-radius:var(--r);
-  padding:34px 30px 30px;background:linear-gradient(180deg,rgba(236,243,239,.025),rgba(236,243,239,0));
-  overflow:hidden;transition:transform .4s var(--ease),border-color .4s,background .4s;}
-.cap::before{content:"";position:absolute;inset:-40% 50% 50% -40%;
-  background:radial-gradient(circle,rgba(79,194,149,.16),transparent 70%);opacity:0;transition:opacity .5s var(--ease)}
-.cap:hover{transform:translateY(-4px);border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.04),rgba(236,243,239,0))}
-.cap:hover::before{opacity:1}
-.cap .key{font-family:var(--f-mono);font-size:12px;color:var(--signal);letter-spacing:.14em;text-transform:uppercase}
-.cap h3{margin:16px 0 12px}
-.cap p{color:var(--muted);font-size:.98rem;margin:0;position:relative}
-.cap .mark{position:absolute;top:28px;right:28px;color:var(--faint);transition:color .4s,transform .4s var(--ease)}
-.cap:hover .mark{color:var(--signal);transform:translate(2px,-2px)}
 /* CHIPS */
 .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
 .chip{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding:5px 10px;border-radius:7px;
-  border:1px solid var(--line);background:rgba(11,20,24,.4);transition:.3s var(--ease);cursor:default;white-space:nowrap}
-.chip:hover{color:var(--paper);border-color:var(--signal);background:rgba(79,194,149,.08);transform:translateY(-2px)}
-/* CONTACT / FORM */
-.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-.form .status{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;line-height:1.5;min-height:1.1em;margin:8px 0 0}
-.form .status.ok{color:var(--signal)}
-.form .status.err{color:#e89a86}
-.vcard-save{margin-top:30px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-.vcard-btn{padding:.72em 1.2em}
-.vcard-btn svg{width:16px;height:16px}
-.vcard-qr{display:flex;align-items:center;gap:12px}
-.vcard-qr img{width:104px;height:104px;border-radius:12px;border:1px solid var(--line-2);background:var(--paper);padding:7px;flex:none}
-.vcard-qr span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);line-height:1.5}
-.contact-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;
-  display:grid;grid-template-columns:1.05fr .95fr;
-  background:linear-gradient(135deg,rgba(46,106,85,.14),rgba(15,61,86,.18));}
-.contact-left{padding:clamp(38px,5vw,60px)}
-.contact-left h2{font-size:clamp(2rem,4.4vw,3.1rem)}
-.contact-left h2 .it{font-style:italic}
-.reach{margin-top:34px;display:flex;flex-direction:column;gap:6px}
-.reach a{font-family:var(--f-display);font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:500;
-  display:inline-flex;align-items:center;gap:.4em;width:fit-content;position:relative}
-.reach a .u{position:absolute;left:0;bottom:1px;height:2px;width:0;background:var(--signal);transition:width .35s var(--ease)}
-.reach a:hover .u{width:100%}
-.reach .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--faint);display:block;margin-bottom:4px}
-.reach .meta{margin-top:30px;font-family:var(--f-mono);font-size:12px;color:var(--faint);letter-spacing:.04em;line-height:1.8}
-.form{padding:clamp(34px,4.5vw,52px);background:rgba(8,16,20,.5);border-left:1px solid var(--line);display:flex;flex-direction:column;gap:16px}
-.form .fhead{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.field{display:flex;flex-direction:column;gap:7px}
-.field label{font-size:13px;color:var(--muted)}
-.field input,.field textarea{background:rgba(236,243,239,.04);border:1px solid var(--line-2);border-radius:10px;color:var(--paper);
-  padding:12px 14px;font:inherit;font-size:15px;transition:border-color .3s,background .3s;resize:vertical}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--signal);background:rgba(79,194,149,.06)}
-.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
-.form .btn-primary{justify-content:center;margin-top:6px}
+  border:1px solid var(--line);background:rgba(11,20,24,.4)}
 /* FOOTER */
 .foot{border-top:1px solid var(--line);padding-block:60px 40px}
 .foot-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px;padding-bottom:46px;border-bottom:1px solid var(--line)}
@@ -174,13 +128,9 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
 /* REVEAL */
 .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal.in{opacity:1;transform:none}
-.reveal[data-d="1"]{transition-delay:.08s}
-.reveal[data-d="2"]{transition-delay:.16s}
-.reveal[data-d="3"]{transition-delay:.24s}
-.reveal[data-d="4"]{transition-delay:.32s}
-.reveal[data-d="5"]{transition-delay:.40s}
-a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
-  outline:2px solid var(--signal);outline-offset:3px;border-radius:6px}
+.reveal[data-d="1"]{transition-delay:.06s}.reveal[data-d="2"]{transition-delay:.12s}
+.reveal[data-d="3"]{transition-delay:.18s}.reveal[data-d="4"]{transition-delay:.24s}
+a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:6px}
 @media (max-width:960px){
   .nav,.head-cta .btn{display:none}
   .menu-toggle{display:flex}
@@ -193,30 +143,56 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .mobile-nav a{font-family:var(--f-display);font-size:1.7rem;color:var(--paper);padding:14px 0;border-bottom:1px solid var(--line)}
   .mobile-nav .btn{margin-top:22px;justify-content:center;font-size:16px;padding:1em}
   .mobile-nav .btn-primary{color:#0A1216}
-  .cap-grid{grid-template-columns:1fr}
-  .contact-panel{grid-template-columns:1fr}
-  .form{border-left:none;border-top:1px solid var(--line)}
   .foot-top{grid-template-columns:1fr 1fr}
   .foot .brandcol{grid-column:1 / -1}
 }
-@media (max-width:560px){
-  .foot-top{grid-template-columns:1fr}
-}
+@media (max-width:560px){.foot-top{grid-template-columns:1fr}}
 .mobile-nav{display:none}
 @media (max-width:960px){.mobile-nav{display:flex}}
-@media (prefers-reduced-motion:reduce){
-  .reveal{opacity:1;transform:none;transition:none}
-  .foot-bot .sysline i{animation:none}
-}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.foot-bot .sysline i{animation:none}}
 
-
-.page-hero{padding-top:160px;padding-bottom:60px}
+/* ===== PAGE HERO ===== */
+.page-hero{padding-top:160px;padding-bottom:54px}
 .page-hero .eyebrow{margin-bottom:28px}
-.page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem)}
+.page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem);max-width:16ch}
 .page-hero h1 .it{font-style:italic;color:var(--signal)}
-.page-hero .lede{margin-top:28px;max-width:54ch}
-.contact-section{padding-block:0 clamp(80px,10vw,140px)}
-
+.page-hero .lede{margin-top:28px;max-width:56ch}
+/* disclosure */
+.disclosure{border:1px solid var(--line);border-radius:var(--r);padding:18px 22px;margin-top:34px;max-width:760px;
+  background:var(--grad-soft);display:flex;gap:14px;align-items:flex-start}
+.disclosure svg{width:18px;height:18px;color:var(--signal);flex:none;margin-top:2px}
+.disclosure p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+/* ===== CATEGORY GROUPS + VENDOR CARDS ===== */
+.ref-group{margin-top:clamp(40px,6vw,64px)}
+.ref-group > .eyebrow{margin-bottom:22px}
+.ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ref{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);
+  padding:26px 24px 22px;background:linear-gradient(180deg,rgba(236,243,239,.025),rgba(236,243,239,0));
+  overflow:hidden;transition:transform .4s var(--ease),border-color .4s,background .4s;color:inherit}
+.ref::before{content:"";position:absolute;inset:-40% 50% 55% -40%;
+  background:radial-gradient(circle,rgba(79,194,149,.16),transparent 70%);opacity:0;transition:opacity .5s var(--ease)}
+.ref:hover{transform:translateY(-4px);border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.045),rgba(236,243,239,0))}
+.ref:hover::before{opacity:1}
+.ref-name{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+.ref-mono{width:34px;height:34px;border-radius:9px;background:var(--grad);flex:none;display:grid;place-items:center;
+  font-family:var(--f-display);font-weight:700;font-size:17px;color:#fff;box-shadow:0 6px 18px -9px rgba(15,61,86,.9)}
+.ref h3{font-size:1.18rem}
+.ref p{color:var(--muted);font-size:.95rem;line-height:1.55;margin:0 0 18px;flex:1}
+.ref .perk{align-self:flex-start;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--signal);
+  border:1px solid rgba(79,194,149,.35);background:rgba(79,194,149,.08);border-radius:7px;padding:4px 9px;margin:0 0 16px}
+.ref .go{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.06em;color:var(--paper);
+  display:inline-flex;align-items:center;gap:7px;transition:gap .3s var(--ease),color .3s}
+.ref .go .arw{transition:transform .3s var(--ease)}
+.ref:hover .go{color:var(--signal)}
+.ref:hover .go .arw{transform:translate(3px,-3px)}
+/* ===== CTA ===== */
+.cta-strip{text-align:center;padding-block:clamp(60px,8vw,110px);border-top:1px solid var(--line);margin-top:clamp(60px,8vw,110px)}
+.cta-strip h2{font-size:clamp(2rem,4.2vw,3.2rem);margin-bottom:14px}
+.cta-strip h2 .it{font-style:italic;color:var(--signal)}
+.cta-strip .lede{margin:0 auto 28px}
+.cta-strip .btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+@media(max-width:880px){.ref-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.ref-grid{grid-template-columns:1fr}}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
 </head>
@@ -232,9 +208,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <a href="/about">About</a>
       <a href="/services">Services</a>
       <a href="/portfolio">Work</a>
-      <a href="/referrals">Referrals</a>
+      <a href="/referrals" aria-current="page">Referrals</a>
       <a href="/#systems">Systems</a>
-      <a href="/contact" aria-current="page">Contact</a>
+      <a href="/contact">Contact</a>
     </nav>
     <div class="head-cta">
       <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
@@ -258,61 +234,134 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <!-- PAGE HERO -->
 <section class="page-hero section">
   <div class="wrap">
-    <span class="eyebrow">Get in touch</span>
-    <h1>Let&rsquo;s build something <span class="it">together.</span></h1>
-    <p class="lede">Tell us what you&rsquo;re working on. We respond within one business day and we skip the sales process — just a direct conversation about your problem.</p>
+    <span class="eyebrow">Tools we run</span>
+    <h1>The stack behind <span class="it">the work.</span></h1>
+    <p class="lede">These are the platforms and programs we use in production every day — the same tools we build on, integrate, and automate for clients. If one earns its place for you too, several offer a referral perk.</p>
+    <div class="disclosure">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+      <p><strong style="color:var(--paper);font-weight:600">Referral disclosure.</strong> Some links below are referral or affiliate links — if you sign up, we may earn a referral bonus or commission at no additional cost to you. We only list tools we actually use and run in production.</p>
+    </div>
   </div>
 </section>
 
-<!-- CONTACT PANEL -->
-<section class="contact-section">
+<!-- VENDOR GROUPS -->
+<!-- NOTE: hrefs currently point to vendor homepages as working placeholders.
+     Swap each href for the real NLMA referral/affiliate URL, and add a <span class="perk">…</span> where there's a signup offer. -->
+<section class="section" style="padding-top:0">
   <div class="wrap">
-    <div class="contact-panel reveal">
-      <div class="contact-left">
-        <h2>Start a <span class="it">conversation.</span></h2>
-        <div class="reach">
-          <span class="k">Email</span>
-          <a href="mailto:info@nlma.io">info@nlma.io<span class="u"></span></a>
-          <span class="k" style="margin-top:20px">Phone</span>
-          <a href="tel:+15712002032">+1 571 200 2032<span class="u"></span></a>
-        </div>
-        <div class="vcard-save">
-          <a class="btn btn-ghost vcard-btn" href="/nlma.vcf" download="Forrest Surprenant - NLMA.vcf" aria-label="Download contact card to your phone">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-            Save my contact
-          </a>
-          <div class="vcard-qr">
-            <img src="/contact-qr.png" width="104" height="104" alt="QR code — scan to save Forrest Surprenant's contact" loading="lazy" />
-            <span>Scan to<br>save</span>
-          </div>
-        </div>
-        <div class="reach meta">
-          Virginia, USA &nbsp;&middot;&nbsp; Available Mon&ndash;Fri<br>
-          Response within one business day.<br>
-          No sales deck. No offshore handoff.
-        </div>
+
+    <div class="ref-group reveal">
+      <span class="eyebrow">Banking &amp; finance</span>
+      <div class="ref-grid">
+        <a class="ref" href="https://www.baselane.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">B</span><h3>Baselane</h3></div>
+          <p>Banking, bookkeeping, and rent collection built for real-estate investors — the financial backbone of our property operations.</p>
+          <span class="go">Get Baselane <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://mercury.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">M</span><h3>Mercury</h3></div>
+          <p>Business banking with the controls, sub-accounts, and API a modern operation actually needs.</p>
+          <span class="go">Get Mercury <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://quickbooks.intuit.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">Q</span><h3>QuickBooks</h3></div>
+          <p>The accounting system we integrate, sync, and automate against so the books stay current.</p>
+          <span class="go">Get QuickBooks <span class="arw">↗</span></span>
+        </a>
       </div>
-      <div class="form">
-        <p class="fhead">Send a message</p>
-        <div class="field">
-          <label for="f-name">Your name</label>
-          <input id="f-name" type="text" placeholder="Jane Smith" autocomplete="name" />
-        </div>
-        <div class="field">
-          <label for="f-email">Email</label>
-          <input id="f-email" type="email" placeholder="jane@company.com" autocomplete="email" />
-        </div>
-        <div class="field">
-          <label for="f-msg">What are you building?</label>
-          <textarea id="f-msg" rows="5" placeholder="Tell us about your project, timeline, and goals."></textarea>
-        </div>
-        <div class="hp" aria-hidden="true">
-          <label for="f-company">Company website</label>
-          <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
-        </div>
-        <button class="btn btn-primary" id="composeBtn" type="button"><span class="dot"></span>Send message</button>
-        <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="ref-group reveal">
+      <span class="eyebrow">Property management</span>
+      <div class="ref-grid">
+        <a class="ref" href="https://www.guesty.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">G</span><h3>Guesty</h3></div>
+          <p>Short-term rental management — channels, automation, guest comms, and accounting in one platform.</p>
+          <span class="go">Get Guesty <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://www.doorloop.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">D</span><h3>DoorLoop</h3></div>
+          <p>Long-term rental and property management — leasing, accounting, and owner/tenant portals.</p>
+          <span class="go">Get DoorLoop <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://turno.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">T</span><h3>Turno</h3></div>
+          <p>Turnover scheduling and a marketplace of cleaners for short-term rentals, fully automated off your calendar.</p>
+          <span class="go">Get Turno <span class="arw">↗</span></span>
+        </a>
       </div>
+    </div>
+
+    <div class="ref-group reveal">
+      <span class="eyebrow">Records &amp; data</span>
+      <div class="ref-grid">
+        <a class="ref" href="https://www.attomdata.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">A</span><h3>ATTOM</h3></div>
+          <p>Nationwide property, owner, valuation, and comparable-sales data — the source we query for diligence.</p>
+          <span class="go">Get ATTOM <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://remine.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">R</span><h3>Remine</h3></div>
+          <p>MLS-connected property research and document workflows for real-estate professionals.</p>
+          <span class="go">Get Remine <span class="arw">↗</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="ref-group reveal">
+      <span class="eyebrow">Infrastructure &amp; dev</span>
+      <div class="ref-grid">
+        <a class="ref" href="https://www.hostinger.com/vps-hosting" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">H</span><h3>Hostinger</h3></div>
+          <p>Fast, affordable VPS hosting — the infrastructure our entire self-hosted platform runs on.</p>
+          <span class="go">Get Hostinger <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://tailscale.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">T</span><h3>Tailscale</h3></div>
+          <p>Zero-config mesh VPN for secure private access to every service and box we run.</p>
+          <span class="go">Get Tailscale <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://n8n.io" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">N</span><h3>n8n</h3></div>
+          <p>Self-hostable workflow automation — the engine behind many of our background jobs and bots.</p>
+          <span class="go">Get n8n <span class="arw">↗</span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="ref-group reveal">
+      <span class="eyebrow">Comms &amp; documents</span>
+      <div class="ref-grid">
+        <a class="ref" href="https://www.twilio.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">T</span><h3>Twilio</h3></div>
+          <p>Programmable SMS, voice, and messaging that powers our notification and triage flows.</p>
+          <span class="go">Get Twilio <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://www.lob.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">L</span><h3>Lob</h3></div>
+          <p>Programmatic direct mail and address verification — physical letters sent from code.</p>
+          <span class="go">Get Lob <span class="arw">↗</span></span>
+        </a>
+        <a class="ref" href="https://workspace.google.com" target="_blank" rel="sponsored nofollow noopener">
+          <div class="ref-name"><span class="ref-mono">W</span><h3>Google Workspace</h3></div>
+          <p>Business email, docs, and collaboration — integrated and automated across our stack.</p>
+          <span class="go">Get Workspace <span class="arw">↗</span></span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <div class="wrap">
+    <span class="eyebrow">Want it wired together?</span>
+    <h2>We connect these into <span class="it">one system.</span></h2>
+    <p class="lede">Picking the tools is the easy part. We integrate, automate, and run them so they actually work together.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
+      <a class="btn btn-ghost" href="/services">See our services &rarr;</a>
     </div>
   </div>
 </section>
@@ -382,37 +431,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   else if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(en){
       en.forEach(function(x){ if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);} });
-    },{threshold:.16,rootMargin:'0px 0px -8% 0px'});
+    },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
     els.forEach(function(e){io.observe(e);});
   } else { els.forEach(function(e){e.classList.add('in');}); }
-})();
-</script>
-<script>
-(function(){
-  var btn=document.getElementById('composeBtn'); if(!btn)return;
-  var statusEl=document.getElementById('formStatus');
-  var ENDPOINT='https://n8n.nlma.io/webhook/nlma-contact';
-  var IDLE='<span class="dot"></span>Send message';
-  var sending=false;
-  function setStatus(msg,kind){ if(statusEl){statusEl.textContent=msg||''; statusEl.className='status'+(kind?' '+kind:'');} }
-  function val(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
-  btn.addEventListener('click',function(){
-    if(sending)return;
-    var name=val('f-name'), email=val('f-email'), message=val('f-msg');
-    var cEl=document.getElementById('f-company'); var company=cEl?cEl.value:'';
-    if(!name||!email||!message){ setStatus('Add your name, email, and a note so we can reply.','err'); return; }
-    sending=true; btn.setAttribute('aria-busy','true'); btn.innerHTML='<span class="dot"></span>Sending\u2026'; setStatus('');
-    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({name:name,email:email,message:message,company_website:company,source:'nlma.io/contact'})})
-      .then(function(r){ return r.json().catch(function(){return {ok:r.ok};}); })
-      .then(function(d){
-        if(d&&d.ok){ ['f-name','f-email','f-msg'].forEach(function(id){var el=document.getElementById(id); if(el)el.value='';});
-          setStatus('Sent. We\u2019ll reply within a business day.','ok'); btn.innerHTML='<span class="dot"></span>Sent \u2713'; }
-        else { throw new Error('rejected'); }
-      })
-      .catch(function(){ setStatus('Couldn\u2019t send right now. Email info@nlma.io and we\u2019ll pick it up.','err'); btn.innerHTML=IDLE; })
-      .finally(function(){ sending=false; btn.removeAttribute('aria-busy'); });
-  });
 })();
 </script>
 </body>
