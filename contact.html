@@ -124,6 +124,10 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
   border:1px solid var(--line);background:rgba(11,20,24,.4);transition:.3s var(--ease);cursor:default;white-space:nowrap}
 .chip:hover{color:var(--paper);border-color:var(--signal);background:rgba(79,194,149,.08);transform:translateY(-2px)}
 /* CONTACT / FORM */
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .status{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;line-height:1.5;min-height:1.1em;margin:8px 0 0}
+.form .status.ok{color:var(--signal)}
+.form .status.err{color:#e89a86}
 .contact-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;
   display:grid;grid-template-columns:1.05fr .95fr;
   background:linear-gradient(135deg,rgba(46,106,85,.14),rgba(15,61,86,.18));}
@@ -282,7 +286,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
           <label for="f-msg">What are you building?</label>
           <textarea id="f-msg" rows="5" placeholder="Tell us about your project, timeline, and goals."></textarea>
         </div>
-        <button class="btn btn-primary" id="composeBtn"><span class="dot"></span>Send message</button>
+        <div class="hp" aria-hidden="true">
+          <label for="f-company">Company website</label>
+          <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <button class="btn btn-primary" id="composeBtn" type="button"><span class="dot"></span>Send message</button>
+        <p class="status" id="formStatus" role="status" aria-live="polite"></p>
       </div>
     </div>
   </div>
@@ -359,12 +368,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <script>
 (function(){
   var btn=document.getElementById('composeBtn'); if(!btn)return;
+  var statusEl=document.getElementById('formStatus');
+  var ENDPOINT='https://n8n.nlma.io/webhook/nlma-contact';
+  var IDLE='<span class="dot"></span>Send message';
+  var sending=false;
+  function setStatus(msg,kind){ if(statusEl){statusEl.textContent=msg||''; statusEl.className='status'+(kind?' '+kind:'');} }
+  function val(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; }
   btn.addEventListener('click',function(){
-    var n=(document.getElementById('f-name').value||'').trim();
-    var e=(document.getElementById('f-email').value||'').trim();
-    var m=(document.getElementById('f-msg').value||'').trim();
-    var body='Name: '+n+'\nEmail: '+e+'\n\n'+m;
-    window.location.href='mailto:info@nlma.io?subject='+encodeURIComponent('New project enquiry'+(n?': '+n:''))+'&body='+encodeURIComponent(body);
+    if(sending)return;
+    var name=val('f-name'), email=val('f-email'), message=val('f-msg');
+    var cEl=document.getElementById('f-company'); var company=cEl?cEl.value:'';
+    if(!name||!email||!message){ setStatus('Add your name, email, and a note so we can reply.','err'); return; }
+    sending=true; btn.setAttribute('aria-busy','true'); btn.innerHTML='<span class="dot"></span>Sending\u2026'; setStatus('');
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:name,email:email,message:message,company_website:company,source:'nlma.io/contact'})})
+      .then(function(r){ return r.json().catch(function(){return {ok:r.ok};}); })
+      .then(function(d){
+        if(d&&d.ok){ ['f-name','f-email','f-msg'].forEach(function(id){var el=document.getElementById(id); if(el)el.value='';});
+          setStatus('Sent. We\u2019ll reply within a business day.','ok'); btn.innerHTML='<span class="dot"></span>Sent \u2713'; }
+        else { throw new Error('rejected'); }
+      })
+      .catch(function(){ setStatus('Couldn\u2019t send right now. Email info@nlma.io and we\u2019ll pick it up.','err'); btn.innerHTML=IDLE; })
+      .finally(function(){ sending=false; btn.removeAttribute('aria-busy'); });
   });
 })();
 </script>
