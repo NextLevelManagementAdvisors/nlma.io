@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Services · NLMA · Next Level Management Advisors</title>
+<meta name="description" content="Custom software, AI automation, MCP infrastructure, and property management technology from NLMA." />
+<link rel="canonical" href="https://nlma.io/services" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --ink:#0B1418;--ink-2:#0E1E28;--ink-3:#10212c;
+  --ocean:#0F3D56;--pine:#2E6A55;--signal:#4FC295;--signal-dim:#2E6A55;
+  --paper:#ECF3EF;--muted:#8AA39B;--faint:#5C726C;
+  --line:rgba(236,243,239,.10);--line-2:rgba(236,243,239,.18);
+  --grad:linear-gradient(135deg,#2E6A55 0%,#0F3D56 100%);
+  --grad-soft:linear-gradient(135deg,rgba(46,106,85,.16),rgba(15,61,86,.16));
+  --maxw:1180px;--gutter:clamp(20px,5vw,72px);--r:14px;
+  --f-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-body:"Hanken Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ink);color:var(--paper);
+  font-family:var(--f-body);font-size:clamp(16px,1.05vw,17px);line-height:1.6;
+  font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer}
+::selection{background:rgba(79,194,149,.28);color:#fff}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(1100px 700px at 78% -8%,rgba(15,61,86,.55),transparent 60%),
+    radial-gradient(900px 600px at 0% 8%,rgba(46,106,85,.16),transparent 55%),var(--ink);}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;font-weight:500;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--signal);display:inline-flex;align-items:center;gap:.7em;}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--signal);opacity:.7}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;line-height:1.03;letter-spacing:-.02em;margin:0}
+h2{font-size:clamp(2rem,4.6vw,3.4rem)}
+h3{font-size:clamp(1.3rem,2vw,1.55rem);line-height:1.12;letter-spacing:-.01em}
+.lede{color:var(--muted);font-size:clamp(1.05rem,1.5vw,1.22rem);line-height:1.55;max-width:62ch}
+/* HEADER */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:60;
+  transition:background .4s var(--ease),border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent;}
+.site-head.scrolled{background:rgba(8,16,20,.72);backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);border-bottom-color:var(--line);}
+.head-row{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .tile{width:34px;height:34px;border-radius:9px;background:var(--grad);
+  display:grid;place-items:center;flex:none;box-shadow:0 6px 20px -8px rgba(15,61,86,.9)}
+.brand .tile span{font-family:var(--f-display);font-weight:700;font-size:20px;color:#fff;line-height:1}
+.brand .word{font-family:var(--f-display);font-weight:600;font-size:21px;letter-spacing:.04em}
+.brand .word b{font-weight:600}
+.nav{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px)}
+.nav a{font-size:14.5px;color:var(--muted);transition:color .25s;position:relative;padding:4px 0}
+.nav a::after{content:"";position:absolute;left:0;bottom:-2px;height:1px;width:0;background:var(--signal);transition:width .3s var(--ease)}
+.nav a:hover{color:var(--paper)}
+.nav a:hover::after,.nav a[aria-current="page"]::after{width:100%}
+.nav a[aria-current="page"]{color:var(--paper)}
+.btn{display:inline-flex;align-items:center;gap:.6em;border-radius:999px;
+  padding:.72em 1.25em;font-weight:600;font-size:14.5px;letter-spacing:.01em;
+  border:1px solid transparent;transition:transform .25s var(--ease),box-shadow .3s,background .3s,border-color .3s;white-space:nowrap;}
+.btn-primary{background:var(--paper);color:#0A1216;box-shadow:0 10px 30px -12px rgba(236,243,239,.4)}
+.btn-primary .dot{width:7px;height:7px;border-radius:50%;background:var(--pine);transition:background .3s,box-shadow .3s}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-primary:hover .dot{background:var(--signal);box-shadow:0 0 0 4px rgba(79,194,149,.25)}
+.btn-ghost{border-color:var(--line-2);color:var(--paper);background:transparent}
+.btn-ghost:hover{border-color:var(--signal);background:rgba(79,194,149,.08);transform:translateY(-2px)}
+.head-cta{display:flex;align-items:center;gap:14px}
+.menu-toggle{display:none;width:42px;height:42px;border-radius:10px;border:1px solid var(--line-2);
+  background:rgba(236,243,239,.03);align-items:center;justify-content:center}
+.menu-toggle span,.menu-toggle span::before,.menu-toggle span::after{
+  content:"";display:block;width:18px;height:1.5px;background:var(--paper);transition:.3s var(--ease)}
+.menu-toggle span::before{transform:translateY(-6px)}
+.menu-toggle span::after{transform:translateY(4.5px)}
+body.menu-open .menu-toggle span{background:transparent}
+body.menu-open .menu-toggle span::before{transform:rotate(45deg)}
+body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5px)}
+/* SECTION RHYTHM */
+.section{padding-block:clamp(84px,11vw,140px);position:relative}
+.section-head{max-width:760px;margin-bottom:clamp(40px,6vw,72px)}
+.section-head h2{margin-top:.5em}
+.section-head .lede{margin-top:1.1em}
+/* CAP GRID */
+.cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.cap{position:relative;border:1px solid var(--line);border-radius:var(--r);
+  padding:34px 30px 30px;background:linear-gradient(180deg,rgba(236,243,239,.025),rgba(236,243,239,0));
+  overflow:hidden;transition:transform .4s var(--ease),border-color .4s,background .4s;}
+.cap::before{content:"";position:absolute;inset:-40% 50% 50% -40%;
+  background:radial-gradient(circle,rgba(79,194,149,.16),transparent 70%);opacity:0;transition:opacity .5s var(--ease)}
+.cap:hover{transform:translateY(-4px);border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.04),rgba(236,243,239,0))}
+.cap:hover::before{opacity:1}
+.cap .key{font-family:var(--f-mono);font-size:12px;color:var(--signal);letter-spacing:.14em;text-transform:uppercase}
+.cap h3{margin:16px 0 12px}
+.cap p{color:var(--muted);font-size:.98rem;margin:0;position:relative}
+.cap .mark{position:absolute;top:28px;right:28px;color:var(--faint);transition:color .4s,transform .4s var(--ease)}
+.cap:hover .mark{color:var(--signal);transform:translate(2px,-2px)}
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding:5px 10px;border-radius:7px;
+  border:1px solid var(--line);background:rgba(11,20,24,.4);transition:.3s var(--ease);cursor:default;white-space:nowrap}
+.chip:hover{color:var(--paper);border-color:var(--signal);background:rgba(79,194,149,.08);transform:translateY(-2px)}
+/* CONTACT / FORM */
+.contact-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;
+  display:grid;grid-template-columns:1.05fr .95fr;
+  background:linear-gradient(135deg,rgba(46,106,85,.14),rgba(15,61,86,.18));}
+.contact-left{padding:clamp(38px,5vw,60px)}
+.contact-left h2{font-size:clamp(2rem,4.4vw,3.1rem)}
+.contact-left h2 .it{font-style:italic}
+.reach{margin-top:34px;display:flex;flex-direction:column;gap:6px}
+.reach a{font-family:var(--f-display);font-size:clamp(1.3rem,2.4vw,1.9rem);font-weight:500;
+  display:inline-flex;align-items:center;gap:.4em;width:fit-content;position:relative}
+.reach a .u{position:absolute;left:0;bottom:1px;height:2px;width:0;background:var(--signal);transition:width .35s var(--ease)}
+.reach a:hover .u{width:100%}
+.reach .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--faint);display:block;margin-bottom:4px}
+.reach .meta{margin-top:30px;font-family:var(--f-mono);font-size:12px;color:var(--faint);letter-spacing:.04em;line-height:1.8}
+.form{padding:clamp(34px,4.5vw,52px);background:rgba(8,16,20,.5);border-left:1px solid var(--line);display:flex;flex-direction:column;gap:16px}
+.form .fhead{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:13px;color:var(--muted)}
+.field input,.field textarea{background:rgba(236,243,239,.04);border:1px solid var(--line-2);border-radius:10px;color:var(--paper);
+  padding:12px 14px;font:inherit;font-size:15px;transition:border-color .3s,background .3s;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--signal);background:rgba(79,194,149,.06)}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
+.form .btn-primary{justify-content:center;margin-top:6px}
+/* FOOTER */
+.foot{border-top:1px solid var(--line);padding-block:60px 40px}
+.foot-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px;padding-bottom:46px;border-bottom:1px solid var(--line)}
+.foot .blurb{color:var(--muted);font-size:.95rem;max-width:34ch;margin:18px 0 0}
+.foot .tagline{font-family:var(--f-display);font-style:italic;color:var(--paper);font-size:1.05rem;margin-top:18px}
+.foot h4{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);font-weight:500;margin:0 0 16px}
+.foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.foot ul a{color:var(--muted);font-size:.95rem;transition:color .25s}
+.foot ul a:hover{color:var(--signal)}
+.foot-bot{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:26px;flex-wrap:wrap}
+.foot-bot p{margin:0;font-family:var(--f-mono);font-size:11.5px;color:var(--faint);letter-spacing:.03em}
+.foot-bot .sysline{display:inline-flex;align-items:center;gap:9px}
+.foot-bot .sysline i{width:6px;height:6px;border-radius:50%;background:var(--signal);font-style:normal;animation:beat 2.4s var(--ease) infinite}
+@keyframes beat{0%{box-shadow:0 0 0 0 rgba(79,194,149,.55)}70%{box-shadow:0 0 0 9px rgba(79,194,149,0)}100%{box-shadow:0 0 0 0 rgba(79,194,149,0)}}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal[data-d="1"]{transition-delay:.08s}
+.reveal[data-d="2"]{transition-delay:.16s}
+.reveal[data-d="3"]{transition-delay:.24s}
+.reveal[data-d="4"]{transition-delay:.32s}
+.reveal[data-d="5"]{transition-delay:.40s}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--signal);outline-offset:3px;border-radius:6px}
+@media (max-width:960px){
+  .nav,.head-cta .btn{display:none}
+  .menu-toggle{display:flex}
+  .head-cta{gap:0}
+  .mobile-nav{position:fixed;inset:72px 0 0;z-index:55;background:rgba(8,15,19,.97);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    display:flex;flex-direction:column;gap:6px;padding:30px var(--gutter);
+    transform:translateY(-12px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  body.menu-open .mobile-nav{opacity:1;transform:none;pointer-events:auto}
+  .mobile-nav a{font-family:var(--f-display);font-size:1.7rem;color:var(--paper);padding:14px 0;border-bottom:1px solid var(--line)}
+  .mobile-nav .btn{margin-top:22px;justify-content:center;font-size:16px;padding:1em}
+  .cap-grid{grid-template-columns:1fr}
+  .contact-panel{grid-template-columns:1fr}
+  .form{border-left:none;border-top:1px solid var(--line)}
+  .foot-top{grid-template-columns:1fr 1fr}
+  .foot .brandcol{grid-column:1 / -1}
+}
+@media (max-width:560px){
+  .foot-top{grid-template-columns:1fr}
+}
+.mobile-nav{display:none}
+@media (max-width:960px){.mobile-nav{display:flex}}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .foot-bot .sysline i{animation:none}
+}
+
+
+.page-hero{padding-top:160px;padding-bottom:80px}
+.page-hero .eyebrow{margin-bottom:28px}
+.page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem);max-width:20ch}
+.page-hero h1 .it{font-style:italic;color:var(--signal)}
+.page-hero .lede{margin-top:28px;max-width:54ch}
+/* service cards — full width with chips */
+.svc-list{display:flex;flex-direction:column;gap:2px}
+.svc{border:1px solid var(--line);border-radius:var(--r);padding:38px 36px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0));
+  transition:border-color .35s,background .35s,transform .35s var(--ease);position:relative;overflow:hidden}
+.svc::before{content:"";position:absolute;inset:0 60% 0 -20%;
+  background:radial-gradient(circle at left center,rgba(79,194,149,.08),transparent 60%);
+  opacity:0;transition:opacity .5s var(--ease)}
+.svc:hover{border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.04),rgba(236,243,239,0));transform:translateX(4px)}
+.svc:hover::before{opacity:1}
+.svc-inner{display:grid;grid-template-columns:2fr 3fr;gap:clamp(24px,4vw,60px);align-items:start}
+.svc .key{font-family:var(--f-mono);font-size:12px;color:var(--signal);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.svc h3{font-size:clamp(1.3rem,2.2vw,1.65rem);margin:0 0 0}
+.svc .idx{font-family:var(--f-display);font-size:3.2rem;font-weight:500;color:transparent;
+  -webkit-text-stroke:1px var(--line-2);line-height:1;float:right;margin-left:16px;transition:-webkit-text-stroke-color .4s}
+.svc:hover .idx{-webkit-text-stroke-color:rgba(79,194,149,.4)}
+.svc .desc{color:var(--muted);line-height:1.7;margin:0 0 16px;font-size:.97rem}
+/* process strip */
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
+.step{padding:34px 26px 30px;border-bottom:1px solid var(--line);position:relative}
+.step+.step{border-left:1px solid var(--line)}
+.step .no{font-family:var(--f-display);font-size:2.7rem;font-weight:500;color:transparent;
+  -webkit-text-stroke:1px var(--line-2);line-height:1;transition:-webkit-text-stroke-color .4s,color .4s}
+.step:hover .no{color:rgba(79,194,149,.14);-webkit-text-stroke-color:var(--signal)}
+.step h3{font-size:1.18rem;margin:18px 0 9px}
+.step p{color:var(--muted);font-size:.94rem;margin:0}
+.step .bar{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--signal);transition:width .5s var(--ease)}
+.step:hover .bar{width:100%}
+/* cta strip */
+.cta-strip{text-align:center;padding-block:clamp(60px,8vw,110px);border-top:1px solid var(--line)}
+.cta-strip h2{font-size:clamp(2rem,4.2vw,3.2rem);margin-bottom:28px}
+.cta-strip h2 .it{font-style:italic;color:var(--signal)}
+.cta-strip .btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+@media(max-width:960px){
+  .svc-inner{grid-template-columns:1fr}
+  .process{grid-template-columns:1fr 1fr}
+  .step:nth-child(odd){border-left:none}
+  .step:nth-child(3),.step:nth-child(4){border-top:1px solid var(--line)}
+}
+@media(max-width:560px){
+  .process{grid-template-columns:1fr}
+  .step+.step{border-left:none}
+  .step{border-top:1px solid var(--line)}
+  .step:first-child{border-top:none}
+  .svc{padding:28px 22px}
+}
+
+</style>
+</head>
+<body>
+
+<header class="site-head" id="head">
+  <div class="wrap head-row">
+    <a class="brand" href="/" aria-label="NLMA home">
+      <span class="tile"><span>N</span></span>
+      <span class="word"><b>NLMA</b></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/about">About</a>
+      <a href="/services" aria-current="page">Services</a>
+      <a href="/#systems">Systems</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="head-cta">
+      <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+  <a href="/about">About</a>
+  <a href="/services">Services</a>
+  <a href="/#systems">Systems</a>
+  <a href="/contact">Contact</a>
+  <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
+</nav>
+
+<main>
+
+<!-- PAGE HERO -->
+<section class="page-hero section">
+  <div class="wrap">
+    <span class="eyebrow">What we build</span>
+    <h1>End-to-end systems <span class="it">engineering.</span></h1>
+    <p class="lede">From blank canvas to production infrastructure. We design, build, and operate software that replaces the glue code, manual work, and off-the-shelf compromises that slow your team down.</p>
+  </div>
+</section>
+
+<!-- SERVICE LIST -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="svc-list">
+
+      <div class="svc reveal">
+        <div class="svc-inner">
+          <div>
+            <p class="key">01 — Core</p>
+            <h3>Custom Software Development</h3>
+          </div>
+          <div>
+            <p class="desc">We build production-grade internal tools, customer portals, data pipelines, and full-stack applications. No templates, no off-the-shelf compromises. Every project starts with what the business actually needs and works backward to the code.</p>
+            <div class="chips">
+              <span class="chip">Internal tools</span><span class="chip">Customer portals</span>
+              <span class="chip">REST &amp; GraphQL APIs</span><span class="chip">Data pipelines</span>
+              <span class="chip">Reporting dashboards</span><span class="chip">Document generation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc reveal" data-d="1">
+        <div class="svc-inner">
+          <div>
+            <p class="key">02 — AI</p>
+            <h3>AI Automation &amp; Agent Orchestration</h3>
+          </div>
+          <div>
+            <p class="desc">We design and deploy LLM-powered workflows that run in production — inbox triage, document processing, decision routing, multi-step agents with real tool access. We specialize in Model Context Protocol (MCP) infrastructure that connects AI to your live business systems.</p>
+            <div class="chips">
+              <span class="chip">LLM workflow design</span><span class="chip">MCP server development</span>
+              <span class="chip">Autonomous agents</span><span class="chip">Inbox &amp; comms triage</span>
+              <span class="chip">Document AI</span><span class="chip">claude-hub automation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc reveal" data-d="2">
+        <div class="svc-inner">
+          <div>
+            <p class="key">03 — Property tech</p>
+            <h3>Property Management Technology</h3>
+          </div>
+          <div>
+            <p class="desc">Deep integrations across the STR/LTR/MTR property management stack. We extend and connect platforms that do not talk to each other by default, build owner-facing portals, automate financial workflows, and eliminate the manual reconciliation that eats your team's time.</p>
+            <div class="chips">
+              <span class="chip">Guesty</span><span class="chip">DoorLoop</span>
+              <span class="chip">Baselane</span><span class="chip">Turno</span>
+              <span class="chip">Airbnb / VRBO</span><span class="chip">Owner portals</span>
+              <span class="chip">STR compliance</span><span class="chip">Booking automation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc reveal" data-d="3">
+        <div class="svc-inner">
+          <div>
+            <p class="key">04 — Infrastructure</p>
+            <h3>Business Systems Integration</h3>
+          </div>
+          <div>
+            <p class="desc">Every business runs on a stack of SaaS tools that barely talk to each other. We build the connective tissue — API orchestration, event-driven sync, webhook pipelines, and custom middleware that turns siloed tools into a coherent system.</p>
+            <div class="chips">
+              <span class="chip">API orchestration</span><span class="chip">Webhook pipelines</span>
+              <span class="chip">QuickBooks Online</span><span class="chip">Google Workspace</span>
+              <span class="chip">DocuSeal / e-sign</span><span class="chip">Twilio / SMS</span>
+              <span class="chip">n8n automation</span><span class="chip">Self-hosted MCP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="svc reveal" data-d="4">
+        <div class="svc-inner">
+          <div>
+            <p class="key">05 — Advisory</p>
+            <h3>Consulting &amp; Technology Strategy</h3>
+          </div>
+          <div>
+            <p class="desc">Fractional CTO and systems-design work for teams that need senior technical guidance without a full-time hire. We audit your current stack, identify bottlenecks, map the build-vs-buy decision, and produce a roadmap you can actually execute against.</p>
+            <div class="chips">
+              <span class="chip">Tech stack audit</span><span class="chip">Process mapping</span>
+              <span class="chip">Build vs buy analysis</span><span class="chip">Fractional CTO</span>
+              <span class="chip">Implementation roadmap</span><span class="chip">Vendor selection</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE WORK -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">How we work</span>
+      <h2>From brief to production — fast.</h2>
+      <p class="lede">We keep the process lean. No discovery theater. No six-week scoping cycles. We get into the work quickly and ship iteratively.</p>
+    </div>
+    <div class="process">
+      <div class="step reveal">
+        <div class="no">01</div>
+        <h3>Brief &amp; scope</h3>
+        <p>One call. We map the problem, define the outcome, and decide what to build first. Scoping doc in 48 hours.</p>
+        <span class="bar"></span>
+      </div>
+      <div class="step reveal" data-d="1">
+        <div class="no">02</div>
+        <h3>Design &amp; architect</h3>
+        <p>System design, data model, integration map. We validate assumptions before writing production code.</p>
+        <span class="bar"></span>
+      </div>
+      <div class="step reveal" data-d="2">
+        <div class="no">03</div>
+        <h3>Build &amp; iterate</h3>
+        <p>Staged delivery in real environments. You see working software early and often, not a big-bang launch.</p>
+        <span class="bar"></span>
+      </div>
+      <div class="step reveal" data-d="3">
+        <div class="no">04</div>
+        <h3>Operate &amp; evolve</h3>
+        <p>We stay engaged. Monitoring, incident response, feature additions as your business changes.</p>
+        <span class="bar"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip">
+  <div class="wrap">
+    <span class="eyebrow">Next step</span>
+    <h2>Tell us what you need to <span class="it">build.</span></h2>
+    <div class="btns">
+      <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
+      <a class="btn btn-ghost" href="/about">About NLMA &rarr;</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="brandcol">
+        <a class="brand" href="/" aria-label="NLMA home">
+          <span class="tile"><span>N</span></span>
+          <span class="word"><b>NLMA</b></span>
+        </a>
+        <p class="blurb">Custom software and AI automation for teams that have outgrown spreadsheets and off-the-shelf tools.</p>
+        <p class="tagline">Transforming complexity into clarity.</p>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/services">Services</a></li>
+          <li><a href="/#systems">Systems</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@nlma.io">info@nlma.io</a></li>
+          <li><a href="tel:+15712002032">+1 571 200 2032</a></li>
+          <li><a href="mailto:info@nlma.io?subject=New%20project%20enquiry">Start a project</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/terms">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <p>&copy; 2026 Next Level Management Advisors, LLC. All rights reserved.</p>
+      <p class="sysline"><i></i>Platform self-hosted at nlma.io</p>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  var head=document.getElementById('head');
+  var onScroll=function(){ head.classList.toggle('scrolled', window.scrollY>24); };
+  onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+  var t=document.getElementById('menuToggle');
+  var close=function(){document.body.classList.remove('menu-open');t.setAttribute('aria-expanded','false');};
+  t.addEventListener('click',function(){
+    var open=document.body.classList.toggle('menu-open');
+    t.setAttribute('aria-expanded',open?'true':'false');
+  });
+  document.querySelectorAll('#mobileNav a').forEach(function(a){a.addEventListener('click',close);});
+})();
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var els=document.querySelectorAll('.reveal');
+  if(reduce){els.forEach(function(e){e.classList.add('in');});}
+  else if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(en){
+      en.forEach(function(x){ if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);} });
+    },{threshold:.16,rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  } else { els.forEach(function(e){e.classList.add('in');}); }
+})();
+</script>
+</body>
+</html>
