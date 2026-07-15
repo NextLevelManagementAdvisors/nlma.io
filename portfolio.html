@@ -451,25 +451,43 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="section-head reveal">
       <span class="eyebrow">Open source</span>
       <h2>Code you can read.</h2>
-      <p class="lede">Most of what we build runs privately on client infrastructure. Here&rsquo;s a public sample &mdash; including one of the Model Context Protocol servers behind the automation above.</p>
+      <p class="lede">Most of what we build runs privately on client infrastructure. Here&rsquo;s a public sample &mdash; Model Context Protocol servers and tooling behind the automation above. All AGPL-3.0, with commercial licensing available.</p>
     </div>
     <div class="repos">
       <a class="repo reveal" href="https://github.com/NextLevelManagementAdvisors/vin-mcp" target="_blank" rel="noopener">
         <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>vin-mcp</span>
-        <p>MCP server for the NHTSA vPIC vehicle-data API &mdash; VIN decode plus makes, models, and WMI lookups. FastMCP + OAuth&nbsp;2.1, self-hosted at vin.nlma.io.</p>
+        <p>MCP server for the NHTSA vPIC vehicle-data API &mdash; VIN decode plus makes, models, and WMI lookups. FastMCP + OAuth&nbsp;2.1.</p>
         <span class="rmeta">Python &middot; MCP &middot; live</span>
         <span class="arrow">View on GitHub &#8599;</span>
       </a>
-      <a class="repo reveal" data-d="1" href="https://github.com/NextLevelManagementAdvisors/gsuite-skills-plugin" target="_blank" rel="noopener">
+      <a class="repo reveal" data-d="1" href="https://github.com/NextLevelManagementAdvisors/github-mcp-auth" target="_blank" rel="noopener">
+        <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>github-mcp-auth</span>
+        <p>Multi-tenant OAuth&nbsp;2.1 gateway that puts per-user auth in front of an MCP server. Reusable pattern for securing any hosted MCP.</p>
+        <span class="rmeta">TypeScript &middot; OAuth&nbsp;2.1</span>
+        <span class="arrow">View on GitHub &#8599;</span>
+      </a>
+      <a class="repo reveal" data-d="2" href="https://github.com/NextLevelManagementAdvisors/vacourts-mcp" target="_blank" rel="noopener">
+        <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>vacourts-mcp</span>
+        <p>Virginia court public-records MCP &mdash; civil and criminal case lookups straight from the state court system.</p>
+        <span class="rmeta">Python &middot; MCP &middot; public records</span>
+        <span class="arrow">View on GitHub &#8599;</span>
+      </a>
+      <a class="repo reveal" href="https://github.com/NextLevelManagementAdvisors/turno-mcp" target="_blank" rel="noopener">
+        <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>turno-mcp</span>
+        <p>Multi-tenant MCP server for Turno (TurnoverBnB) &mdash; short-term-rental cleaning &amp; turnover scheduling for AI agents.</p>
+        <span class="rmeta">TypeScript &middot; MCP</span>
+        <span class="arrow">View on GitHub &#8599;</span>
+      </a>
+      <a class="repo reveal" data-d="1" href="https://github.com/NextLevelManagementAdvisors/hospitable-mcp" target="_blank" rel="noopener">
+        <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>hospitable-mcp</span>
+        <p>Multi-tenant MCP server for Hospitable &mdash; short-term-rental reservations, messaging, and property data for AI agents.</p>
+        <span class="rmeta">TypeScript &middot; MCP</span>
+        <span class="arrow">View on GitHub &#8599;</span>
+      </a>
+      <a class="repo reveal" data-d="2" href="https://github.com/NextLevelManagementAdvisors/gsuite-skills-plugin" target="_blank" rel="noopener">
         <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>gsuite-skills-plugin</span>
         <p>Google Workspace skills for Claude Code &mdash; automations like Drive organization, packaged as a reusable plugin.</p>
         <span class="rmeta">Claude Code &middot; Skills</span>
-        <span class="arrow">View on GitHub &#8599;</span>
-      </a>
-      <a class="repo reveal" data-d="2" href="https://github.com/NextLevelManagementAdvisors/nlma.io" target="_blank" rel="noopener">
-        <span class="rname"><svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>nlma.io</span>
-        <p>The source for this site &mdash; static HTML, self-hosted on a VPS with a git-pull deploy. What you&rsquo;re looking at right now.</p>
-        <span class="rmeta">HTML &middot; Static &middot; live</span>
         <span class="arrow">View on GitHub &#8599;</span>
       </a>
     </div>
