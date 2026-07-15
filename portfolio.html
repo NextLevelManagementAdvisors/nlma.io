@@ -256,6 +256,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   color:var(--signal);letter-spacing:.03em}
 .work .code-link:hover{text-decoration:underline}
 @media(max-width:900px){.repos{grid-template-columns:1fr}}
+
+/* ===== CLIENTS ===== */
+.clients{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.client{border:1px solid var(--line);border-radius:var(--r);padding:26px 24px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0));
+  transition:border-color .35s,background .35s,transform .35s var(--ease);
+  display:flex;flex-direction:column;gap:9px}
+.client:hover{border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.05),rgba(236,243,239,0));transform:translateY(-4px)}
+.client .cname{font-family:var(--f-display);font-size:1.18rem;color:var(--paper);line-height:1.15}
+.client p{color:var(--muted);font-size:.92rem;line-height:1.5;margin:0;flex:1}
+.client .visit{color:var(--signal);font-size:12.5px;font-family:var(--f-mono);letter-spacing:.03em}
+.client:hover .visit{text-decoration:underline}
+@media(max-width:900px){.clients{grid-template-columns:1fr}}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
 </head>
@@ -441,6 +454,64 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         </div>
       </article>
 
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Clients</span>
+      <h2>Sites &amp; software we&rsquo;ve shipped.</h2>
+      <p class="lede">Live products and websites we designed, built, and run for the businesses we work with.</p>
+    </div>
+    <div class="clients">
+      <a class="client reveal" href="https://zipadeeservices.com" target="_blank" rel="noopener">
+        <span class="cname">Zip-A-Dee Services</span>
+        <p>Trash pickup &amp; waste-management company website.</p>
+        <span class="visit">zipadeeservices.com &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="1" href="https://app.ruralwm.com" target="_blank" rel="noopener">
+        <span class="cname">Rural WM</span>
+        <p>Waste-management client portal &mdash; accounts, routes, and billing.</p>
+        <span class="visit">app.ruralwm.com &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="2" href="https://flash.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">Flash Services</span>
+        <p>Junk removal &amp; hauling &mdash; Front Royal, VA.</p>
+        <span class="visit">flash.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" href="https://mtcarmel.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">Mount Carmel Home Services</span>
+        <p>Home repairs, maintenance &amp; handyman services.</p>
+        <span class="visit">mtcarmel.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="1" href="https://notary.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">Megan Hart, Notary Public</span>
+        <p>Mobile notary practice &mdash; Front Royal, VA.</p>
+        <span class="visit">notary.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="2" href="https://fieldflow.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">FieldFlow</span>
+        <p>Field-service management platform &mdash; scheduling, dispatch, work orders.</p>
+        <span class="visit">fieldflow.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" href="https://loanserv.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">LoanServ</span>
+        <p>Private mortgage &amp; note-servicing portal.</p>
+        <span class="visit">loanserv.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="1" href="https://nightclick.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">NightClick</span>
+        <p>Consumer product &mdash; find your seat-belt buckle in the dark.</p>
+        <span class="visit">nightclick.nlma.io &#8599;</span>
+      </a>
+      <a class="client reveal" data-d="2" href="https://hostcart.nlma.io" target="_blank" rel="noopener">
+        <span class="cname">HostCart</span>
+        <p>Inventory restocking via last-mile delivery.</p>
+        <span class="visit">hostcart.nlma.io &#8599;</span>
+      </a>
     </div>
   </div>
 </section>
