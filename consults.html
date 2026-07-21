@@ -15,9 +15,9 @@
 <meta name="twitter:title" content="Systems that do the work · NLMA" />
 <meta name="twitter:description" content="Custom software and AI automation that turns operational complexity into systems that run themselves." />
 <meta name="twitter:image" content="https://nlma.io/og-image.png" />
-<title>Services · NLMA · Next Level Management Advisors</title>
-<meta name="description" content="Custom software, AI automation, MCP infrastructure, and property management technology from NLMA." />
-<link rel="canonical" href="https://nlma.io/services" />
+<title>Book a consult · NLMA · Next Level Management Advisors</title>
+<meta name="description" content="Book a consult with NLMA — describe what you need and pick a time." />
+<link rel="canonical" href="https://nlma.io/consults" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -124,6 +124,16 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
   border:1px solid var(--line);background:rgba(11,20,24,.4);transition:.3s var(--ease);cursor:default;white-space:nowrap}
 .chip:hover{color:var(--paper);border-color:var(--signal);background:rgba(79,194,149,.08);transform:translateY(-2px)}
 /* CONTACT / FORM */
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .status{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;line-height:1.5;min-height:1.1em;margin:8px 0 0}
+.form .status.ok{color:var(--signal)}
+.form .status.err{color:#e89a86}
+.vcard-save{margin-top:30px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.vcard-btn{padding:.72em 1.2em}
+.vcard-btn svg{width:16px;height:16px}
+.vcard-qr{display:flex;align-items:center;gap:12px}
+.vcard-qr img{width:104px;height:104px;border-radius:12px;border:1px solid var(--line-2);background:var(--paper);padding:7px;flex:none}
+.vcard-qr span{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);line-height:1.5}
 .contact-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;
   display:grid;grid-template-columns:1.05fr .95fr;
   background:linear-gradient(135deg,rgba(46,106,85,.14),rgba(15,61,86,.18));}
@@ -200,60 +210,47 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 
 
-.page-hero{padding-top:160px;padding-bottom:80px}
+.page-hero{padding-top:160px;padding-bottom:60px}
 .page-hero .eyebrow{margin-bottom:28px}
-.page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem);max-width:20ch}
+.page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem)}
 .page-hero h1 .it{font-style:italic;color:var(--signal)}
 .page-hero .lede{margin-top:28px;max-width:54ch}
-/* service cards — full width with chips */
-.svc-list{display:flex;flex-direction:column;gap:2px}
-.svc{border:1px solid var(--line);border-radius:var(--r);padding:38px 36px;
-  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0));
-  transition:border-color .35s,background .35s,transform .35s var(--ease);position:relative;overflow:hidden}
-.svc::before{content:"";position:absolute;inset:0 60% 0 -20%;
-  background:radial-gradient(circle at left center,rgba(79,194,149,.08),transparent 60%);
-  opacity:0;transition:opacity .5s var(--ease)}
-.svc:hover{border-color:var(--line-2);background:linear-gradient(180deg,rgba(236,243,239,.04),rgba(236,243,239,0));transform:translateX(4px)}
-.svc:hover::before{opacity:1}
-.svc-inner{display:grid;grid-template-columns:2fr 3fr;gap:clamp(24px,4vw,60px);align-items:start}
-.svc .key{font-family:var(--f-mono);font-size:12px;color:var(--signal);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
-.svc h3{font-size:clamp(1.3rem,2.2vw,1.65rem);margin:0 0 0}
-.svc .idx{font-family:var(--f-display);font-size:3.2rem;font-weight:500;color:transparent;
-  -webkit-text-stroke:1px var(--line-2);line-height:1;float:right;margin-left:16px;transition:-webkit-text-stroke-color .4s}
-.svc:hover .idx{-webkit-text-stroke-color:rgba(79,194,149,.4)}
-.svc .desc{color:var(--muted);line-height:1.7;margin:0 0 16px;font-size:.97rem}
-/* process strip */
-.process{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line)}
-.step{padding:34px 26px 30px;border-bottom:1px solid var(--line);position:relative}
-.step+.step{border-left:1px solid var(--line)}
-.step .no{font-family:var(--f-display);font-size:2.7rem;font-weight:500;color:transparent;
-  -webkit-text-stroke:1px var(--line-2);line-height:1;transition:-webkit-text-stroke-color .4s,color .4s}
-.step:hover .no{color:rgba(79,194,149,.14);-webkit-text-stroke-color:var(--signal)}
-.step h3{font-size:1.18rem;margin:18px 0 9px}
-.step p{color:var(--muted);font-size:.94rem;margin:0}
-.step .bar{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--signal);transition:width .5s var(--ease)}
-.step:hover .bar{width:100%}
-/* cta strip */
-.cta-strip{text-align:center;padding-block:clamp(60px,8vw,110px);border-top:1px solid var(--line)}
-.cta-strip h2{font-size:clamp(2rem,4.2vw,3.2rem);margin-bottom:28px}
-.cta-strip h2 .it{font-style:italic;color:var(--signal)}
-.cta-strip .btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
-@media(max-width:960px){
-  .svc-inner{grid-template-columns:1fr}
-  .process{grid-template-columns:1fr 1fr}
-  .step:nth-child(odd){border-left:none}
-  .step:nth-child(3),.step:nth-child(4){border-top:1px solid var(--line)}
-}
-@media(max-width:560px){
-  .process{grid-template-columns:1fr}
-  .step+.step{border-left:none}
-  .step{border-top:1px solid var(--line)}
-  .step:first-child{border-top:none}
-  .svc{padding:28px 22px}
-}
+.contact-section{padding-block:0 clamp(80px,10vw,140px)}
+
+.booking{max-width:760px;padding-block:clamp(48px,9vw,110px)}
+.booking .card{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,34px);margin-top:26px}
+.field{margin-bottom:18px;display:flex;flex-direction:column;gap:7px}
+.field .label,.field label{font-size:14px;color:var(--muted)}
+.field input,.field textarea{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:12px 14px;font:inherit}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--signal)}
+.seg{display:flex;gap:10px}.seg label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--paper)}
+.verdict{font-family:var(--f-display);font-size:clamp(1.3rem,3vw,1.7rem);margin-bottom:10px}
+.verdict .price{color:var(--signal)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 22px}
+.slots button{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:11px;cursor:pointer;font:inherit}
+.slots button[aria-pressed="true"]{border-color:var(--signal);background:rgba(79,194,149,.12)}
+.slots .empty{color:var(--muted);grid-column:1/-1}
+.rowbtns{display:flex;gap:12px;flex-wrap:wrap}
+.btn-ghost{border:1px solid var(--line);color:var(--paper)}
+.linkbtn{background:none;border:none;color:var(--signal);cursor:pointer;font:inherit;padding:0}
+.formnote{margin-top:12px;color:#ff9b9b;font-size:14px}
+.sub{font-family:var(--f-display);font-size:1.15rem;margin:18px 0 4px}
+/* fixes for bugs found during Playwright verification (not in brief's verbatim CSS):
+   1) .field{display:flex} above beats the UA [hidden]{display:none} rule at equal
+      specificity, so #phoneField stayed visible even with the hidden attribute set. */
+.field[hidden]{display:none}
+/* 2) the honeypot input had no visual-hiding CSS, so it rendered as a bare empty
+      box next to the Continue button. Hide it off-screen like contact.html's .hp. */
+#f-company{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined —
+      only the --muted custom property existed. Define the class. */
+.muted{color:var(--muted)}
 
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Next Level Management Advisors","alternateName":"NLMA","url":"https://nlma.io","email":"info@nlma.io","telephone":"+1-571-200-2032","address":{"@type":"PostalAddress","streetAddress":"21 N Broad St, Ste E","addressLocality":"Luray","addressRegion":"VA","postalCode":"22835","addressCountry":"US"},"areaServed":"US","description":"Custom software and AI automation that turns operational complexity into systems that run themselves."}
+</script>
 </head>
 <body>
 
@@ -265,11 +262,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     </a>
     <nav class="nav" aria-label="Primary">
       <a href="/about">About</a>
-      <a href="/services" aria-current="page">Services</a>
+      <a href="/services">Services</a>
       <a href="/portfolio">Work</a>
       <a href="/referrals">Referrals</a>
       <a href="/#systems">Systems</a>
-      <a href="/consults">Consults</a>
+      <a href="/consults" aria-current="page">Consults</a>
       <a href="/contact">Contact</a>
     </nav>
     <div class="head-cta">
@@ -290,162 +287,55 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
 </nav>
 
-<main>
+<main id="main">
+  <section class="wrap booking">
+    <p class="eyebrow">Consult</p>
+    <h1 class="display">Book time with NLMA</h1>
+    <p class="lede">Tell us what you need. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls book instantly.</p>
 
-<!-- PAGE HERO -->
-<section class="page-hero section">
-  <div class="wrap">
-    <span class="eyebrow">What we build</span>
-    <h1>End-to-end systems <span class="it">engineering.</span></h1>
-    <p class="lede">From blank canvas to production infrastructure. We design, build, and operate the software that replaces the glue code, manual work, and off-the-shelf compromises slowing your team down &mdash; with a concentrated specialization in real estate and property management.</p>
-  </div>
-</section>
+    <!-- STEP 1: intake -->
+    <form id="intakeForm" class="card" novalidate>
+      <div class="field"><label for="f-name">Your name</label>
+        <input id="f-name" type="text" autocomplete="name" required placeholder="Jane Smith" /></div>
+      <div class="field"><label for="f-email">Email</label>
+        <input id="f-email" type="email" autocomplete="email" required placeholder="jane@company.com" /></div>
+      <div class="field"><span class="label">How should we meet?</span>
+        <div class="seg" role="radiogroup" aria-label="Meeting medium">
+          <label><input type="radio" name="medium" value="meet" checked /> Google Meet</label>
+          <label><input type="radio" name="medium" value="phone" /> Phone</label>
+        </div></div>
+      <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
+        <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
+      <div class="field"><label for="f-request">What do you need?</label>
+        <textarea id="f-request" rows="5" maxlength="2000" required placeholder="Describe your situation, question, or project."></textarea></div>
+      <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <button class="btn btn-primary" id="intakeBtn" type="submit"><span class="dot"></span>Continue</button>
+      <p class="formnote" id="intakeNote" hidden></p>
+    </form>
 
-<!-- SERVICE LIST -->
-<section class="section" style="padding-top:0">
-  <div class="wrap">
-    <div class="svc-list">
-
-      <div class="svc reveal">
-        <div class="svc-inner">
-          <div>
-            <p class="key">01 — Core</p>
-            <h3>Custom Software Development</h3>
-          </div>
-          <div>
-            <p class="desc">We build production-grade internal tools, customer portals, data pipelines, and full-stack applications. No templates, no off-the-shelf compromises. Every project starts with what the business actually needs and works backward to the code.</p>
-            <div class="chips">
-              <span class="chip">Internal tools</span><span class="chip">Customer portals</span>
-              <span class="chip">REST &amp; GraphQL APIs</span><span class="chip">Data pipelines</span>
-              <span class="chip">Reporting dashboards</span><span class="chip">Document generation</span>
-            </div>
-          </div>
-        </div>
+    <!-- STEP 2: verdict + slots -->
+    <div id="resultStep" class="card" hidden>
+      <div id="verdict" class="verdict"></div>
+      <p id="summary" class="muted"></p>
+      <p id="freeSwitch" hidden><button type="button" class="linkbtn" id="requestFree">Request a free intro instead →</button></p>
+      <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
+      <div id="slots" class="slots" aria-live="polite"></div>
+      <div class="rowbtns">
+        <button type="button" class="btn btn-ghost" id="backBtn">← Edit request</button>
+        <button type="button" class="btn btn-primary" id="confirmBtn" disabled><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
       </div>
-
-      <div class="svc reveal" data-d="1">
-        <div class="svc-inner">
-          <div>
-            <p class="key">02 — AI</p>
-            <h3>AI Automation &amp; Agent Orchestration</h3>
-          </div>
-          <div>
-            <p class="desc">We design and deploy LLM-powered workflows that run in production — inbox triage, document processing, decision routing, multi-step agents with real tool access. We specialize in Model Context Protocol (MCP) infrastructure that connects AI to your live business systems.</p>
-            <div class="chips">
-              <span class="chip">LLM workflow design</span><span class="chip">MCP server development</span>
-              <span class="chip">Autonomous agents</span><span class="chip">Inbox &amp; comms triage</span>
-              <span class="chip">Document AI</span><span class="chip">claude-hub automation</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="svc reveal" data-d="2">
-        <div class="svc-inner">
-          <div>
-            <p class="key">03 — Property tech</p>
-            <h3>Property Management Technology</h3>
-          </div>
-          <div>
-            <p class="desc">Deep integrations across the STR/LTR/MTR property management stack. We extend and connect platforms that do not talk to each other by default, build owner-facing portals, automate financial workflows, and eliminate the manual reconciliation that eats your team's time.</p>
-            <div class="chips">
-              <span class="chip">Guesty</span><span class="chip">DoorLoop</span>
-              <span class="chip">Baselane</span><span class="chip">Turno</span>
-              <span class="chip">Airbnb / VRBO</span><span class="chip">Owner portals</span>
-              <span class="chip">STR compliance</span><span class="chip">Booking automation</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="svc reveal" data-d="3">
-        <div class="svc-inner">
-          <div>
-            <p class="key">04 — Infrastructure</p>
-            <h3>Business Systems Integration</h3>
-          </div>
-          <div>
-            <p class="desc">Every business runs on a stack of SaaS tools that barely talk to each other. We build the connective tissue — API orchestration, event-driven sync, webhook pipelines, and custom middleware that turns siloed tools into a coherent system.</p>
-            <div class="chips">
-              <span class="chip">API orchestration</span><span class="chip">Webhook pipelines</span>
-              <span class="chip">QuickBooks Online</span><span class="chip">Google Workspace</span>
-              <span class="chip">DocuSeal / e-sign</span><span class="chip">Twilio / SMS</span>
-              <span class="chip">n8n automation</span><span class="chip">Self-hosted MCP</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="svc reveal" data-d="4">
-        <div class="svc-inner">
-          <div>
-            <p class="key">05 — Advisory</p>
-            <h3>Consulting &amp; Technology Strategy</h3>
-          </div>
-          <div>
-            <p class="desc">Fractional CTO and systems-design work for teams that need senior technical guidance without a full-time hire. We audit your current stack, identify bottlenecks, map the build-vs-buy decision, and produce a roadmap you can actually execute against.</p>
-            <div class="chips">
-              <span class="chip">Tech stack audit</span><span class="chip">Process mapping</span>
-              <span class="chip">Build vs buy analysis</span><span class="chip">Fractional CTO</span>
-              <span class="chip">Implementation roadmap</span><span class="chip">Vendor selection</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <p class="formnote" id="resultNote" hidden></p>
     </div>
-  </div>
-</section>
 
-<!-- HOW WE WORK -->
-<section class="section">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">How we work</span>
-      <h2>From brief to production — fast.</h2>
-      <p class="lede">We keep the process lean. No discovery theater. No six-week scoping cycles. We get into the work quickly and ship iteratively.</p>
+    <!-- STEP 3: done (free path inline; billable returns to /consults/confirmed) -->
+    <div id="doneStep" class="card" hidden>
+      <h2 class="sub">You’re booked ✓</h2>
+      <p id="doneMsg" class="muted"></p>
+      <p><a class="btn btn-ghost" href="/">← Back to nlma.io</a></p>
     </div>
-    <div class="process">
-      <div class="step reveal">
-        <div class="no">01</div>
-        <h3>Brief &amp; scope</h3>
-        <p>One call. We map the problem, define the outcome, and decide what to build first. Scoping doc in 48 hours.</p>
-        <span class="bar"></span>
-      </div>
-      <div class="step reveal" data-d="1">
-        <div class="no">02</div>
-        <h3>Design &amp; architect</h3>
-        <p>System design, data model, integration map. We validate assumptions before writing production code.</p>
-        <span class="bar"></span>
-      </div>
-      <div class="step reveal" data-d="2">
-        <div class="no">03</div>
-        <h3>Build &amp; iterate</h3>
-        <p>Staged delivery in real environments. You see working software early and often, not a big-bang launch.</p>
-        <span class="bar"></span>
-      </div>
-      <div class="step reveal" data-d="3">
-        <div class="no">04</div>
-        <h3>Operate &amp; evolve</h3>
-        <p>We stay engaged. Monitoring, incident response, feature additions as your business changes.</p>
-        <span class="bar"></span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- CTA -->
-<section class="cta-strip">
-  <div class="wrap">
-    <span class="eyebrow">Next step</span>
-    <h2>Tell us what you need to <span class="it">build.</span></h2>
-    <div class="btns">
-      <a class="btn btn-primary" href="mailto:info@nlma.io?subject=New%20project%20enquiry"><span class="dot"></span>Start a project</a>
-      <a class="btn btn-ghost" href="/about">About NLMA &rarr;</a>
-    </div>
-  </div>
-</section>
-
+    <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable — email <a href="mailto:info@nlma.io?subject=Consult%20request">info@nlma.io</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we’ll set it up.</p>
+  </section>
 </main>
 
 <footer class="foot">
@@ -517,6 +407,120 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     },{threshold:.16,rootMargin:'0px 0px -8% 0px'});
     els.forEach(function(e){io.observe(e);});
   } else { els.forEach(function(e){e.classList.add('in');}); }
+})();
+</script>
+<script>
+(function(){
+  var CONFIG={
+    intake:"https://n8n.nlma.io/webhook/consult-intake",
+    book:"https://n8n.nlma.io/webhook/consult-book",
+    checkout:"https://n8n.nlma.io/webhook/consult-checkout",
+    MOCK:false
+  };
+  var $=function(id){return document.getElementById(id)};
+  var state={data:null, slot:null};
+
+  // medium toggle reveals phone
+  Array.prototype.forEach.call(document.getElementsByName("medium"),function(r){
+    r.addEventListener("change",function(){ $("phoneField").hidden = (r.value!=="phone")||!r.checked; });
+  });
+
+  function tzLabel(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"local time"}catch(e){return "local time"}}
+  function fmtSlot(iso){
+    var d=new Date(iso);
+    var local=d.toLocaleString([], {weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+    var et=d.toLocaleString([], {timeZone:"America/New_York",hour:"numeric",minute:"2-digit"});
+    return {local:local, et:et};
+  }
+
+  async function callBackend(url, body){
+    if(CONFIG.MOCK){ return mock(url, body); }
+    var res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    return res.json();
+  }
+  function mock(url, body){
+    if(url===CONFIG.intake){
+      return Promise.resolve({duration_min:45, billable:true, price:337.5,
+        summary:"Advisory session on structuring a distressed-property acquisition.",
+        rationale:"Advice-only request from a non-managed party.",
+        slots:[{startIso:isoInDays(2,11)},{startIso:isoInDays(2,14)},{startIso:isoInDays(4,16)},{startIso:isoInDays(7,11)}]});
+    }
+    if(url===CONFIG.book) return Promise.resolve({status:"booked", meetLink:"https://meet.google.com/xxx-mock"});
+    if(url===CONFIG.checkout) return Promise.resolve({checkoutUrl:"https://checkout.stripe.com/mock"});
+  }
+  function isoInDays(days,hourET){ // crude mock ET slot
+    var d=new Date(); d.setDate(d.getDate()+days); d.setHours(hourET,0,0,0); return d.toISOString();
+  }
+
+  function val(id){return ($(id).value||"").trim()}
+  function medium(){var r=document.querySelector('input[name="medium"]:checked');return r?r.value:"meet"}
+
+  $("intakeForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    $("intakeNote").hidden=true;
+    if(val("f-company")!==""){return;} // honeypot: silently drop
+    if(!val("f-name")||!val("f-email")||!val("f-request")){ note("intakeNote","Please fill in your name, email, and request."); return; }
+    setBusy("intakeBtn",true,"Analyzing…");
+    try{
+      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-company")});
+      state.data=data; renderResult(data);
+    }catch(err){ showFallback(); }
+    finally{ setBusy("intakeBtn",false,"Continue"); }
+  });
+
+  function renderResult(data){
+    $("intakeForm").hidden=true; $("resultStep").hidden=false; $("doneStep").hidden=true;
+    var mins=data.duration_min;
+    var v = data.billable
+      ? '~'+mins+'-min paid consult — <span class="price">$'+data.price.toFixed(2)+'</span>'
+      : 'Free intro call — ~'+mins+' min';
+    $("verdict").innerHTML=v;
+    $("summary").textContent=data.summary?("What we’ll cover: "+data.summary):"";
+    $("freeSwitch").hidden=!data.billable;
+    $("confirmLabel").textContent = data.billable ? ("Pay $"+data.price.toFixed(2)+" & book") : "Confirm booking";
+    $("tzNote").textContent="(times shown in "+tzLabel()+")";
+    renderSlots(data.slots||[]);
+  }
+  function renderSlots(slots){
+    var wrap=$("slots"); wrap.innerHTML=""; state.slot=null; $("confirmBtn").disabled=true;
+    if(!slots.length){ wrap.innerHTML='<p class="empty">No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>'; return; }
+    slots.forEach(function(s){
+      var f=fmtSlot(s.startIso||s);
+      var b=document.createElement("button"); b.type="button";
+      b.innerHTML=f.local+'<br><span class="muted">'+f.et+' ET</span>';
+      b.setAttribute("aria-pressed","false");
+      b.addEventListener("click",function(){
+        Array.prototype.forEach.call(wrap.children,function(c){c.setAttribute&&c.setAttribute("aria-pressed","false")});
+        b.setAttribute("aria-pressed","true"); state.slot=(s.startIso||s); $("confirmBtn").disabled=false;
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  $("backBtn").addEventListener("click",function(){ $("resultStep").hidden=true; $("intakeForm").hidden=false; });
+  $("requestFree").addEventListener("click",function(){
+    state.data.billable=false; state.data.price=0; renderResult(state.data);
+  });
+
+  $("confirmBtn").addEventListener("click",async function(){
+    if(!state.slot) return;
+    $("resultNote").hidden=true; setBusy("confirmBtn",true,"Working…");
+    var body={name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),duration_min:state.data.duration_min,startIso:state.slot};
+    try{
+      if(state.data.billable){
+        var c=await callBackend(CONFIG.checkout,body); window.location.href=c.checkoutUrl;
+      }else{
+        var r=await callBackend(CONFIG.book,body);
+        $("resultStep").hidden=true; $("doneStep").hidden=false;
+        $("doneMsg").innerHTML="Check your email for the calendar invite"+(r.meetLink?', including your Google Meet link.':'.');
+      }
+    }catch(err){ note("resultNote","Something went wrong — please try another time or email info@nlma.io."); setBusy("confirmBtn",false, state.data.billable?("Pay $"+state.data.price.toFixed(2)+" & book"):"Confirm booking"); }
+  });
+
+  function setBusy(id,busy,label){var b=$(id);b.disabled=busy;b.innerHTML='<span class="dot"></span>'+label;}
+  function note(id,msg){var n=$(id);n.textContent=msg;n.hidden=false;}
+  function showFallback(){$("fallback").hidden=false;}
 })();
 </script>
 </body>
