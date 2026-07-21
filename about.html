@@ -242,6 +242,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .val{border-right:none}
   .val:last-child{border-bottom:none}
 }
+/* proof band */
+.proof{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.proof .p{padding:30px 26px;border-right:1px solid var(--line)}
+.proof .p:last-child{border-right:none}
+.proof .n{font-family:var(--f-display);font-size:clamp(2rem,3.4vw,2.8rem);font-weight:500;color:var(--signal);line-height:1}
+.proof .l{color:var(--muted);font-size:.9rem;margin-top:10px;line-height:1.4}
+@media(max-width:960px){
+  .proof{grid-template-columns:1fr 1fr}
+  .proof .p{border-bottom:1px solid var(--line)}
+  .proof .p:nth-child(even){border-right:none}
+  .proof .p:nth-last-child(-n+2){border-bottom:none}
+}
+@media(max-width:560px){.proof{grid-template-columns:1fr}.proof .p{border-right:none}.proof .p:last-child{border-bottom:none}}
 
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
@@ -286,7 +299,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <div class="wrap">
     <span class="eyebrow" data-boot>The company</span>
     <h1 data-boot>Built by operators,<br><span class="it">for operators.</span></h1>
-    <p class="lede" data-boot>NLMA was founded because the right software rarely existed off the shelf. So we started building it — first for ourselves, then for everyone else.</p>
+    <p class="lede" data-boot>NLMA pairs hands-on management consulting with senior software engineering and applied AI — concentrated in one domain we know cold: real estate and property management. We were founded because the right tools rarely existed off the shelf, so we started building them.</p>
   </div>
 </section>
 
@@ -295,17 +308,61 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <div class="wrap">
     <div class="story-grid">
       <div class="story-copy reveal">
-        <p>Next Level Management Advisors started as a management and operations consultancy helping small businesses untangle the systems holding them back. Over time the work kept converging on the same truth: the tooling gap was the problem. Off-the-shelf platforms handled 80% of the job and left operators duct-taping the rest.</p>
-        <p>We pivoted into building the missing 20% — custom integrations, AI-powered workflows, and infrastructure that runs itself. Today NLMA ships production software and agent automation across real estate, property management, government, and commercial sectors.</p>
-        <p>We are a small, founder-led firm based in Virginia. We move fast, own the outcomes, and do not outsource judgment.</p>
+        <p>Next Level Management Advisors began as a business-management and operations consultancy — helping owners untangle the processes holding their companies back. The work kept converging on the same truth: the tooling gap <em>was</em> the problem. Off-the-shelf platforms handled 80% of the job and left operators duct-taping the rest by hand.</p>
+        <p>So we learned to build the missing 20% — custom software, deep integrations, and AI agents that do real work in production. And we went deep in one place instead of shallow everywhere: <strong>real estate and property management</strong>. Short-term and long-term rentals, HOAs, brokerage operations, foreclosure and loan servicing — the systems we build, we also run ourselves, on live portfolios, every day.</p>
+        <p>That is the difference. We are not an agency guessing at your workflow from the outside; we are operators who got tired of waiting for the right software and decided to write it. Founder-led, based in Virginia — we move fast, own the outcome, and never outsource judgment.</p>
       </div>
       <div class="story-aside reveal" data-d="2">
         <div class="item"><span class="k">Founded</span><span class="v">2018 · Virginia, USA</span></div>
         <div class="item"><span class="k">Entity</span><span class="v">Next Level Management Advisors, LLC</span></div>
-        <div class="item"><span class="k">Focus</span><span class="v">Software · AI automation · Property tech</span></div>
-        <div class="item"><span class="k">Approach</span><span class="v">Founder-led · Self-hosted · Operator-grade</span></div>
+        <div class="item"><span class="k">Disciplines</span><span class="v">Consulting · Software · Applied AI</span></div>
+        <div class="item"><span class="k">Specialty</span><span class="v">Real estate &amp; property management</span></div>
+        <div class="item"><span class="k">Approach</span><span class="v">Operator-led · Self-hosted · Outcome-owned</span></div>
         <div class="item"><span class="k">Reach us</span><span class="v">info@nlma.io · +1 571 200 2032</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What we bring</span>
+      <h2>Four disciplines, one operator.</h2>
+      <p class="lede">Most firms give you a consultant <em>or</em> an engineer <em>or</em> an AI vendor. The rare part is one team that does all three — inside a domain it actually operates in.</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap reveal">
+        <div class="key">Consulting</div>
+        <h3>Management &amp; operations</h3>
+        <p>We map the process before we touch a line of code — bottlenecks, hand-offs, the build-vs-buy call. Strategy grounded in how the business actually runs.</p>
+        <div class="chips"><span class="chip">Process mapping</span><span class="chip">Systems design</span><span class="chip">Fractional CTO</span></div>
+      </div>
+      <div class="cap reveal" data-d="1">
+        <div class="key">Engineering</div>
+        <h3>Custom software</h3>
+        <p>Production-grade full-stack applications, internal tools, portals, APIs, and the integration middleware that turns siloed SaaS into one coherent system.</p>
+        <div class="chips"><span class="chip">Full-stack apps</span><span class="chip">APIs &amp; pipelines</span><span class="chip">Systems integration</span></div>
+      </div>
+      <div class="cap reveal" data-d="2">
+        <div class="key">Applied AI</div>
+        <h3>Agents &amp; automation</h3>
+        <p>LLM workflows and autonomous agents that run in production — with Model Context Protocol infrastructure wiring AI safely into your live business systems.</p>
+        <div class="chips"><span class="chip">AI agents</span><span class="chip">MCP servers</span><span class="chip">Document &amp; comms AI</span></div>
+      </div>
+      <div class="cap reveal" data-d="3">
+        <div class="key">Domain</div>
+        <h3>Property-tech depth</h3>
+        <p>Fluent in the RE/PM stack and the money that flows through it. We extend and connect the platforms that don't talk to each other by default.</p>
+        <div class="chips"><span class="chip">Guesty</span><span class="chip">DoorLoop</span><span class="chip">Baselane</span><span class="chip">STR / LTR / HOA</span></div>
+      </div>
+    </div>
+    <div class="proof reveal" data-d="2" style="margin-top:clamp(40px,6vw,64px)">
+      <div class="p"><div class="n">40+</div><div class="l">Services running in production</div></div>
+      <div class="p"><div class="n">20+</div><div class="l">Platforms wired into one system</div></div>
+      <div class="p"><div class="n">7+</div><div class="l">Self-hosted MCP servers</div></div>
+      <div class="p"><div class="n">100%</div><div class="l">Code &amp; infrastructure the client owns</div></div>
     </div>
   </div>
 </section>
