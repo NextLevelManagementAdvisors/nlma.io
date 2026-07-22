@@ -126,7 +126,7 @@ h3{font-size:clamp(1.3rem,2vw,1.55rem);line-height:1.12;letter-spacing:-.01em}
 .brand{display:flex;align-items:center;gap:12px}
 .brand .tile{width:34px;height:34px;border-radius:9px;background:var(--grad);
   display:grid;place-items:center;flex:none;box-shadow:0 6px 20px -8px rgba(15,61,86,.9)}
-.brand .tile span{font-family:var(--f-display);font-weight:700;font-size:20px;color:#fff;line-height:1}
+.brand .tile::before{content:"N";font-family:var(--f-display);font-weight:700;font-size:20px;color:#fff;line-height:1}
 .brand .word{font-family:var(--f-display);font-weight:600;font-size:21px;letter-spacing:.04em}
 .brand .word b{font-weight:600}
 .nav{display:flex;align-items:center;gap:clamp(18px,2.4vw,36px)}
@@ -398,7 +398,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <header class="site-head" id="head">
   <div class="wrap head-row">
     <a class="brand" href="/" aria-label="NLMA home">
-      <span class="tile" aria-hidden="true"><span>N</span></span>
+      <span class="tile" aria-hidden="true"></span>
       <span class="word"><b>NLMA</b></span>
     </a>
     <nav class="nav" aria-label="Primary">
@@ -645,7 +645,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="foot-top">
       <div class="brandcol">
         <a class="brand" href="#top" aria-label="NLMA home">
-          <span class="tile" aria-hidden="true"><span>N</span></span>
+          <span class="tile" aria-hidden="true"></span>
           <span class="word"><b>NLMA</b></span>
         </a>
         <p class="blurb">Custom software and AI automation for teams that have outgrown spreadsheets and off-the-shelf tools.</p>
