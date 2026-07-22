@@ -48,7 +48,7 @@
   --signal-dim:#2E6A55;
   --paper:#ECF3EF;        /* warm off-white text */
   --muted:#8AA39B;        /* secondary text */
-  --faint:#5C726C;        /* tertiary / captions */
+  --faint:#728880;        /* tertiary / captions — ≥4.5:1 on --ink */
   --line:rgba(236,243,239,.10);
   --line-2:rgba(236,243,239,.18);
   --grad:linear-gradient(135deg,#2E6A55 0%,#0F3D56 100%);
@@ -316,7 +316,7 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
 .foot-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px;padding-bottom:46px;border-bottom:1px solid var(--line)}
 .foot .blurb{color:var(--muted);font-size:.95rem;max-width:34ch;margin:18px 0 0}
 .foot .tagline{font-family:var(--f-display);font-style:italic;color:var(--paper);font-size:1.05rem;margin-top:18px}
-.foot h4{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);font-weight:500;margin:0 0 16px}
+.foot h3{font-family:var(--f-mono);font-size:11.5px;line-height:1.4;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);font-weight:500;margin:0 0 16px}
 .foot ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
 .foot ul a{color:var(--muted);font-size:.95rem;transition:color .25s}
 .foot ul a:hover{color:var(--signal)}
@@ -398,7 +398,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <header class="site-head" id="head">
   <div class="wrap head-row">
     <a class="brand" href="/" aria-label="NLMA home">
-      <span class="tile"><span>N</span></span>
+      <span class="tile" aria-hidden="true"><span>N</span></span>
       <span class="word"><b>NLMA</b></span>
     </a>
     <nav class="nav" aria-label="Primary">
@@ -645,14 +645,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="foot-top">
       <div class="brandcol">
         <a class="brand" href="#top" aria-label="NLMA home">
-          <span class="tile"><span>N</span></span>
+          <span class="tile" aria-hidden="true"><span>N</span></span>
           <span class="word"><b>NLMA</b></span>
         </a>
         <p class="blurb">Custom software and AI automation for teams that have outgrown spreadsheets and off-the-shelf tools.</p>
         <p class="tagline">Transforming complexity into clarity.</p>
       </div>
       <div>
-        <h4>Company</h4>
+        <h3>Company</h3>
         <ul>
           <li><a href="/about">About</a></li>
           <li><a href="/services">Services</a></li>
@@ -664,7 +664,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         </ul>
       </div>
       <div>
-        <h4>Contact</h4>
+        <h3>Contact</h3>
         <ul>
           <li><a href="mailto:info@nlma.io">info@nlma.io</a></li>
           <li><a href="tel:+15712002032">+1 571 200 2032</a></li>
@@ -673,7 +673,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         </ul>
       </div>
       <div>
-        <h4>Legal</h4>
+        <h3>Legal</h3>
         <ul>
           <li><a href="/privacy">Privacy</a></li>
           <li><a href="/terms">Terms</a></li>
