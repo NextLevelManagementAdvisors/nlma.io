@@ -167,6 +167,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
 .disclosure p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
 /* ===== CATEGORY GROUPS + VENDOR CARDS ===== */
 .ref-group{margin-top:clamp(40px,6vw,64px)}
+.ref-group[id]{scroll-margin-top:96px}
 .ref-group > .eyebrow{margin-bottom:22px}
 .ref-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .ref{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);
@@ -302,7 +303,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
       </div>
     </div>
 
-    <div class="ref-group reveal">
+    <div class="ref-group reveal" id="funding">
       <span class="eyebrow">Business credit &amp; funding</span>
       <div class="ref-grid">
         <a class="ref" href="https://go.nlma.io/gf-landmines" target="_blank" rel="sponsored nofollow noopener">
