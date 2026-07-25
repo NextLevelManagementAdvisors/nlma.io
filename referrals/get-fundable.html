@@ -155,7 +155,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.foot-bot .sysline i{animation:none}}
 
 /* ===== PAGE HERO ===== */
-.page-hero{padding-top:160px;padding-bottom:54px}
+.page-hero{padding-top:150px;padding-bottom:30px}
 .page-hero .eyebrow{margin-bottom:28px}
 .page-hero h1{font-size:clamp(2.8rem,6.4vw,5rem);max-width:16ch}
 .page-hero h1 .it{font-style:italic;color:var(--signal)}
@@ -165,6 +165,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
   background:var(--grad-soft);display:flex;gap:14px;align-items:flex-start}
 .disclosure svg{width:18px;height:18px;color:var(--signal);flex:none;margin-top:2px}
 .disclosure p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+.disclosure-foot{padding-block:0 clamp(44px,6vw,72px)}
+.disclosure-foot .disclosure{margin-top:0;max-width:none}
 /* ===== CATEGORY GROUPS + VENDOR CARDS ===== */
 .ref-group{margin-top:clamp(40px,6vw,64px)}
 .ref-group[id],.ref[id]{scroll-margin-top:96px}
@@ -243,10 +245,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
     <span class="eyebrow">Referral partner</span>
     <h1>Get <span class="it">Fundable!</span></h1>
     <p class="lede">Merrill Chandler&rsquo;s business-credit and funding training. Four sessions run free and open to anyone &mdash; start with the masterclass, then the workshop.</p>
-    <div class="disclosure">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-      <p><strong style="color:var(--paper);font-weight:600">Referral disclosure.</strong> The links on this page are referral links &mdash; if you sign up, we may earn a commission at no additional cost to you. All four sessions below are free to attend.</p>
-    </div>
   </div>
 </section>
 
@@ -296,6 +294,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
       <a class="btn btn-primary" href="/consults"><span class="dot"></span>Schedule a consult</a>
       <a class="btn btn-ghost" href="/services">See our services &rarr;</a>
     </div>
+  </div>
+</section>
+
+<!-- DISCLOSURE -->
+<section class="disclosure-foot">
+  <div class="wrap">
+      <div class="disclosure">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <p><strong style="color:var(--paper);font-weight:600">Referral disclosure.</strong> The links on this page are referral links &mdash; if you sign up, we may earn a commission at no additional cost to you. All four sessions listed here are free to attend.</p>
+      </div>
   </div>
 </section>
 
