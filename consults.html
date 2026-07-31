@@ -171,6 +171,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 /* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined —
       only the --muted custom property existed. Define the class. */
 .muted{color:var(--muted)}
+/* 4) .seg label{display:flex} beats the UA [hidden]{display:none} rule at equal
+      specificity, same as the #phoneField case — needed to gate the phone option. */
+.seg label[hidden]{display:none}
+/* disclosure block shown before the confirm affordance on the discovery path */
+.disclosure{border:1px solid var(--line);border-radius:12px;background:var(--grad-soft);padding:16px 18px;margin:6px 0 20px}
+.disclosure .disclosure-head{font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin:0 0 11px}
+.disclosure ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
+.disclosure li{color:var(--muted);font-size:14px;line-height:1.5}
+.disclosure strong{color:var(--paper);font-weight:600}
 
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
@@ -217,7 +226,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <section class="wrap booking">
     <p class="eyebrow">Consult</p>
     <h1 class="display">Schedule a consult</h1>
-    <p class="lede">Tell us what you need — an operations, software, or AI problem, especially in real estate or property management. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls book instantly.</p>
+    <p class="lede">Tell us what you need — an operations, software, or AI problem, especially in real estate or property management. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
 
     <!-- STEP 1: intake -->
     <form id="intakeForm" class="card" novalidate>
@@ -225,13 +234,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <input id="f-name" type="text" autocomplete="name" required placeholder="Jane Smith" /></div>
       <div class="field"><label for="f-email">Email</label>
         <input id="f-email" type="email" autocomplete="email" required placeholder="jane@company.com" /></div>
-      <div class="field"><span class="label">How should we meet?</span>
-        <div class="seg" role="radiogroup" aria-label="Meeting medium">
-          <label><input type="radio" name="medium" value="meet" checked /> Google Meet</label>
-          <label><input type="radio" name="medium" value="phone" /> Phone</label>
-        </div></div>
-      <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
-        <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
       <div class="field"><label for="f-request">What do you need?</label>
         <textarea id="f-request" rows="5" maxlength="2000" required placeholder="Describe your situation, question, or project."></textarea></div>
       <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
@@ -244,8 +246,25 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div id="verdict" class="verdict"></div>
       <p id="summary" class="muted"></p>
       <p id="freeSwitch" hidden><button type="button" class="linkbtn" id="requestFree">Request a free intro instead →</button></p>
+      <div class="field"><span class="label">How should we meet?</span>
+        <div class="seg" role="radiogroup" aria-label="Meeting medium">
+          <label><input type="radio" name="medium" value="meet" checked /> Google Meet</label>
+          <label id="phoneOption" hidden><input type="radio" name="medium" value="phone" /> Phone</label>
+        </div></div>
+      <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
+        <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
       <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
       <div id="slots" class="slots" aria-live="polite"></div>
+      <div class="disclosure" id="disclosure" hidden>
+        <p class="disclosure-head">Before you book a free intro</p>
+        <ul>
+          <li>The call is held on Google Meet and transcribed.</li>
+          <li>We review the transcript only to confirm the call stayed within a free intro.</li>
+          <li>A <strong>$112.50</strong> authorization hold is placed on your card — a 15-minute increment of advisory time at our standard rate.</li>
+          <li>The hold is <strong>released</strong> unless the call becomes paid advice.</li>
+          <li>Nothing is charged without a human decision.</li>
+        </ul>
+      </div>
       <div class="rowbtns">
         <button type="button" class="btn btn-ghost" id="backBtn">← Edit request</button>
         <button type="button" class="btn btn-primary" id="confirmBtn" disabled><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
@@ -379,6 +398,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     $("verdict").innerHTML=v;
     $("summary").textContent=data.summary?("What we’ll cover: "+data.summary):"";
     $("freeSwitch").hidden=!data.billable;
+    // Phone is Meet-only for discovery: only offer it when triage returns billable.
+    // Discovery calls produce no transcript to review, so they must be on Meet.
+    $("phoneOption").hidden = !data.billable;
+    if(!data.billable){
+      var meetRadio=document.querySelector('input[name="medium"][value="meet"]');
+      if(meetRadio) meetRadio.checked=true;
+      $("phoneField").hidden=true;
+    }
+    // Hold disclosure applies to the discovery path (the billable path prepays in full).
+    $("disclosure").hidden = !!data.billable;
     $("confirmLabel").textContent = payLabel(data);
     $("tzNote").textContent="(times shown in "+tzLabel()+")";
     renderSlots(data.slots||[]);
