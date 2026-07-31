@@ -143,7 +143,9 @@ Append to the page’s inline `<style>` (reuse existing tokens `--signal`, `--mu
 .booking{max-width:760px;padding-block:clamp(48px,9vw,110px)}
 .booking .card{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,3vw,34px);margin-top:26px}
 .field{margin-bottom:18px;display:flex;flex-direction:column;gap:7px}
+.field[hidden]{display:none}
 .field .label,.field label{font-size:14px;color:var(--muted)}
+#f-company{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .field input,.field textarea{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:12px 14px;font:inherit}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--signal)}
 .seg{display:flex;gap:10px}.seg label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--paper)}
