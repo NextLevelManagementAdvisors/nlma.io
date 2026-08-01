@@ -153,10 +153,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .seg{display:flex;gap:10px}.seg label{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;color:var(--paper)}
 .verdict{font-family:var(--f-display);font-size:clamp(1.3rem,3vw,1.7rem);margin-bottom:10px}
 .verdict .price{color:var(--signal)}
-.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 22px}
-.slots button{background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:10px;color:var(--paper);padding:11px;cursor:pointer;font:inherit}
-.slots button[aria-pressed="true"]{border-color:var(--signal);background:rgba(79,194,149,.12)}
-.slots .empty{color:var(--muted);grid-column:1/-1}
+.seg{flex-wrap:wrap}
+.seg label.disabled{opacity:.32;pointer-events:none}
+.seg.dateSeg label{min-width:104px;justify-content:center}
+.slots .empty{color:var(--muted);margin:14px 0 22px}
 .rowbtns{display:flex;gap:12px;flex-wrap:wrap}
 .linkbtn{background:none;border:none;color:var(--signal);cursor:pointer;font:inherit;padding:0}
 .formnote{margin-top:12px;color:#ff9b9b;font-size:14px}
@@ -254,7 +254,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
         <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
       <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
-      <div id="slots" class="slots" aria-live="polite"></div>
+      <div aria-live="polite">
+        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>
+        <div class="field" id="dateField"><span class="label">Date</span>
+          <div class="seg dateSeg" id="dateSeg" role="radiogroup" aria-label="Date"></div></div>
+        <div class="field" id="timeField"><span class="label">Time</span>
+          <div class="seg timeSeg" id="timeSeg" role="radiogroup" aria-label="Time of day"></div></div>
+      </div>
       <div class="disclosure" id="disclosure" hidden>
         <p class="disclosure-head">Before you book a free intro</p>
         <ul>
@@ -358,11 +364,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   });
 
   function tzLabel(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"local time"}catch(e){return "local time"}}
-  function fmtSlot(iso){
-    var d=new Date(iso);
-    var local=d.toLocaleString([], {weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
-    var et=d.toLocaleString([], {timeZone:"America/New_York",hour:"numeric",minute:"2-digit"});
-    return {local:local, et:et};
+  function dayLabel(iso){
+    return new Date(iso).toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"});
+  }
+  function timeLabel(iso){
+    return new Date(iso).toLocaleString([], {hour:"numeric",minute:"2-digit"});
   }
 
   async function callBackend(url, body){
@@ -412,19 +418,59 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     renderSlots(data.slots||[]);
   }
   function renderSlots(slots){
-    var wrap=$("slots"); wrap.innerHTML=""; state.slot=null; $("confirmBtn").disabled=true;
-    if(!slots.length){ wrap.innerHTML='<p class="empty">No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>'; return; }
+    var dateSeg=$("dateSeg"), timeSeg=$("timeSeg");
+    dateSeg.innerHTML=""; timeSeg.innerHTML="";
+    state.slot=null; $("confirmBtn").disabled=true;
+
+    if(!slots.length){
+      $("slotsEmpty").hidden=false; $("dateField").hidden=true; $("timeField").hidden=true;
+      return;
+    }
+    $("slotsEmpty").hidden=true; $("dateField").hidden=false; $("timeField").hidden=false;
+
+    // Every available day repeats the same handful of times, so a "which day /
+    // which time" pair of short rows reads far lighter than one long flat list.
+    var matrix={}, dates=[], times=[];
     slots.forEach(function(s){
-      var f=fmtSlot(s.startIso||s);
-      var b=document.createElement("button"); b.type="button";
-      b.innerHTML=f.local+'<br><span class="muted">'+f.et+' ET</span>';
-      b.setAttribute("aria-pressed","false");
-      b.addEventListener("click",function(){
-        Array.prototype.forEach.call(wrap.children,function(c){c.setAttribute&&c.setAttribute("aria-pressed","false")});
-        b.setAttribute("aria-pressed","true"); state.slot=(s.startIso||s); $("confirmBtn").disabled=false;
-      });
-      wrap.appendChild(b);
+      var iso=s.startIso||s, d=dayLabel(iso), t=timeLabel(iso);
+      if(dates.indexOf(d)===-1) dates.push(d);
+      if(times.indexOf(t)===-1) times.push(t);
+      matrix[d]=matrix[d]||{}; matrix[d][t]=iso;
     });
+
+    function buildSeg(container,name,values){
+      values.forEach(function(v){
+        var label=document.createElement("label");
+        var input=document.createElement("input");
+        input.type="radio"; input.name=name; input.value=v;
+        input.addEventListener("change",onPick);
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(v));
+        container.appendChild(label);
+      });
+    }
+    buildSeg(dateSeg,"dateChoice",dates);
+    buildSeg(timeSeg,"timeChoice",times);
+
+    function checked(name){
+      var r=document.querySelector('input[name="'+name+'"]:checked'); return r?r.value:null;
+    }
+    function onPick(){
+      var d=checked("dateChoice"), t=checked("timeChoice");
+      Array.prototype.forEach.call(timeSeg.querySelectorAll("input"),function(r){
+        var has=!d||(matrix[d]&&matrix[d][r.value]);
+        r.disabled=!has; r.parentElement.classList.toggle("disabled",!has);
+        if(!has&&r.checked) r.checked=false;
+      });
+      Array.prototype.forEach.call(dateSeg.querySelectorAll("input"),function(r){
+        var has=!t||(matrix[r.value]&&matrix[r.value][t]);
+        r.disabled=!has; r.parentElement.classList.toggle("disabled",!has);
+        if(!has&&r.checked) r.checked=false;
+      });
+      d=checked("dateChoice"); t=checked("timeChoice");
+      if(d&&t&&matrix[d]&&matrix[d][t]){ state.slot=matrix[d][t]; $("confirmBtn").disabled=false; }
+      else { state.slot=null; $("confirmBtn").disabled=true; }
+    }
   }
 
   $("backBtn").addEventListener("click",function(){ $("resultStep").hidden=true; $("intakeForm").hidden=false; });
