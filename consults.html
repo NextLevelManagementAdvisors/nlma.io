@@ -386,7 +386,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     r.addEventListener("change",function(){ $("phoneField").hidden = (r.value!=="phone")||!r.checked; });
   });
 
-  function tzLabel(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"local time"}catch(e){return "local time"}}
+  function tzLabel(){
+    try{
+      var part=Intl.DateTimeFormat(undefined,{timeZoneName:"short"}).formatToParts(new Date())
+        .find(function(p){ return p.type==="timeZoneName"; });
+      return (part&&part.value)||Intl.DateTimeFormat().resolvedOptions().timeZone||"local time";
+    }catch(e){ return "local time"; }
+  }
   function pad2(n){return (n<10?"0":"")+n}
   function dateKey(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())}
   function monthKey(d){return d.getFullYear()*12+d.getMonth()}
@@ -497,7 +503,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     // Hold disclosure applies to the discovery path (the billable path prepays in full).
     $("disclosure").hidden = !!data.billable;
     $("confirmLabel").textContent = payLabel(data);
-    $("tzNote").textContent="(times shown in "+tzLabel()+")";
+    $("tzNote").textContent="("+tzLabel()+")";
     renderSlots(data.slots||[]);
   }
   function renderSlots(slots){
