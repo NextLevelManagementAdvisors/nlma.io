@@ -155,8 +155,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .verdict .price{color:var(--signal)}
 .seg{flex-wrap:wrap}
 .seg label.disabled{opacity:.32;pointer-events:none}
-.seg.dateSeg label{min-width:104px;justify-content:center}
 .slots .empty{color:var(--muted);margin:14px 0 22px}
+#timeForDate{color:var(--paper);font-weight:600}
+.cal{border:1px solid var(--line);border-radius:12px;padding:14px 16px 18px;background:rgba(0,0,0,.15)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-month{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper)}
+.cal-nav{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--paper);
+  display:grid;place-items:center;font-size:16px;line-height:1;flex:none}
+.cal-nav:hover:not(:disabled){border-color:var(--signal);color:var(--signal)}
+.cal-nav:disabled{opacity:.25;cursor:default}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);text-align:center;padding-bottom:6px}
+.cal-day{aspect-ratio:1;border-radius:9px;border:1px solid transparent;background:none;color:var(--faint);
+  display:grid;place-items:center;font:inherit;font-size:14px;padding:0}
+.cal-day.avail{color:var(--paper);border-color:var(--line);background:rgba(0,0,0,.2);cursor:pointer}
+.cal-day.avail:hover{border-color:var(--signal)}
+.cal-day.selected{border-color:var(--signal);background:rgba(79,194,149,.15)}
+.cal-day:disabled{cursor:default;pointer-events:none}
+.cal-day.pad{visibility:hidden}
 .rowbtns{display:flex;gap:12px;flex-wrap:wrap}
 .linkbtn{background:none;border:none;color:var(--signal);cursor:pointer;font:inherit;padding:0}
 .formnote{margin-top:12px;color:#ff9b9b;font-size:14px}
@@ -257,8 +273,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div aria-live="polite">
         <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>
         <div class="field" id="dateField"><span class="label">Date</span>
-          <div class="seg dateSeg" id="dateSeg" role="radiogroup" aria-label="Date"></div></div>
-        <div class="field" id="timeField"><span class="label">Time</span>
+          <div class="cal" id="cal">
+            <div class="cal-head">
+              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">‹</button>
+              <span class="cal-month" id="calMonth"></span>
+              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div class="field" id="timeField" hidden><span class="label">Time on <span id="timeForDate" class="paper"></span></span>
           <div class="seg timeSeg" id="timeSeg" role="radiogroup" aria-label="Time of day"></div></div>
       </div>
       <div class="disclosure" id="disclosure" hidden>
@@ -364,11 +388,71 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   });
 
   function tzLabel(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"local time"}catch(e){return "local time"}}
-  function dayLabel(iso){
-    return new Date(iso).toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"});
+  function pad2(n){return (n<10?"0":"")+n}
+  function dateKey(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate())}
+  function monthKey(d){return d.getFullYear()*12+d.getMonth()}
+  function dayLabel(d){return d.toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"})}
+  function timeLabel(iso){return new Date(iso).toLocaleString([], {hour:"numeric",minute:"2-digit"})}
+  var DOW=["S","M","T","W","T","F","S"];
+
+  $("calPrev").addEventListener("click",function(){
+    if(!state.calMin||monthKey(state.calView)<=monthKey(state.calMin)) return;
+    state.calView=new Date(state.calView.getFullYear(),state.calView.getMonth()-1,1);
+    renderCalendar();
+  });
+  $("calNext").addEventListener("click",function(){
+    if(!state.calMax||monthKey(state.calView)>=monthKey(state.calMax)) return;
+    state.calView=new Date(state.calView.getFullYear(),state.calView.getMonth()+1,1);
+    renderCalendar();
+  });
+
+  function renderCalendar(){
+    var view=state.calView;
+    $("calMonth").textContent=view.toLocaleDateString([], {month:"long",year:"numeric"});
+    $("calPrev").disabled = monthKey(view)<=monthKey(state.calMin);
+    $("calNext").disabled = monthKey(view)>=monthKey(state.calMax);
+
+    var grid=$("calGrid"); grid.innerHTML="";
+    DOW.forEach(function(d){ var h=document.createElement("div"); h.className="cal-dow"; h.textContent=d; grid.appendChild(h); });
+
+    var first=new Date(view.getFullYear(),view.getMonth(),1);
+    var daysInMonth=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+    for(var i=0;i<first.getDay();i++){
+      var pad=document.createElement("span"); pad.className="cal-day pad"; grid.appendChild(pad);
+    }
+    var dayNums=[]; for(var n=1;n<=daysInMonth;n++){ dayNums.push(n); }
+    dayNums.forEach(function(day){
+      var d=new Date(view.getFullYear(),view.getMonth(),day);
+      var k=dateKey(d);
+      var has=!!state.matrix[k];
+      var btn=document.createElement("button");
+      btn.type="button"; btn.className="cal-day"+(has?" avail":""); btn.textContent=String(day);
+      if(!has){ btn.disabled=true; }
+      else{
+        if(k===state.selectedDateKey) btn.classList.add("selected");
+        btn.addEventListener("click",function(){ selectDate(k,d); });
+      }
+      grid.appendChild(btn);
+    });
   }
-  function timeLabel(iso){
-    return new Date(iso).toLocaleString([], {hour:"numeric",minute:"2-digit"});
+
+  function selectDate(k,d){
+    state.selectedDateKey=k; state.slot=null; $("confirmBtn").disabled=true;
+    renderCalendar();
+    $("timeForDate").textContent = dayLabel(d);
+    var timeSeg=$("timeSeg"); timeSeg.innerHTML="";
+    var times=Object.keys(state.matrix[k]).sort(function(a,b){
+      return state.matrix[k][a] < state.matrix[k][b] ? -1 : 1;
+    });
+    times.forEach(function(t){
+      var label=document.createElement("label");
+      var input=document.createElement("input");
+      input.type="radio"; input.name="timeChoice"; input.value=t;
+      input.addEventListener("change",function(){ state.slot=state.matrix[k][t]; $("confirmBtn").disabled=false; });
+      label.appendChild(input); label.appendChild(document.createTextNode(t));
+      timeSeg.appendChild(label);
+    });
+    $("timeField").hidden=false;
   }
 
   async function callBackend(url, body){
@@ -418,59 +502,31 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     renderSlots(data.slots||[]);
   }
   function renderSlots(slots){
-    var dateSeg=$("dateSeg"), timeSeg=$("timeSeg");
-    dateSeg.innerHTML=""; timeSeg.innerHTML="";
-    state.slot=null; $("confirmBtn").disabled=true;
+    $("timeField").hidden=true; state.slot=null; $("confirmBtn").disabled=true;
 
     if(!slots.length){
-      $("slotsEmpty").hidden=false; $("dateField").hidden=true; $("timeField").hidden=true;
+      $("slotsEmpty").hidden=false; $("dateField").hidden=true;
       return;
     }
-    $("slotsEmpty").hidden=true; $("dateField").hidden=false; $("timeField").hidden=false;
+    $("slotsEmpty").hidden=true; $("dateField").hidden=false;
 
-    // Every available day repeats the same handful of times, so a "which day /
-    // which time" pair of short rows reads far lighter than one long flat list.
-    var matrix={}, dates=[], times=[];
+    // Group into a real calendar: pick a day first, then see just that
+    // day's times — reads lighter than a flat list of every open slot.
+    var matrix={}; // dateKey -> {timeLabel: iso}
     slots.forEach(function(s){
-      var iso=s.startIso||s, d=dayLabel(iso), t=timeLabel(iso);
-      if(dates.indexOf(d)===-1) dates.push(d);
-      if(times.indexOf(t)===-1) times.push(t);
-      matrix[d]=matrix[d]||{}; matrix[d][t]=iso;
+      var iso=s.startIso||s, d=new Date(iso), k=dateKey(d), t=timeLabel(iso);
+      matrix[k]=matrix[k]||{}; matrix[k][t]=iso;
     });
+    var availKeys=Object.keys(matrix).sort();
+    var first=new Date(availKeys[0]+"T00:00:00");
+    var last=new Date(availKeys[availKeys.length-1]+"T00:00:00");
 
-    function buildSeg(container,name,values){
-      values.forEach(function(v){
-        var label=document.createElement("label");
-        var input=document.createElement("input");
-        input.type="radio"; input.name=name; input.value=v;
-        input.addEventListener("change",onPick);
-        label.appendChild(input);
-        label.appendChild(document.createTextNode(v));
-        container.appendChild(label);
-      });
-    }
-    buildSeg(dateSeg,"dateChoice",dates);
-    buildSeg(timeSeg,"timeChoice",times);
-
-    function checked(name){
-      var r=document.querySelector('input[name="'+name+'"]:checked'); return r?r.value:null;
-    }
-    function onPick(){
-      var d=checked("dateChoice"), t=checked("timeChoice");
-      Array.prototype.forEach.call(timeSeg.querySelectorAll("input"),function(r){
-        var has=!d||(matrix[d]&&matrix[d][r.value]);
-        r.disabled=!has; r.parentElement.classList.toggle("disabled",!has);
-        if(!has&&r.checked) r.checked=false;
-      });
-      Array.prototype.forEach.call(dateSeg.querySelectorAll("input"),function(r){
-        var has=!t||(matrix[r.value]&&matrix[r.value][t]);
-        r.disabled=!has; r.parentElement.classList.toggle("disabled",!has);
-        if(!has&&r.checked) r.checked=false;
-      });
-      d=checked("dateChoice"); t=checked("timeChoice");
-      if(d&&t&&matrix[d]&&matrix[d][t]){ state.slot=matrix[d][t]; $("confirmBtn").disabled=false; }
-      else { state.slot=null; $("confirmBtn").disabled=true; }
-    }
+    state.matrix=matrix;
+    state.calMin=new Date(first.getFullYear(),first.getMonth(),1);
+    state.calMax=new Date(last.getFullYear(),last.getMonth(),1);
+    state.calView=new Date(state.calMin);
+    state.selectedDateKey=null;
+    renderCalendar();
   }
 
   $("backBtn").addEventListener("click",function(){ $("resultStep").hidden=true; $("intakeForm").hidden=false; });
