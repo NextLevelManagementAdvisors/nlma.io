@@ -183,7 +183,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .field[hidden]{display:none}
 /* 2) the honeypot input had no visual-hiding CSS, so it rendered as a bare empty
       box next to the Continue button. Hide it off-screen like contact.html's .hp. */
-#f-company{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#f-check{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 /* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined —
       only the --muted custom property existed. Define the class. */
 .muted{color:var(--muted)}
@@ -252,7 +252,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <input id="f-email" type="email" autocomplete="email" required placeholder="jane@company.com" /></div>
       <div class="field"><label for="f-request">What do you need?</label>
         <textarea id="f-request" rows="5" maxlength="2000" required placeholder="Describe your situation, question, or project."></textarea></div>
-      <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <!-- Honeypot. The name deliberately carries no autofill-recognizable token:
+           the old name="company_website" matched Chrome's COMPANY_NAME heuristic, so
+           address autofill filled this off-screen box and the submit was dropped. -->
+      <input id="f-check" name="nlma_check" type="text" tabindex="-1" autocomplete="off"
+             aria-hidden="true" data-lpignore="true" data-form-type="other" />
       <button class="btn btn-primary" id="intakeBtn" type="submit"><span class="dot"></span>Continue</button>
       <p class="formnote" id="intakeNote" hidden></p>
     </form>
@@ -462,7 +466,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
   async function callBackend(url, body){
     var res=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if(!res.ok) throw new Error("HTTP "+res.status);
+    if(!res.ok){ var e=new Error("HTTP "+res.status); e.status=res.status; throw e; }
     return res.json();
   }
 
@@ -470,16 +474,26 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   function medium(){var r=document.querySelector('input[name="medium"]:checked');return r?r.value:"meet"}
   function payLabel(d){return d.billable?("Pay $"+d.price.toFixed(2)+" & book"):"Confirm booking";}
 
+  // Never drop a submit silently. The honeypot is enforced server-side only: a
+  // client-side `return` left the button dead with no message, which is exactly
+  // what a human tripped by browser autofill reported as "it doesn't work".
   $("intakeForm").addEventListener("submit",async function(e){
     e.preventDefault();
-    $("intakeNote").hidden=true;
-    if(val("f-company")!==""){return;} // honeypot: silently drop
+    $("intakeNote").hidden=true; $("fallback").hidden=true;
     if(!val("f-name")||!val("f-email")||!val("f-request")){ note("intakeNote","Please fill in your name, email, and request."); return; }
     setBusy("intakeBtn",true,"Analyzing…");
     try{
-      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-company")});
+      // posted under the key the n8n Guard node reads; only the DOM field name changed
+      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-check")});
       state.data=data; renderResult(data);
-    }catch(err){ showFallback(); }
+    }catch(err){
+      if(err.status===400){
+        note("intakeNote","We couldn’t accept that request. Check your name and email and try again — or email info@nlma.io and we’ll book it for you.");
+      }else{
+        note("intakeNote","Booking is temporarily unavailable. Please email info@nlma.io or call +1 571 200 2032 and we’ll set it up.");
+        showFallback();
+      }
+    }
     finally{ setBusy("intakeBtn",false,"Continue"); }
   });
 
@@ -551,7 +565,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         $("resultStep").hidden=true; $("doneStep").hidden=false;
         $("doneMsg").innerHTML="Check your email for the calendar invite"+(r.meetLink?', including your Google Meet link.':'.');
       }
-    }catch(err){ note("resultNote","Something went wrong — please try another time or email info@nlma.io."); setBusy("confirmBtn",false,payLabel(state.data)); }
+    }catch(err){
+      if(err.status===409){
+        note("resultNote","That time was just taken. Please pick another time below.");
+      }else if(err.status===400){
+        note("resultNote","We couldn’t accept that booking. Please pick another time, or email info@nlma.io and we’ll book it for you.");
+      }else{
+        note("resultNote","Something went wrong — please try another time or email info@nlma.io.");
+      }
+      setBusy("confirmBtn",false,payLabel(state.data));
+    }
   });
 
   function setBusy(id,busy,label){var b=$(id);b.disabled=busy;b.innerHTML='<span class="dot"></span>'+label;}
