@@ -627,8 +627,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <textarea id="f-msg" name="message" rows="4" placeholder="The operation, the friction, what you wish ran itself…" required></textarea>
           </div>
           <div class="hp" aria-hidden="true">
-            <label for="f-company">Company website</label>
-            <input id="f-company" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+            <!-- Honeypot. Named with no autofill-recognizable token: "company_website"
+                 plus a "Company website" label matched Chrome's COMPANY_NAME heuristic,
+                 so address autofill filled this off-screen box and the send was rejected
+                 server-side. Still posted as company_website (see the submit handler). -->
+            <label for="f-check">Leave this field blank</label>
+            <input id="f-check" name="nlma_check" type="text" tabindex="-1" autocomplete="off"
+                   data-lpignore="true" data-form-type="other" />
           </div>
           <button class="btn btn-primary" id="sendBtn" type="submit"><span class="dot"></span>Send enquiry</button>
           <p class="status" id="formStatus" role="status" aria-live="polite"></p>
@@ -836,7 +841,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     var name=(document.getElementById('f-name').value||'').trim();
     var email=(document.getElementById('f-email').value||'').trim();
     var message=(document.getElementById('f-msg').value||'').trim();
-    var company=(document.getElementById('f-company').value||'');
+    var company=(document.getElementById('f-check').value||'');
     if(!name||!email||!message){ setStatus('Add your name, email, and a note so we can reply.','err'); return; }
     sending=true; btn.setAttribute('aria-busy','true'); btn.innerHTML='<span class="dot"></span>Sending…'; setStatus('');
     fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},

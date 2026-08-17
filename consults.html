@@ -488,7 +488,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       state.data=data; renderResult(data);
     }catch(err){
       if(err.status===400){
-        note("intakeNote","We couldn’t accept that request. Check your name and email and try again — or email info@nlma.io and we’ll book it for you.");
+        note("intakeNote","We couldn’t accept that request. Check your name and email and try again, or email info@nlma.io and we’ll book it for you.");
       }else{
         note("intakeNote","Booking is temporarily unavailable. Please email info@nlma.io or call +1 571 200 2032 and we’ll set it up.");
         showFallback();
@@ -571,7 +571,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       }else if(err.status===400){
         note("resultNote","We couldn’t accept that booking. Please pick another time, or email info@nlma.io and we’ll book it for you.");
       }else{
-        note("resultNote","Something went wrong — please try another time or email info@nlma.io.");
+        note("resultNote","Something went wrong. Please try another time, or email info@nlma.io.");
       }
       setBusy("confirmBtn",false,payLabel(state.data));
     }
