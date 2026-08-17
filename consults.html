@@ -16,10 +16,10 @@
 <meta property="og:image:alt" content="NLMA - Systems that do the work" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Systems that do the work · NLMA" />
-<meta name="twitter:description" content="Schedule a consult — operations consulting, custom software, and applied AI, specialized in real estate and property management." />
+<meta name="twitter:description" content="Schedule a consult: operations consulting, custom software, and applied AI, specialized in real estate and property management." />
 <meta name="twitter:image" content="https://nlma.io/og-image.png" />
 <title>Schedule a consult · NLMA · Next Level Management Advisors</title>
-<meta name="description" content="Schedule a consult with NLMA — describe what you need and pick a time." />
+<meta name="description" content="Schedule a consult with NLMA. Pick a time and describe what you need." />
 <link rel="canonical" href="https://nlma.io/consults" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -167,6 +167,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .cal-times .seg label{padding:8px 13px;background:rgba(0,0,0,.28);font-size:14.5px}
 .cal-times .seg label:hover{border-color:var(--signal)}
 .cal-times .seg label:has(input:checked){border-color:var(--signal);background:rgba(79,194,149,.16)}
+/* The time chosen in step 1 is restated at the top of every later step, so nobody
+   has to trust their memory of what they clicked two screens ago. */
+.chosen{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--signal);
+  margin:0 0 20px;padding:0 0 14px;border-bottom:1px solid var(--line)}
 .cal{border:1px solid var(--line);border-radius:12px;padding:14px 16px 18px;background:rgba(0,0,0,.15)}
 .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .cal-month{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper)}
@@ -194,11 +198,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 /* 2) the honeypot input had no visual-hiding CSS, so it rendered as a bare empty
       box next to the Continue button. Hide it off-screen like contact.html's .hp. */
 #f-check{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined —
+/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined,
       only the --muted custom property existed. Define the class. */
 .muted{color:var(--muted)}
 /* 4) .seg label{display:flex} beats the UA [hidden]{display:none} rule at equal
-      specificity, same as the #phoneField case — needed to gate the phone option. */
+      specificity, same as the #phoneField case, needed to gate the phone option. */
 .seg label[hidden]{display:none}
 /* disclosure block shown before the confirm affordance on the discovery path */
 .disclosure{border:1px solid var(--line);border-radius:12px;background:var(--grad-soft);padding:16px 18px;margin:6px 0 20px}
@@ -252,10 +256,38 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <section class="wrap booking">
     <p class="eyebrow">Consult</p>
     <h1 class="display">Schedule a consult</h1>
-    <p class="lede">Tell us what you need — an operations, software, or AI problem, especially in real estate or property management. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
+    <p class="lede">Pick a time, then tell us what you need: an operations, software, or AI problem, especially in real estate or property management. We size the call from your description, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
 
-    <!-- STEP 1: intake -->
-    <form id="intakeForm" class="card" novalidate>
+    <!-- STEP 1: pick a time.
+         Times load on page view from /webhook/consult-slots, which runs no LLM and
+         filters candidates against the LONGEST bookable duration (60 min). A time
+         chosen here therefore survives whatever triage decides in step 2, so the
+         visitor is never bounced back to re-pick because the call got sized up. -->
+    <div id="timeStep" class="card">
+      <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
+      <div aria-live="polite">
+        <p class="formnote muted" id="slotsLoading">Loading open times&hellip;</p>
+        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks. Email info@nlma.io and we&rsquo;ll find one.</p>
+        <div class="field" id="dateField" hidden><span class="label">Date</span>
+          <div class="cal" id="cal">
+            <div class="cal-head">
+              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">&lsaquo;</button>
+              <span class="cal-month" id="calMonth"></span>
+              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="rowbtns">
+        <button type="button" class="btn btn-primary" id="toDetailsBtn" disabled><span class="dot"></span>Next</button>
+      </div>
+      <p class="formnote" id="timeNote" hidden></p>
+    </div>
+
+    <!-- STEP 2: who you are and what you need. Triage runs on submit and sizes the call. -->
+    <form id="intakeForm" class="card" novalidate hidden>
+      <p class="chosen" id="chosenTime"></p>
       <div class="field"><label for="f-name">Your name</label>
         <input id="f-name" type="text" autocomplete="name" required placeholder="Jane Smith" /></div>
       <div class="field"><label for="f-email">Email</label>
@@ -267,15 +299,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
            address autofill filled this off-screen box and the submit was dropped. -->
       <input id="f-check" name="nlma_check" type="text" tabindex="-1" autocomplete="off"
              aria-hidden="true" data-lpignore="true" data-form-type="other" />
-      <button class="btn btn-primary" id="intakeBtn" type="submit"><span class="dot"></span>Continue</button>
+      <div class="rowbtns">
+        <button type="button" class="btn btn-ghost" id="backToTime">&larr; Change time</button>
+        <button class="btn btn-primary" id="intakeBtn" type="submit"><span class="dot"></span>Continue</button>
+      </div>
       <p class="formnote" id="intakeNote" hidden></p>
     </form>
 
-    <!-- STEP 2: verdict + slots -->
+    <!-- STEP 3: what the call is, then confirm. The medium lives here rather than in
+         step 2 because phone is only offered once triage says the call is billable:
+         a discovery call produces no transcript to review, so it has to be on Meet. -->
     <div id="resultStep" class="card" hidden>
       <div id="verdict" class="verdict"></div>
       <p id="summary" class="muted"></p>
-      <p id="freeSwitch" hidden><button type="button" class="linkbtn" id="requestFree">Request a free intro instead →</button></p>
+      <p class="chosen" id="chosenTime2"></p>
+      <p id="freeSwitch" hidden><button type="button" class="linkbtn" id="requestFree">Request a free intro instead &rarr;</button></p>
       <div class="field"><span class="label">How should we meet?</span>
         <div class="seg" role="radiogroup" aria-label="Meeting medium">
           <label><input type="radio" name="medium" value="meet" checked /> Google Meet</label>
@@ -283,47 +321,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         </div></div>
       <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
         <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
-      <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
-      <div aria-live="polite">
-        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>
-        <div class="field" id="dateField"><span class="label">Date</span>
-          <div class="cal" id="cal">
-            <div class="cal-head">
-              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">‹</button>
-              <span class="cal-month" id="calMonth"></span>
-              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">›</button>
-            </div>
-            <div class="cal-grid" id="calGrid"></div>
-          </div>
-        </div>
-        <!-- Times are not a separate field: renderCalendar() injects them as a
-             full-width strip inside the grid, directly under the week row holding
-             the selected day, so choosing a day and choosing a time happen in one
-             place instead of a day up top and a time somewhere below the fold. -->
-      </div>
       <div class="disclosure" id="disclosure" hidden>
         <p class="disclosure-head">Before you book a free intro</p>
         <ul>
           <li>The call is held on Google Meet and transcribed.</li>
-          <li>A <strong>$112.50</strong> authorization hold is placed on your card — a 15-minute increment of advisory time at our standard rate.</li>
+          <li>A <strong>$112.50</strong> authorization hold is placed on your card, a 15-minute increment of advisory time at our standard rate.</li>
           <li>The hold is <strong>released</strong> unless the call becomes paid advice.</li>
         </ul>
       </div>
       <div class="rowbtns">
-        <button type="button" class="btn btn-ghost" id="backBtn">← Edit request</button>
-        <button type="button" class="btn btn-primary" id="confirmBtn" disabled><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
+        <button type="button" class="btn btn-ghost" id="backBtn">&larr; Edit details</button>
+        <button type="button" class="btn btn-primary" id="confirmBtn"><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
       </div>
       <p class="formnote" id="resultNote" hidden></p>
     </div>
 
-    <!-- STEP 3: done (free path inline; billable returns to /consults/confirmed) -->
+    <!-- STEP 4: done (free path inline; billable returns to /consults/confirmed) -->
     <div id="doneStep" class="card" hidden>
-      <h2 class="sub">You’re booked ✓</h2>
+      <h2 class="sub">You&rsquo;re booked &#10003;</h2>
       <p id="doneMsg" class="muted"></p>
-      <p><a class="btn btn-ghost" href="/">← Back to nlma.io</a></p>
+      <p><a class="btn btn-ghost" href="/">&larr; Back to nlma.io</a></p>
     </div>
 
-    <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable — <a href="/#contact">use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we’ll set it up.</p>
+    <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable. <a href="/#contact">Use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we&rsquo;ll set it up.</p>
   </section>
 </main>
 
@@ -390,12 +410,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <script>
 (function(){
   var CONFIG={
+    slots:"https://n8n.nlma.io/webhook/consult-slots",
     intake:"https://n8n.nlma.io/webhook/consult-intake",
     book:"https://n8n.nlma.io/webhook/consult-book",
     checkout:"https://n8n.nlma.io/webhook/consult-checkout"
   };
   var $=function(id){return document.getElementById(id)};
-  var state={data:null, slot:null, selectedDateKey:null, selectedTime:null};
+  var state={data:null, slot:null, selectedDateKey:null, selectedTime:null, matrix:{}};
 
   // medium toggle reveals phone
   Array.prototype.forEach.call(document.getElementsByName("medium"),function(r){
@@ -405,8 +426,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   function tzLabel(){
     try{
       var part=Intl.DateTimeFormat(undefined,{timeZoneName:"short"}).formatToParts(new Date())
-        .find(function(p){ return p.type==="timeZoneName"; });
-      return (part&&part.value)||Intl.DateTimeFormat().resolvedOptions().timeZone||"local time";
+        .filter(function(p){return p.type==="timeZoneName"})[0];
+      return part?part.value:"local time";
     }catch(e){ return "local time"; }
   }
   function pad2(n){return (n<10?"0":"")+n}
@@ -414,6 +435,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   function monthKey(d){return d.getFullYear()*12+d.getMonth()}
   function dayLabel(d){return d.toLocaleDateString([], {weekday:"short",month:"short",day:"numeric"})}
   function timeLabel(iso){return new Date(iso).toLocaleString([], {hour:"numeric",minute:"2-digit"})}
+  function longLabel(iso){
+    var d=new Date(iso);
+    return d.toLocaleDateString([], {weekday:"long",month:"long",day:"numeric"})+" at "+timeLabel(iso)+" "+tzLabel();
+  }
   var DOW=["S","M","T","W","T","F","S"];
 
   $("calPrev").addEventListener("click",function(){
@@ -490,7 +515,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         // A re-render (month paging) must not silently drop a choice already made.
         if(t===state.selectedTime){ input.checked=true; }
         input.addEventListener("change",function(){
-          state.selectedTime=t; state.slot=slots[t]; $("confirmBtn").disabled=false;
+          state.selectedTime=t; state.slot=slots[t]; $("toDetailsBtn").disabled=false;
         });
         label.appendChild(input); label.appendChild(document.createTextNode(t));
         seg.appendChild(label);
@@ -501,7 +526,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
   function selectDate(k,d){
     state.selectedDateKey=k; state.selectedTime=null; state.slot=null;
-    $("confirmBtn").disabled=true;
+    $("toDetailsBtn").disabled=true;
     renderCalendar();
   }
 
@@ -515,55 +540,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   function medium(){var r=document.querySelector('input[name="medium"]:checked');return r?r.value:"meet"}
   function payLabel(d){return d.billable?("Pay $"+d.price.toFixed(2)+" & book"):"Confirm booking";}
 
-  // Never drop a submit silently. The honeypot is enforced server-side only: a
-  // client-side `return` left the button dead with no message, which is exactly
-  // what a human tripped by browser autofill reported as "it doesn't work".
-  $("intakeForm").addEventListener("submit",async function(e){
-    e.preventDefault();
-    $("intakeNote").hidden=true; $("fallback").hidden=true;
-    if(!val("f-name")||!val("f-email")||!val("f-request")){ note("intakeNote","Please fill in your name, email, and request."); return; }
-    setBusy("intakeBtn",true,"Analyzing…");
-    try{
-      // posted under the key the n8n Guard node reads; only the DOM field name changed
-      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-check")});
-      state.data=data; renderResult(data);
-    }catch(err){
-      if(err.status===400){
-        note("intakeNote","We couldn’t accept that request. Check your name and email and try again, or email info@nlma.io and we’ll book it for you.");
-      }else{
-        note("intakeNote","Booking is temporarily unavailable. Please email info@nlma.io or call +1 571 200 2032 and we’ll set it up.");
-        showFallback();
-      }
-    }
-    finally{ setBusy("intakeBtn",false,"Continue"); }
-  });
-
-  function renderResult(data){
-    $("intakeForm").hidden=true; $("resultStep").hidden=false; $("doneStep").hidden=true;
-    var mins=data.duration_min;
-    var v = data.billable
-      ? '~'+mins+'-min paid consult — <span class="price">$'+data.price.toFixed(2)+'</span>'
-      : 'Free intro call — ~'+mins+' min';
-    $("verdict").innerHTML=v;
-    $("summary").textContent=data.summary?("What we’ll cover: "+data.summary):"";
-    $("freeSwitch").hidden=!data.billable;
-    // Phone is Meet-only for discovery: only offer it when triage returns billable.
-    // Discovery calls produce no transcript to review, so they must be on Meet.
-    $("phoneOption").hidden = !data.billable;
-    if(!data.billable){
-      var meetRadio=document.querySelector('input[name="medium"][value="meet"]');
-      if(meetRadio) meetRadio.checked=true;
-      $("phoneField").hidden=true;
-    }
-    // Hold disclosure applies to the discovery path (the billable path prepays in full).
-    $("disclosure").hidden = !!data.billable;
-    $("confirmLabel").textContent = payLabel(data);
-    $("tzNote").textContent="("+tzLabel()+")";
-    renderSlots(data.slots||[]);
-  }
+  // ---- step 1: the calendar loads before anything is asked of the visitor -------
   function renderSlots(slots){
     state.selectedDateKey=null; state.selectedTime=null; state.slot=null;
-    $("confirmBtn").disabled=true;
+    $("toDetailsBtn").disabled=true;
+    $("slotsLoading").hidden=true;
 
     if(!slots.length){
       $("slotsEmpty").hidden=false; $("dateField").hidden=true;
@@ -572,7 +553,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     $("slotsEmpty").hidden=true; $("dateField").hidden=false;
 
     // Group into a real calendar: pick a day first, then see just that
-    // day's times — reads lighter than a flat list of every open slot.
+    // day's times, which reads lighter than a flat list of every open slot.
     var matrix={}; // dateKey -> {timeLabel: iso}
     slots.forEach(function(s){
       var iso=s.startIso||s, d=new Date(iso), k=dateKey(d), t=timeLabel(iso);
@@ -586,8 +567,91 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     state.calMin=new Date(first.getFullYear(),first.getMonth(),1);
     state.calMax=new Date(last.getFullYear(),last.getMonth(),1);
     state.calView=new Date(state.calMin);
-    state.selectedDateKey=null;
     renderCalendar();
+  }
+
+  async function loadSlots(){
+    $("tzNote").textContent="("+tzLabel()+")";
+    $("slotsLoading").hidden=false; $("slotsEmpty").hidden=true; $("timeNote").hidden=true;
+    try{
+      var d=await callBackend(CONFIG.slots,{});
+      renderSlots(d.slots||[]);
+    }catch(err){
+      $("slotsLoading").hidden=true;
+      note("timeNote","We couldn’t load open times just now. Please reload, or email info@nlma.io and we’ll book it for you.");
+      showFallback();
+    }
+  }
+  loadSlots();
+
+  $("toDetailsBtn").addEventListener("click",function(){
+    if(!state.slot) return;
+    $("chosenTime").textContent=longLabel(state.slot);
+    $("timeStep").hidden=true; $("intakeForm").hidden=false;
+  });
+  $("backToTime").addEventListener("click",function(){
+    $("intakeForm").hidden=true; $("timeStep").hidden=false;
+  });
+
+  // ---- step 2: who and what, then triage ---------------------------------------
+  // Never drop a submit silently. The honeypot is enforced server-side only: a
+  // client-side `return` left the button dead with no message, which is exactly
+  // what a human tripped by browser autofill reported as "it doesn't work".
+  $("intakeForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    $("intakeNote").hidden=true; $("fallback").hidden=true;
+    if(!val("f-name")||!val("f-email")||!val("f-request")){ note("intakeNote","Please fill in your name, email, and request."); return; }
+    setBusy("intakeBtn",true,"Analyzing…");
+    try{
+      // posted under the key the n8n Guard node reads; only the DOM field name changed
+      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-check")});
+      state.data=data;
+      // The intake response carries its own slot list, filtered at the duration
+      // triage just chose. Step 1 filtered at 60 minutes, so the chosen time is
+      // normally still there; if the calendar changed underneath us, send the
+      // visitor back to a fresh grid rather than to a 409 at confirm time.
+      var stillOpen=(data.slots||[]).some(function(s){ return (s.startIso||s)===state.slot; });
+      if(!stillOpen){
+        renderSlots(data.slots||[]);
+        $("intakeForm").hidden=true; $("timeStep").hidden=false;
+        note("timeNote","That time was taken while you were typing. Here are the times still open.");
+        return;
+      }
+      renderResult(data);
+    }catch(err){
+      if(err.status===400){
+        note("intakeNote","We couldn’t accept that request. Check your name and email and try again, or email info@nlma.io and we’ll book it for you.");
+      }else{
+        note("intakeNote","Booking is temporarily unavailable. Please email info@nlma.io or call +1 571 200 2032 and we’ll set it up.");
+        showFallback();
+      }
+    }
+    finally{ setBusy("intakeBtn",false,"Continue"); }
+  });
+
+  // ---- step 3: verdict, medium, confirm ----------------------------------------
+  function renderResult(data){
+    $("timeStep").hidden=true; $("intakeForm").hidden=true;
+    $("resultStep").hidden=false; $("doneStep").hidden=true;
+    var mins=data.duration_min;
+    var v = data.billable
+      ? '~'+mins+'-min paid consult: <span class="price">$'+data.price.toFixed(2)+'</span>'
+      : 'Free intro call, ~'+mins+' min';
+    $("verdict").innerHTML=v;
+    $("summary").textContent=data.summary?("What we’ll cover: "+data.summary):"";
+    $("chosenTime2").textContent=longLabel(state.slot);
+    $("freeSwitch").hidden=!data.billable;
+    // Phone is Meet-only for discovery: only offer it when triage returns billable.
+    // Discovery calls produce no transcript to review, so they must be on Meet.
+    $("phoneOption").hidden = !data.billable;
+    if(!data.billable){
+      var meetRadio=document.querySelector('input[name="medium"][value="meet"]');
+      if(meetRadio) meetRadio.checked=true;
+      $("phoneField").hidden=true;
+    }
+    // Hold disclosure applies to the discovery path (the billable path prepays in full).
+    $("disclosure").hidden = !!data.billable;
+    $("confirmLabel").textContent = payLabel(data);
   }
 
   $("backBtn").addEventListener("click",function(){ $("resultStep").hidden=true; $("intakeForm").hidden=false; });
@@ -609,7 +673,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       }
     }catch(err){
       if(err.status===409){
-        note("resultNote","That time was just taken. Please pick another time below.");
+        // Someone booked it between step 1 and here. Reload the grid rather than
+        // leaving the visitor staring at a time that no longer exists.
+        note("resultNote","That time was just taken. Pick another one.");
+        $("resultStep").hidden=true; $("timeStep").hidden=false;
+        loadSlots();
       }else if(err.status===400){
         note("resultNote","We couldn’t accept that booking. Please pick another time, or email info@nlma.io and we’ll book it for you.");
       }else{
