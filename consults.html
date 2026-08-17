@@ -16,10 +16,10 @@
 <meta property="og:image:alt" content="NLMA - Systems that do the work" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Systems that do the work · NLMA" />
-<meta name="twitter:description" content="Schedule a consult — operations consulting, custom software, and applied AI, specialized in real estate and property management." />
+<meta name="twitter:description" content="Schedule a consult: operations consulting, custom software, and applied AI, specialized in real estate and property management." />
 <meta name="twitter:image" content="https://nlma.io/og-image.png" />
 <title>Schedule a consult · NLMA · Next Level Management Advisors</title>
-<meta name="description" content="Schedule a consult with NLMA — describe what you need and pick a time." />
+<meta name="description" content="Schedule a consult with NLMA. Describe what you need and pick a time." />
 <link rel="canonical" href="https://nlma.io/consults" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -184,11 +184,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 /* 2) the honeypot input had no visual-hiding CSS, so it rendered as a bare empty
       box next to the Continue button. Hide it off-screen like contact.html's .hp. */
 #f-check{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined —
+/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined,
       only the --muted custom property existed. Define the class. */
 .muted{color:var(--muted)}
 /* 4) .seg label{display:flex} beats the UA [hidden]{display:none} rule at equal
-      specificity, same as the #phoneField case — needed to gate the phone option. */
+      specificity, same as the #phoneField case, needed to gate the phone option. */
 .seg label[hidden]{display:none}
 /* disclosure block shown before the confirm affordance on the discovery path */
 .disclosure{border:1px solid var(--line);border-radius:12px;background:var(--grad-soft);padding:16px 18px;margin:6px 0 20px}
@@ -196,6 +196,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .disclosure ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
 .disclosure li{color:var(--muted);font-size:14px;line-height:1.5}
 .disclosure strong{color:var(--paper);font-weight:600}
+/* Google Calendar appointment schedule, embedded in the same flow as a second
+   way to pick a time. Google styles the frame's interior; we only own the box.
+   Requires `frame-src https://calendar.google.com` in the nginx CSP, otherwise
+   the frame is blocked silently, which is why an out-of-band link sits below it. */
+.gcal{border:1px solid var(--line);border-radius:12px;background:var(--grad-soft);padding:14px 18px;margin:6px 0 20px}
+.gcal[hidden]{display:none}
+.gcal>summary{cursor:pointer;font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--signal)}
+.gcal p{font-size:14px;line-height:1.5;margin:11px 0}
+.gcal-frame{margin:12px 0 0;min-height:0}
+.gcal-frame iframe{display:block;width:100%;height:620px;border:0;border-radius:10px;background:#fff}
+@media (max-width:640px){.gcal-frame iframe{height:760px}}
 
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
@@ -242,7 +253,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <section class="wrap booking">
     <p class="eyebrow">Consult</p>
     <h1 class="display">Schedule a consult</h1>
-    <p class="lede">Tell us what you need — an operations, software, or AI problem, especially in real estate or property management. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
+    <p class="lede">Tell us what you need: an operations, software, or AI problem, especially in real estate or property management. We size the call, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
 
     <!-- STEP 1: intake -->
     <form id="intakeForm" class="card" novalidate>
@@ -275,7 +286,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
       <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
       <div aria-live="polite">
-        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks — email info@nlma.io and we’ll find one.</p>
+        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks. Email info@nlma.io and we’ll find one.</p>
         <div class="field" id="dateField"><span class="label">Date</span>
           <div class="cal" id="cal">
             <div class="cal-head">
@@ -293,10 +304,22 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <p class="disclosure-head">Before you book a free intro</p>
         <ul>
           <li>The call is held on Google Meet and transcribed.</li>
-          <li>A <strong>$112.50</strong> authorization hold is placed on your card — a 15-minute increment of advisory time at our standard rate.</li>
+          <li>A <strong>$112.50</strong> authorization hold is placed on your card, a 15-minute increment of advisory time at our standard rate.</li>
           <li>The hold is <strong>released</strong> unless the call becomes paid advice.</li>
         </ul>
       </div>
+      <!-- Second way to pick a time, in this same step. The grid above books through
+           n8n (race check, hold, Meet link built from the triage summary); this books
+           straight onto forrest@nlma.io with no card and no hold. Google's scheduler
+           is a closed frame: it cannot be prefilled from the intake above and reports
+           nothing back, so the visitor retypes name and email inside it. Shown on the
+           free-intro path only, so it never sits next to a priced session. -->
+      <details class="gcal" id="gcalWrap" hidden>
+        <summary>Or pick any 30 minutes from the full calendar</summary>
+        <p class="muted">Books directly, no card and no hold. You will re-enter your name and email in Google's form, since it cannot read what you typed above.</p>
+        <div class="gcal-frame" id="gcalFrame"></div>
+        <p class="muted"><a href="https://calendar.app.google/Soqv8DWdnQoEtSDn9" target="_blank" rel="noopener">Open the scheduler in a new tab</a> if the calendar above does not load.</p>
+      </details>
       <div class="rowbtns">
         <button type="button" class="btn btn-ghost" id="backBtn">← Edit request</button>
         <button type="button" class="btn btn-primary" id="confirmBtn" disabled><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
@@ -311,7 +334,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <p><a class="btn btn-ghost" href="/">← Back to nlma.io</a></p>
     </div>
 
-    <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable — <a href="/#contact">use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we’ll set it up.</p>
+    <!-- Shown when the booking backend fails. It used to offer only email and phone,
+         which is what a visitor sees at the exact moment they have already decided to
+         book, so the scheduler goes here too: a working path that needs nothing of ours. -->
+    <div class="fallback muted" id="fallback" hidden>
+      <p>Booking through this form is temporarily unavailable. You can still take a 30-minute slot on the calendar below, <a href="/#contact">use our contact form</a>, or call <a href="tel:+15712002032">+1 571 200 2032</a> and we’ll set it up.</p>
+      <div class="gcal-frame" id="gcalFrameFb"></div>
+      <p><a href="https://calendar.app.google/Soqv8DWdnQoEtSDn9" target="_blank" rel="noopener">Open the scheduler in a new tab</a></p>
+    </div>
   </section>
 </main>
 
@@ -501,8 +531,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     $("intakeForm").hidden=true; $("resultStep").hidden=false; $("doneStep").hidden=true;
     var mins=data.duration_min;
     var v = data.billable
-      ? '~'+mins+'-min paid consult — <span class="price">$'+data.price.toFixed(2)+'</span>'
-      : 'Free intro call — ~'+mins+' min';
+      ? '~'+mins+'-min paid consult, <span class="price">$'+data.price.toFixed(2)+'</span>'
+      : 'Free intro call, ~'+mins+' min';
     $("verdict").innerHTML=v;
     $("summary").textContent=data.summary?("What we’ll cover: "+data.summary):"";
     $("freeSwitch").hidden=!data.billable;
@@ -516,6 +546,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     }
     // Hold disclosure applies to the discovery path (the billable path prepays in full).
     $("disclosure").hidden = !!data.billable;
+    // Direct-booking escape hatch: free path only. Next to a priced session it would
+    // read as a way to get the same time for nothing.
+    $("gcalWrap").hidden = !!data.billable;
+    if(data.billable) $("gcalWrap").open=false;
     $("confirmLabel").textContent = payLabel(data);
     $("tzNote").textContent="("+tzLabel()+")";
     renderSlots(data.slots||[]);
@@ -530,7 +564,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     $("slotsEmpty").hidden=true; $("dateField").hidden=false;
 
     // Group into a real calendar: pick a day first, then see just that
-    // day's times — reads lighter than a flat list of every open slot.
+    // day's times, which reads lighter than a flat list of every open slot.
     var matrix={}; // dateKey -> {timeLabel: iso}
     slots.forEach(function(s){
       var iso=s.startIso||s, d=new Date(iso), k=dateKey(d), t=timeLabel(iso);
@@ -571,7 +605,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       }else if(err.status===400){
         note("resultNote","We couldn’t accept that booking. Please pick another time, or email info@nlma.io and we’ll book it for you.");
       }else{
-        note("resultNote","Something went wrong. Please try another time, or email info@nlma.io.");
+        note("resultNote","Something went wrong. Please try another time, or take a slot on the calendar below.");
+        showFallback();
       }
       setBusy("confirmBtn",false,payLabel(state.data));
     }
@@ -579,7 +614,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
   function setBusy(id,busy,label){var b=$(id);b.disabled=busy;b.innerHTML='<span class="dot"></span>'+label;}
   function note(id,msg){var n=$(id);n.textContent=msg;n.hidden=false;}
-  function showFallback(){$("fallback").hidden=false;}
+  function showFallback(){$("fallback").hidden=false;mountGcal("gcalFrameFb");}
+
+  // Google Calendar appointment schedule, mounted on demand. Building the iframe
+  // only when the panel is actually opened keeps a 600px third-party frame off
+  // every page view; mounting twice would reload it and lose a half-filled form.
+  var GCAL="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3DSaXGl9M_pVmbc9zqg3VjHqFvpJDhpldynTolYVgzbz_x-72UguRSdfSKf4wuTKRLeeLa69UB?gv=true";
+  function mountGcal(id){
+    var host=$(id);
+    if(!host||host.firstChild) return;
+    var f=document.createElement("iframe");
+    f.src=GCAL; f.title="Book a 30-minute consult"; f.loading="lazy";
+    host.appendChild(f);
+  }
+  $("gcalWrap").addEventListener("toggle",function(){ if(this.open) mountGcal("gcalFrame"); });
 })();
 </script>
 </body>
