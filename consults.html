@@ -256,7 +256,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <section class="wrap booking">
     <p class="eyebrow">Consult</p>
     <h1 class="display">Schedule a consult</h1>
-    <p class="lede">Pick a time, then tell us what you need: an operations, software, or AI problem, especially in real estate or property management. We size the call from your description, and if it’s a paid advisory session you’ll see the price before you book. Free intro calls carry no charge, but they require a card and a short authorization hold that’s released after the call.</p>
+    <p class="lede">Pick a time, then tell us what you need: an operations, software, or AI problem, especially in real estate or property management. We size the call from your description and show you the amount before anything is asked of your card. Your card is authorized, never charged at booking: a paid consult is captured after the call for the time actually spent, and a free intro’s hold is released. Forrest confirms each appointment himself, and you get the invite when he does.</p>
 
     <!-- STEP 1: pick a time.
          Times load on page view from /webhook/consult-slots, which runs no LLM and
@@ -321,12 +321,24 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         </div></div>
       <div class="field" id="phoneField" hidden><label for="f-phone">Phone number</label>
         <input id="f-phone" type="tel" autocomplete="tel" placeholder="+1 555 123 4567" /></div>
+      <!-- Two disclosures, one per path. Both are now literally what the workflow
+           does: Stripe Checkout runs in manual-capture mode, so the card is
+           authorized at booking and captured only afterwards, or not at all. -->
       <div class="disclosure" id="disclosure" hidden>
-        <p class="disclosure-head">Before you book a free intro</p>
+        <p class="disclosure-head">Before you request a free intro</p>
         <ul>
           <li>The call is held on Google Meet and transcribed.</li>
-          <li>A <strong>$112.50</strong> authorization hold is placed on your card, a 15-minute increment of advisory time at our standard rate.</li>
-          <li>The hold is <strong>released</strong> unless the call becomes paid advice.</li>
+          <li>A <strong>$112.50</strong> authorization is placed on your card, a 15-minute increment of advisory time at our standard rate. An authorization reserves funds; it is not a charge.</li>
+          <li>It is <strong>released</strong> unless the call becomes paid advice.</li>
+          <li>The time is held for you and confirmed by email once Forrest accepts it.</li>
+        </ul>
+      </div>
+      <div class="disclosure" id="disclosurePaid" hidden>
+        <p class="disclosure-head">Before you request this consult</p>
+        <ul>
+          <li>Your card is <strong>authorized</strong> for the amount above, not charged. An authorization reserves funds; nothing leaves your account yet.</li>
+          <li>It is captured <strong>after the call</strong>, for the time actually spent, and never for more than the amount authorized.</li>
+          <li>The time is held for you and confirmed by email once Forrest accepts it.</li>
         </ul>
       </div>
       <div class="rowbtns">
@@ -538,7 +550,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
   function val(id){return ($(id).value||"").trim()}
   function medium(){var r=document.querySelector('input[name="medium"]:checked');return r?r.value:"meet"}
-  function payLabel(d){return d.billable?("Pay $"+d.price.toFixed(2)+" & book"):"Confirm booking";}
+  // Every booking authorizes a card and charges nothing at booking time, so the
+  // button says authorize, not pay. A free intro authorizes the $112.50 the
+  // disclosure names; the backend applies the same constant.
+  var DISCOVERY_HOLD=112.50;
+  function holdAmount(d){ return d.billable ? d.price : DISCOVERY_HOLD; }
+  function payLabel(d){ return "Authorize $"+holdAmount(d).toFixed(2)+" & request"; }
 
   // ---- step 1: the calendar loads before anything is asked of the visitor -------
   function renderSlots(slots){
@@ -649,8 +666,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       if(meetRadio) meetRadio.checked=true;
       $("phoneField").hidden=true;
     }
-    // Hold disclosure applies to the discovery path (the billable path prepays in full).
     $("disclosure").hidden = !!data.billable;
+    $("disclosurePaid").hidden = !data.billable;
     $("confirmLabel").textContent = payLabel(data);
   }
 
@@ -664,13 +681,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     $("resultNote").hidden=true; setBusy("confirmBtn",true,"Working…");
     var body={name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),duration_min:state.data.duration_min,startIso:state.slot};
     try{
-      if(state.data.billable){
-        var c=await callBackend(CONFIG.checkout,body); window.location.href=c.checkoutUrl;
-      }else{
-        var r=await callBackend(CONFIG.book,body);
-        $("resultStep").hidden=true; $("doneStep").hidden=false;
-        $("doneMsg").innerHTML="Check your email for the calendar invite"+(r.meetLink?', including your Google Meet link.':'.');
-      }
+      // Both paths go through Stripe Checkout now: a free intro authorizes $112.50
+      // and a billable consult authorizes its quoted fee. Neither is charged here.
+      // /consult-book still exists and still books without a card, which is what a
+      // revert of this change would fall back to.
+      var c=await callBackend(CONFIG.checkout,body); window.location.href=c.checkoutUrl;
     }catch(err){
       if(err.status===409){
         // Someone booked it between step 1 and here. Reload the grid rather than

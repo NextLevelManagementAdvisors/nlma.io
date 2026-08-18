@@ -254,9 +254,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 <script>
 (function(){
   var q=new URLSearchParams(location.search);
-  if(q.get("canceled")){document.getElementById("cfTitle").textContent="Payment canceled";document.getElementById("cfMsg").textContent="No charge was made. You can pick another time on the booking page.";return;}
-  document.getElementById("cfTitle").textContent="You’re booked ✓";
-  document.getElementById("cfMsg").innerHTML="Payment received. Your calendar invite"+ " (with a Google Meet link if you chose video) is on its way to your email. See you then.";
+  if(q.get("canceled")){
+    document.getElementById("cfTitle").textContent="Nothing was authorized";
+    document.getElementById("cfMsg").textContent="You left before authorizing, so no hold was placed and no charge was made. The time is still open if you want it.";
+    return;
+  }
+  // Booking is a request, not a confirmation: the card is authorized and the time
+  // is held, but the invite only goes out once Forrest accepts the appointment.
+  document.getElementById("cfTitle").textContent="Request received";
+  document.getElementById("cfMsg").innerHTML="Your card is authorized, not charged, and your time is held. Forrest confirms appointments himself, so watch for the calendar invite by email. If he can’t make it, the authorization is released and you’ll hear from him directly.";
 })();
 </script>
 </body>
