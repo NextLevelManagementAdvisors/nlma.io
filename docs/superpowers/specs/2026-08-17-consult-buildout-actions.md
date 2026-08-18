@@ -404,7 +404,7 @@ patching; `success: true` is not evidence the code is intact.
 |---|---|
 | **L6, CSP reload** | **Done.** The live header now matches the staged config byte for byte: `form-action 'self' https://checkout.stripe.com` is present, the inert `frame-src calendar.google.com` is gone. All three pages and `/consult-slots` still answer 200 after the reload |
 | **L2, availability** | **Done.** Tue/Thu at 11/14/16 became **Mon-Thu at 10/11/14/15/16**. Open times went from **14 to 50**, and tomorrow (Wed 8/19) now offers two, where before nothing at all was bookable this week. Friday stays clear. freeBusy is visibly still doing its job: 8/20 and 8/21 are fully consumed by real meetings and 8/25 loses its mornings |
-| **Item 5, DWD grant** | **Blocked, not attempted further.** Driving the Google Admin console was refused by the auto mode classifier. Still needs Forrest: append the two scopes to client `105046837924700815762`, then Retry credential `3siGSxiA9FloX0c1` |
+| **Item 5, DWD grant** | **Done, and it turned out to already be done.** The grant for client `105046837924700815762` already carries all five scopes, `drive.readonly` and `documents.readonly` included. Verified by exercising the delegation rather than trusting the console: a signed JWT impersonating forrest@nlma.io exchanged for a token with no `unauthorized_client`, and both Drive and Docs answered. See below |
 | **L4, retire /consult-book** | **Blocked.** Renaming the webhook path was refused by the classifier. See the note below; this one is now a small security item, not just tidying |
 | **Item 2, Stripe scopes** | **Answered by evidence, no probe needed.** See below |
 
@@ -434,6 +434,58 @@ the exposure remains. Renaming the path (reversible) or disabling the node close
 Monday 2026-09-07 is Labor Day and the widened grid offers five slots on it. freeBusy only hides
 it if there is an event on that calendar. Either put a holiday block on the calendar or add a
 skip-dates list to `Slots Prep`.
+
+## Item 5 closed, item 7 unblocked, and the gotcha that would have cost a day
+
+Item 5 was never a missing grant. Client `105046837924700815762` already had all five scopes:
+`gmail.send`, `spreadsheets`, `gmail.compose`, `drive.readonly`, `documents.readonly`. Rather than
+trust the console listing, the delegation was exercised end to end from the VPS: an RS256 JWT
+signed with `/opt/gsuite-mcp/scheduler-service-account.json`, `sub: forrest@nlma.io`, both scopes
+requested. Token exchange succeeded, `drive/v3/files` returned real files, `docs/v1/documents`
+returned a document. Whatever produced the old `unauthorized_client` is gone. **The n8n credential
+`3siGSxiA9FloX0c1` should now test green, and that is the only thing left to click.**
+
+### The Docs API hides tabs by default
+
+This is the finding that matters, and it silently contradicts what the notes-doc plan assumed.
+
+`GET https://docs.googleapis.com/v1/documents/{id}` returns **only the first tab**. On a Gemini
+notes doc that is the summary: 650 to 2,000 characters, no transcript, no talk-time line. Read
+that way every notes doc looks summary-only and item 7 looks impossible.
+
+Add **`?includeTabsContent=true`** and the real structure appears, two or three sibling tabs with
+the transcript last.
+
+| Doc created | Quick notes | Full notes | Transcript tab | `Transcription ended after` |
+|---|---|---|---|---|
+| 2026-08-14 16:42 | 866 | 1,845 | 1,726 | **00:16:57** |
+| 2026-08-14 11:39 | 1,608 | 4,449 | 11,874 | **00:13:25** |
+| 2026-08-14 11:38 | 654 (`Notes`) | none | 440 | **00:00:49** |
+| 2026-08-13 18:10 | 1,738 | 5,127 | 17,293 | **00:15:48** |
+
+The transcript tab is speaker-attributed and timestamped from `00:00:00`, for example
+`00:00:13 Forrest Surprenant: Okay. Yeah, you can hang up phone and then just join on the call.`
+So item 7 gets both things it needs from one document: prose to judge intro versus advisory, and a
+**measured** talk time to bill against instead of the scheduled duration the terms would otherwise
+have to stand behind.
+
+Retrieval recipe, confirmed against live data:
+
+```
+GET drive/v3/files?q=name contains ' - Notes by Gemini'&orderBy=createdTime desc
+      url-encode the q AND the orderBy; an unencoded space in orderBy throws InvalidURL
+GET docs/v1/documents/{id}?includeTabsContent=true
+      walk doc.tabs[].documentTab.body.content, and recurse into childTabs
+      the transcript tab is the one matching /Transcription ended after\s+([0-9:]+)/
+```
+
+One caveat to design around: the 11:38 doc says a summary was not produced because there was not
+enough conversation in a supported language, and its transcript is 440 characters for a 49-second
+call. Short or silent calls give a usable talk time but no summary, which is exactly the
+inconclusive case the terms already promise to resolve by **releasing rather than capturing**.
+
+**Item 7 is now blocked only on tooling**, same as item 4: it needs a schedule trigger and several
+new nodes, and structural n8n writes are what the classifier refuses.
 
 ## What is actually proven, as of 2026-08-18
 
