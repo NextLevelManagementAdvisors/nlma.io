@@ -354,9 +354,28 @@ are paths that were never built.
 Consequence right now: the 8/20 test booking is confirmed, RSVP-declined by the guest, and still
 holding $112.50 on the Baselane card with no path to release it.
 
-The fix for both is one addition, because the decline branch already does exactly the right three
-things: widen the guard to accept a `confirmed` booking, give it its own email wording (a
-cancellation is not the same message as a decline), and optionally add an RSVP watcher later.
+**Built 2026-08-18, gap 1 only.** No new nodes, so no structural write was needed: the decline
+branch already does the right three things, it was just unreachable once a booking was confirmed.
+Six parameter patches across five nodes.
+
+| Node | Change |
+|---|---|
+| `Approve Prep` | `valid` now admits `confirmed` + `decline`, and exposes `_cancel` so downstream nodes can tell a cancellation from a decline. `confirm` on a confirmed booking is still refused, now with wording that points at the decline link instead of saying "Unknown action" |
+| `Delete Event` | `sendUpdates` is `all` when cancelling, `none` when declining. A confirmed guest has the invite on their calendar and has to be told it is gone; a pending guest never had one |
+| `Decline Email` | Subject and body branch on `_cancel`. A decline reads "I can't make that time after all, so I have not booked it"; a cancellation reads "I have to cancel our consult on X, I am sorry to take the time back after confirming it" |
+| `Decline Shape` | Records `cancelled` rather than `declined` when a confirmed booking is released. Two different events: one revoked an appointment, the other never granted one |
+| `Respond Declined` | Heading reads Cancelled or Declined, and mentions the Google cancellation when there was one |
+
+Thirty-case harness passes, run against the node bodies with stubbed n8n globals. It covers the
+new path, that the two pending paths are untouched, that `declined` and `cancelled` are terminal
+so nothing can be released twice, and that junk tokens and actions are still refused.
+
+**Gap 2 (RSVP) is not built.** A guest declining the calendar invite still releases nothing. It
+needs something watching calendar RSVPs, which is a new trigger rather than a rewiring, so it is
+a separate piece of work.
+
+To release the stuck 8/20 booking:
+`https://n8n.nlma.io/webhook/consult-approve?t=msyv8neg1jny5w3l41&a=decline`
 
 ### L10, found by this pass and fixed
 
