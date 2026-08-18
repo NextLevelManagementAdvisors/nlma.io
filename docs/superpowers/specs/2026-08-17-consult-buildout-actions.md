@@ -398,6 +398,43 @@ repaired minutes later. **Never put a literal dollar sign in a `patchNodeField` 
 Use `String.fromCharCode(36)`, which is what the node does now. Always read the node back after
 patching; `success: true` is not evidence the code is intact.
 
+## Closing sweep, 2026-08-18 13:30 EDT
+
+| Item | Outcome |
+|---|---|
+| **L6, CSP reload** | **Done.** The live header now matches the staged config byte for byte: `form-action 'self' https://checkout.stripe.com` is present, the inert `frame-src calendar.google.com` is gone. All three pages and `/consult-slots` still answer 200 after the reload |
+| **L2, availability** | **Done.** Tue/Thu at 11/14/16 became **Mon-Thu at 10/11/14/15/16**. Open times went from **14 to 50**, and tomorrow (Wed 8/19) now offers two, where before nothing at all was bookable this week. Friday stays clear. freeBusy is visibly still doing its job: 8/20 and 8/21 are fully consumed by real meetings and 8/25 loses its mornings |
+| **Item 5, DWD grant** | **Blocked, not attempted further.** Driving the Google Admin console was refused by the auto mode classifier. Still needs Forrest: append the two scopes to client `105046837924700815762`, then Retry credential `3siGSxiA9FloX0c1` |
+| **L4, retire /consult-book** | **Blocked.** Renaming the webhook path was refused by the classifier. See the note below; this one is now a small security item, not just tidying |
+| **Item 2, Stripe scopes** | **Answered by evidence, no probe needed.** See below |
+
+### Item 2 no longer needs a probe
+
+The scope question was going to be settled by creating a throwaway Customer. It does not need to
+be. `Cancel Auth` succeeded live at 12:57 today: `POST /v1/payment_intents/{id}/cancel` is a
+**write on payment_intents**, which is the same permission the nightly re-authorization needs to
+call `POST /v1/payment_intents`. And re-auth never creates a Customer; it passes the `customer`
+and `payment_method` ids that are already on the booking record, so no Customers write is
+involved at all. Item 2 is closed.
+
+That leaves item 4 blocked only on **tooling**, not on Stripe: the nightly sweep needs a schedule
+trigger and several new nodes, which is a structural n8n write, and those are what the classifier
+refuses.
+
+### L4 is a security item now, not housekeeping
+
+`/webhook/consult-book` still creates calendar events, and it checks nothing but the honeypot and
+the required fields. No card, no payment. Anyone who knows the URL can put tentative consults on
+forrest@nlma.io indefinitely. It existed as the rollback path while the paid flow was unproven;
+item 1 and the decline test have now proven the paid flow, so the rollback value is spent and only
+the exposure remains. Renaming the path (reversible) or disabling the node closes it.
+
+### One wart in the new availability
+
+Monday 2026-09-07 is Labor Day and the widened grid offers five slots on it. freeBusy only hides
+it if there is an event on that calendar. Either put a holiday block on the calendar or add a
+skip-dates list to `Slots Prep`.
+
 ## What is actually proven, as of 2026-08-18
 
 | Half of the flow | State |
