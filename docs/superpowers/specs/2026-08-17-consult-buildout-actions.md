@@ -321,8 +321,42 @@ Forrest's; everything either side of it was driven and verified here.
 | Slot correctly disappears | execution 63042 shows `/consult-slots` no longer offering 8/20 16:00 |
 | Re-click safety | `Approve Prep` refuses a second confirm with "already marked 'confirmed'" |
 
-Not exercised by this pass: **Decline**. Everything it touches is the same machinery the confirm
-path used, but `Cancel Auth`, `Delete Event` and `Decline Email` have still never run.
+### Decline passed too, 2026-08-18 12:57 EDT
+
+A second booking ("Beta Co (decline test)", Tue 2026-09-08 4:00 PM ET) was created purely to
+exercise the other branch, then declined from the email link. Execution 63099, all 9 nodes.
+
+| What decline promises | What actually happened |
+|---|---|
+| Release the authorization | `pi_3U5qEjHFc2VHl4AN1wwGgYKC` is `status: canceled`, `cancellation_reason: abandoned`, `amount_received: 0`, `amount_capturable: 0`. Money reserved, then released, never moved |
+| Delete the tentative event | `Delete Event` returned 204; the Sep 8 calendar query comes back empty |
+| Tell the guest | Gmail id `1a015cee6bd2d62f`: "The authorization on your card has been released. Nothing was charged." with a link back to pick another time |
+| Free the slot | `/consult-slots` offers 2026-09-08T16:00 again, while the confirmed 8/20 16:00 stays correctly blocked |
+
+Also confirmed on this booking: `Store Booking` now persists `request`, so the L10 description
+rewrite has the guest's own words available on future confirms.
+
+**Every branch of the booking flow has now executed successfully at least once.**
+
+### L11: confirming is a one-way door, and a calendar RSVP releases nothing
+
+Two gaps that only showed up once real bookings existed. Neither is a bug in what was built; both
+are paths that were never built.
+
+1. **No cancel after confirm.** Once a booking is `confirmed`, `Approve Prep` refuses decline,
+   and capture does not exist yet (item 7). So a confirmed consult that has to be called off has
+   nothing that releases the authorization or removes the event. It sits until the auth lapses.
+2. **An attendee declining the Google Calendar invite does nothing.** Nothing watches RSVPs, so a
+   guest who declines the invitation leaves their own $112.50 held until expiry, and the slot
+   stays blocked. Observed live: the 8/20 booking was RSVP-declined at 12:52 EDT and the
+   authorization stayed active.
+
+Consequence right now: the 8/20 test booking is confirmed, RSVP-declined by the guest, and still
+holding $112.50 on the Baselane card with no path to release it.
+
+The fix for both is one addition, because the decline branch already does exactly the right three
+things: widen the guard to accept a `confirmed` booking, give it its own email wording (a
+cancellation is not the same message as a decline), and optionally add an RSVP watcher later.
 
 ### L10, found by this pass and fixed
 
