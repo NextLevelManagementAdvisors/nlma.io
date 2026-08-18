@@ -25,7 +25,9 @@ Live and verified today:
 | Execution saving on the workflow | on (closes nlma.io#4's second half) |
 | Page copy, terms, post-checkout page describe the above | live |
 
-Not built: re-authorization, transcript analysis, capture, guest-side email at booking.
+| Guest "request received" email at booking | live as of 2026-08-17, untested against a real payment |
+
+Not built: re-authorization, transcript analysis, capture.
 **Nothing captures money today.** An authorization sits until it is released or expires.
 
 ---
@@ -40,6 +42,7 @@ authorization, so it is the one part of what shipped today that is unproven.
 - [ ] Book yourself a free intro at nlma.io/consults. Authorize the $112.50 on your own card.
 - [ ] Check the calendar: event exists, titled `PENDING: Consult, <name>`, shows as tentative, and the guest has **not** received an invite.
 - [ ] Check your inbox: "Pending consult" email arrives with the amount and two links.
+- [ ] Check the guest inbox too: "Your consult request for ..." should arrive in the same execution, saying the card was authorized and not charged. This is the one piece built today and never run.
 - [ ] Click **Decline**. Expect: page says Declined, event disappears, guest email arrives, and the authorization shows as canceled in Stripe.
 - [ ] Repeat, and this time click **Confirm**. Expect: event loses the `PENDING:` prefix, guest receives the invite with the Meet link, authorization still uncaptured.
 - [ ] Cancel that second authorization in the Stripe dashboard when done, or leave it to expire.
@@ -66,15 +69,28 @@ in seconds; the residue is one live-mode Customer you can delete.
 
 ## 3. Tell the guest something at booking time
 
-**Owner: C. Blocks: nothing. Ready to build now.**
+**Owner: C. Built 2026-08-17. Untested against a real payment; item 1 exercises it.**
 
-Today a guest authorizes a card and then hears nothing at all until you confirm. Stripe
-sends no receipt for an uncaptured authorization, so from their side the money vanished
-into silence. This is the most visible gap in what shipped.
+A guest used to authorize a card and hear nothing at all until you confirmed. Stripe sends
+no receipt for an uncaptured authorization, so from their side the money vanished into
+silence. That was the most visible gap in what shipped.
 
-- [ ] Gmail node after `Store Booking`: "Request received" to the guest, naming the time,
-      the amount authorized, that it is not a charge, and that the invite follows confirmation.
-- [ ] Same email carries a plain-language line about what happens if you decline.
+Node **Guest Received Email** now sits between `Notify Forrest` and `Paid Booked Shape`,
+so the same execution that emails you emails them. It reads its fields from
+`$('Store Booking')`, the same paired-item pattern `Paid Booked Shape` already relied on
+across a Gmail node, and runs `onError: continueRegularOutput` so a Gmail hiccup can never
+cost the guest their booking.
+
+What it says: the time they asked for, the amount authorized and that a hold is not a
+charge, that you review each request yourself so the time is held rather than confirmed,
+that the invite follows your confirmation, and that a decline releases the hold and gets
+them a note so they can pick another time. The last line splits on `billable`: a paid
+consult says the fee is captured after the call for the time actually spent and never more
+than the amount authorized; a free intro says it captures nothing unless the conversation
+turns into paid advisory work.
+
+- [x] Guest email at booking.
+- [ ] Confirm the wording reads right when you see the real one during item 1.
 
 ## 4. Re-authorization, so a 21-day booking survives
 
@@ -203,16 +219,17 @@ Small, independent, none of them blocking.
 ## Order of work
 
 ```
-F: 1 (prove the loop) ─┬─> F: 2 (scopes confirmed as a side effect)
-                       │
-C: 3 (guest email) ────┘   independent, can ship immediately
+C: 3 (guest email) ──> shipped 2026-08-17
+
+F: 1 (prove the loop) ──> F: 2 (scopes confirmed as a side effect)
+                     └──> also proves item 3's email for the first time
 
 F: 2 ──> C: 4 (re-auth + sweeps)
 
-F: 5 (Drive cred) ─┬─> C: 7 (analysis + capture)
+F: 5 (DWD grant) ──┬─> C: 7 (analysis + capture)
 F: 6 (transcripts) ┘
 
 C: 8 only if you want CRM records
 ```
 
-Item 3 is the only build task with no prerequisite. Everything else waits on you.
+Every remaining build task waits on you now.
