@@ -298,6 +298,53 @@ Two things left that only you can do: **one real card pass** (item 1, which carr
 with it) and **appending two scopes to one delegation grant** (item 5). Item 6 is closed.
 Approving a single n8n write would also let me settle item 2 on its own.
 
+## Item 1 PASSED. First real booking, 2026-08-18
+
+Booked from the live page in Chrome as "Beta Co (e2e test)", admin@fidumcompany.com,
+Thursday 2026-08-20 at 4:00 PM ET, paid with a Baselane debit card. The card entry itself was
+Forrest's; everything either side of it was driven and verified here.
+
+| Link in the chain | Evidence |
+|---|---|
+| Checkout session | execution 62977, 12 nodes, live-mode session, metadata carried holdId, slotStartISO and `billable:false` |
+| Stripe webhook actually registered | the Paid branch fired, which answers the one question the dashboard was hiding |
+| Edge signature verifier | forwarded a verified event; an unsigned probe still gets `invalid_signature` |
+| **Paid branch, first execution ever** | execution 63031, **all 15 nodes succeeded** in 2.6s |
+| Authorize, not charge | `pi_3U5pUbHFc2VHl4AN1rE7RZwV`, $112.50, `capture_method: manual`, nothing captured |
+| Card saved off-session for re-auth | customer `cus_V61XkAciTFIpPQ`, payment method `pm_1U5phMHFc2VHl4ANtqkHwMIS` |
+| Free-intro pricing | $112.50 on a 15-minute intro, exactly what the disclosure has always promised |
+| Tentative hold, guest not invited | event created `tentative` via `sendUpdates=none` |
+| Both emails, the guest one for the first time | `Notify Forrest` and `Guest Received Email` each returned a Gmail message id |
+| Meet link provisioned | https://meet.google.com/jay-ufww-rod plus a dial-in |
+| Capability links resolve | token `msyv8neg1jny5w3l41`, confirm and decline both minted |
+| **Confirm works** | execution 63049: event PATCHed to `status: confirmed`, retitled `Consult: Beta Co (e2e test) (intro)`, `sendUpdates=all` so the invite went out, guest now an attendee at `needsAction` |
+| Slot correctly disappears | execution 63042 shows `/consult-slots` no longer offering 8/20 16:00 |
+| Re-click safety | `Approve Prep` refuses a second confirm with "already marked 'confirmed'" |
+
+Not exercised by this pass: **Decline**. Everything it touches is the same machinery the confirm
+path used, but `Cancel Auth`, `Delete Event` and `Decline Email` have still never run.
+
+### L10, found by this pass and fixed
+
+A calendar PATCH only touches the fields you send, and the confirm patch sent `status` and
+`summary` only. So a confirmed event kept its booking-time description, which reads **"AWAITING
+YOUR CONFIRMATION. The guest has not been invited yet."** By that point `sendUpdates=all` had
+already emailed the invite, so the event asserted the opposite of what happened. `Approve Prep`
+now rewrites the description on confirm, and `Store Booking` also saves `request` so the
+rewritten text does not drop the guest's own words. Fifteen-case harness passes: confirmed
+wording, dollar amount, PaymentIntent, billable versus intro wording, request preserved,
+re-click refused, unknown token refused, decline still patches nothing.
+
+### A tooling trap worth remembering
+
+`patchNodeField` feeds its `replace` string through JavaScript replacement semantics, so a
+literal `$'` in the replacement is read as "the text after the match" and silently splices the
+rest of the file into the middle of your insertion. That corrupted `Approve Prep` into a syntax
+error in a live, active workflow, which killed the confirm and decline links until it was
+repaired minutes later. **Never put a literal dollar sign in a `patchNodeField` replacement.**
+Use `String.fromCharCode(36)`, which is what the node does now. Always read the node back after
+patching; `success: true` is not evidence the code is intact.
+
 ## What is actually proven, as of 2026-08-18
 
 | Half of the flow | State |
