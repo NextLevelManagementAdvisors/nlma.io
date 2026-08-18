@@ -2,3 +2,6 @@
 *.bak
 metrics.json
 tmp_*
+
+# commit-message scratch files, never part of the site
+*.tmp
