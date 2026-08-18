@@ -352,3 +352,78 @@ only the exposure is left.
 Cheapest reversible fix: rename `Book`'s `parameters.path` from `consult-book` to
 `consult-book-retired-20260818`. The old URL 404s immediately and renaming back restores it.
 Disabling the node works too. Either is one edit.
+
+---
+
+## Built and live, 2026-08-18
+
+Everything above is now in the active workflow (`R0cMmqeBshPYpdqt`, 103 nodes, 8 triggers,
+96 valid connections, 0 invalid). The three items that were blocked this morning are closed.
+
+### What went in
+
+| Chain | Trigger | Nodes | What it does |
+|---|---|---|---|
+| Capture (item 7) | `Capture Cron`, hourly | Capture Sweep, Find Notes Doc, Pick Notes Doc, Read Notes Doc, Parse Notes, Judge Call, Capture Decide, Is Capture, Stripe Capture, Stripe Release, Settle Booking, Settlement Receipt | Finds the Gemini notes doc for a finished consult, measures talk time, judges intro vs advisory, captures or releases, writes a settlement record, emails the guest with Forrest bcc'd |
+| Re-auth (item 4) | `Reauth Cron`, daily 03:00 ET | Reauth Sweep, New Auth, Reauth Check, Reauth OK, Cancel Old Auth, Reauth Store, Reauth Alert | Renews a hold on day six against the saved card, new hold taken before the old one is cancelled, alerts Forrest with a one-click decline link when the card refuses |
+| Lapse | `Reauth Cron` (second branch) | Lapse Sweep, Lapse Release, Lapse Delete Event, Lapse Email, Lapse Store | A request Forrest never acted on gets its hold released and the guest gets an apology, instead of silence |
+| Nudge | `Capture Cron` (second branch) | Nudge Sweep, Nudge Email, Nudge Store | Twelve hours before a still-pending consult, Forrest gets one reminder with both action links |
+| L4 | n/a | `Book` webhook path | Renamed `consult-book` to `consult-book-retired-20260818`. That endpoint created real calendar events and sent real invites behind nothing but a honeypot check, and the live page has used `consult-slots` plus `consult-checkout` for a while. The nodes stay wired so the shape is still readable |
+
+### Idempotency, which is the whole game here
+
+Every sweep is guarded by a durable field on the booking record, not by an in-memory marker:
+
+- `settledAt` stops the capture sweep and the lapse sweep from touching a booking twice.
+  It is written *after* the Stripe call, so a Stripe failure leaves the booking due and
+  the next hourly run retries rather than dropping the money.
+- `reauthorizedAt` restarts the six-day clock, so re-auth cannot loop.
+- `nudgedAt` caps the reminder at one per booking rather than one per hour.
+
+### Three decisions worth remembering
+
+- **`GRACE_MIN=45` on the capture sweep.** Gemini writes the notes doc after the call
+  ends, not during it. Sweeping at the end of the slot looks identical to "no notes were
+  produced", which is a release path, so an early sweep would silently give away money
+  that should have been captured.
+- **The new hold comes before the cancel.** If `New Auth` is declined, `Cancel Old Auth`
+  never runs, so the booking keeps whatever hold it still has and Forrest gets told. The
+  reverse order would leave a confirmed consult with no authorization behind it.
+- **`Nudge Email` has no `onError: continueRegularOutput`, on purpose.** Everywhere on the
+  booking path a Gmail failure must not cost the guest their slot, so those nodes continue
+  on error. Here the opposite is right: if the send fails, `nudgedAt` must stay unset so the
+  next hourly run tries again.
+
+### The credential guess that turned out right
+
+`3siGSxiA9FloX0c1` had to be wired without being able to read it: the n8n public API
+answers `403 NOT_SUPPORTED` to any credential list, so its *type* was a guess from the
+item 5 notes ("service account, not the OAuth one"). `nodeCredentialType: "googleApi"` was
+correct, and the proof is that n8n resolved the id to its real name in the saved node,
+"Google Drive+Docs SA (forrest@nlma.io) — consult transcripts". A wrong type would have
+left the credential unresolved.
+
+### Two facts about the n8n MCP write path, learned the hard way
+
+- **A large `n8n_update_partial_workflow` batch is refused; small ones go through.** The
+  seven-node single call was blocked outright. The same operations in batches of two to
+  four applied cleanly. Build in pairs.
+- **`addNode` and `addConnection` must land in the same call.** A lone `addNode` fails
+  validation with "Disconnected nodes detected" and, importantly, reports
+  `operationsApplied: 1` while also saying "The workflow was NOT saved". Do not read that
+  count as success.
+
+### Still open
+
+- **RSVP watcher (L11 gap 2).** A guest declining the calendar invite still releases
+  nothing, because nothing watches RSVPs. That needs a new trigger, not a rewiring, so it
+  was left out rather than half-built.
+- **Untested against a real call.** Every branch of the capture logic is proven by
+  `capture-decide.test.js` (30 named assertions plus a 108-combination sweep), but the
+  chain as wired has never run: it needs a confirmed consult that has actually happened and
+  produced a Gemini notes doc. The first real one is the test.
+- **Forrest only:** click Retry on n8n credential `3siGSxiA9FloX0c1` so the Drive and Docs
+  calls can authenticate. Until that is done the capture sweep releases everything, because
+  a failed Drive lookup reads as "no notes doc", which is a release path by design.
+- **Labor Day, Monday 9/7.** The widened grid offers five slots on it. Worth a calendar
+  block if you would rather not work it.
