@@ -274,6 +274,7 @@ Small, independent, none of them blocking.
 | L6 | nginx CSP. **Staged, not live.** `form-action 'self' https://checkout.stripe.com` added and the inert `frame-src calendar.google.com` removed in `/etc/nginx/sites-available/nlma.io` (backup `nlma.io.bak-csp-formaction-*`); `nginx -t` passes. The reload could not be run: the Shell MCP chroot sits in a separate PID namespace, so `nginx -s reload` fails with `kill(...) No such process`, and SSH from here was refused by the classifier. **Needs one command on the host: `systemctl reload nginx`.** Nothing is broken meanwhile; the old policy stays live and blocks nothing the site does. | F, one command |
 | L7 | ~~Close nlma.io#5.~~ **Done 2026-08-18.** Closed as completed, with a comment recording that option 2 was built, that the CSP half is staged pending reload, and that the paid branch is still unexercised. | — |
 | L8 | ~~Honeypot key mismatch.~~ **Done 2026-08-18.** `Book Prep` and `Checkout Prep` now accept `nlma_check` or `company_website`, matching `Guard`. With all three accepting both, consults.html was switched to post `nlma_check` on the intake call, and the checkout call now sends it too (it previously sent no honeypot at all, so that check was dead code). Verified live rather than assumed: an empty honeypot returns a verdict, a filled one returns 400. Old cached pages posting `company_website` still work. This closes nlma.io#4, and nlma.io#5 closed with it, so the repo has no open issues. | — |
+| L9 | ~~Stripe webhook replay could double-book one payment.~~ **Found and fixed 2026-08-18.** `Paid Guard` detected a replayed `checkout.session.completed` only by finding the hold marked `done`, and that marker is not durable: `CO Race` prunes every non-`held` hold on the next visitor's checkout, and a payer who lingers past the 15-minute hold expiry never gets the marker written at all. So a retry (the edge verifier returns 500 on a forward failure or a >60s timeout, and its own comment notes Stripe then retries a verified event) could create a **second booking with a new token on the same PaymentIntent**: two confirm/decline emails for one payment, and declining the duplicate runs `Cancel Auth` on the shared PI, silently killing the authorization behind the consult just confirmed. `Paid Guard` now also dedupes on `paymentIntent` against the bookings register, which is retained 30 days past the call, well beyond Stripe's 3-day retry window. Proven with a six-case harness run against both the old and new code: the old guard fails the two replay cases, the new one passes all six, and the happy path still yields a tentative event at $112.50 with the PI, customer, and payment method intact. | — |
 
 ---
 
@@ -296,3 +297,31 @@ C: 8 only if you want CRM records
 Two things left that only you can do: **one real card pass** (item 1, which carries item 2
 with it) and **appending two scopes to one delegation grant** (item 5). Item 6 is closed.
 Approving a single n8n write would also let me settle item 2 on its own.
+
+## What is actually proven, as of 2026-08-18
+
+| Half of the flow | State |
+|---|---|
+| Intake, triage, slots, honeypot rejects on all three webhooks, Checkout Session creation with the right amounts | **verified live** |
+| Stripe signature verifier at the edge (`consult-stripe-verify.service` on 127.0.0.1:3071, nginx routes `/webhook/consult-paid` to it) | **verified live**: it answers an unsigned probe with `{"error":"invalid_signature"}` 400, so the endpoint is up and the signing secret is loaded |
+| The whole Paid branch, and the Approve confirm/decline happy paths | **wired, never executed once.** No `Paid` execution has ever run, because no one has paid yet. The Approve reject path was tested against four bad inputs; confirm and decline have not run. |
+| Capture (item 7) and nightly re-authorization (item 4) | **not built** |
+| CRM (item 8) | **not in the graph at all.** 74 nodes, zero CRM nodes. Its absence blocks nothing; it would only add records alongside a flow that already works without it. |
+
+Two things this cannot prove from here, both of which item 1 settles:
+
+- **Whether the Stripe dashboard endpoint is registered** at
+  `https://n8n.nlma.io/webhook/consult-paid` with `checkout.session.completed` selected and
+  enabled. The verifier holding a working signing secret is strong evidence someone set it up,
+  but registration lives in the dashboard. If the Paid branch no-shows during item 1, check the
+  dashboard first, not the workflow.
+- **Whether the authorization survives to the call.** Card authorizations lapse in roughly seven
+  days, and slots currently run 3 to 18 days out. So most bookable times today sit past the
+  window: a billable consult booked more than about six days out will fail capture until item 4
+  ships. That makes item 4 a prerequisite rather than a follow-up, and it makes L2 a money
+  decision as well as a marketing one, since the availability you pick sets how exposed the
+  window is.
+
+One flag, no action needed: pending bookings and their confirm/decline links live in n8n
+workflow static data. If that is ever lost the links stop resolving and the authorization
+expires and releases on its own, so the failure mode is bounded and never takes money.
