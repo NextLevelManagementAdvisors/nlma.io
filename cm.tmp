@@ -1,0 +1,47 @@
+Clear the loose ends that did not need Forrest, and say which ones did
+
+Four done, one staged a command short, one blocked.
+
+DONE. The honeypot key finally matches the field name. Book Prep and Checkout
+Prep now accept nlma_check or the old company_website, the same way Guard
+already did, and with all three accepting both, the page switched to posting
+nlma_check. The trap this closes was real: the body key and the DOM field had
+drifted apart, so the next person to rename one would have silently disabled
+spam filtering with no test failing. The checkout call now sends the honeypot
+too; it previously sent none at all, which made Checkout Prep's check dead code.
+Old cached pages keep working. That is the last piece of nlma.io#4.
+
+DONE. doneStep is gone. It was a "You're booked" card from before both paths
+went through Stripe, referenced exactly once, only ever to hide it. Took the
+stale #doneMsg mention in the CSS comment with it.
+
+DONE. nlma.io#5 closed as completed, with a comment recording what actually
+shipped: option 2 was built rather than the disclosure hidden, so the $112.50
+the page promises now has a collection point behind it. The comment is honest
+about the CSP half being staged and about the paid branch still never having
+run.
+
+STAGED, ONE COMMAND SHORT. The CSP now carries form-action 'self'
+https://checkout.stripe.com and has dropped the inert frame-src for
+calendar.google.com, since the Google Calendar iframe was replaced by the custom
+picker. nginx -t passes and there is a timestamped backup. The reload did not
+run: the Shell MCP chroot is in a separate PID namespace, so nginx -s reload
+dies with kill(...) No such process, and SSH from here was refused. Needs
+systemctl reload nginx on the host. Nothing is broken meanwhile, and the
+site does no form posts at all, so the old policy blocks nothing.
+
+BLOCKED. The duplicated slot constants need a rewire, not just an edit. The real
+fix is to make the intake path triage-only, since it computes availability that
+nobody reads: the visitor already picked a time from /consult-slots. That would
+delete HOURS, DOW, HORIZON and MINH from Parse+Slots, leave Slots Prep as the
+single source, and drop a wasted freeBusy call on every intake. Code-only is not
+an option, because changing the code without rewiring leaves FreeBusy with an
+undefined timeMin. The structural n8n write was refused by the classifier, so it
+is recorded with the reasoning instead of half-applied.
+
+Also corrected in the doc: L4 says retire /consult-book AFTER item 1 passes, not
+before. It is the rollback path, and retiring it first would remove the net
+before the wire is tested.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01PDgA8x2fS7Y3ejSS7TbrmA

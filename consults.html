@@ -198,7 +198,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 /* 2) the honeypot input had no visual-hiding CSS, so it rendered as a bare empty
       box next to the Continue button. Hide it off-screen like contact.html's .hp. */
 #f-check{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
-/* 3) .muted was referenced on #summary/#tzNote/#doneMsg/.fallback but never defined,
+/* 3) .muted was referenced on #summary/#tzNote/.fallback but never defined,
       only the --muted custom property existed. Define the class. */
 .muted{color:var(--muted)}
 /* 4) .seg label{display:flex} beats the UA [hidden]{display:none} rule at equal
@@ -296,7 +296,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <textarea id="f-request" rows="5" maxlength="2000" required placeholder="Describe your situation, question, or project."></textarea></div>
       <!-- Honeypot. The name deliberately carries no autofill-recognizable token:
            the old name="company_website" matched Chrome's COMPANY_NAME heuristic, so
-           address autofill filled this off-screen box and the submit was dropped. -->
+           address autofill filled this off-screen box and the submit was dropped.
+           The posted key matches the field name again, so renaming one without the
+           other cannot silently disable spam filtering. Guard, Book Prep and Checkout
+           Prep all accept nlma_check or the old company_website. -->
       <input id="f-check" name="nlma_check" type="text" tabindex="-1" autocomplete="off"
              aria-hidden="true" data-lpignore="true" data-form-type="other" />
       <div class="rowbtns">
@@ -346,13 +349,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <button type="button" class="btn btn-primary" id="confirmBtn"><span class="dot"></span><span id="confirmLabel">Confirm</span></button>
       </div>
       <p class="formnote" id="resultNote" hidden></p>
-    </div>
-
-    <!-- STEP 4: done (free path inline; billable returns to /consults/confirmed) -->
-    <div id="doneStep" class="card" hidden>
-      <h2 class="sub">You&rsquo;re booked &#10003;</h2>
-      <p id="doneMsg" class="muted"></p>
-      <p><a class="btn btn-ghost" href="/">&larr; Back to nlma.io</a></p>
     </div>
 
     <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable. <a href="/#contact">Use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we&rsquo;ll set it up.</p>
@@ -621,7 +617,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     setBusy("intakeBtn",true,"Analyzing…");
     try{
       // posted under the key the n8n Guard node reads; only the DOM field name changed
-      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),company_website:val("f-check")});
+      var data=await callBackend(CONFIG.intake,{name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),nlma_check:val("f-check")});
       state.data=data;
       // The intake response carries its own slot list, filtered at the duration
       // triage just chose. Step 1 filtered at 60 minutes, so the chosen time is
@@ -649,7 +645,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   // ---- step 3: verdict, medium, confirm ----------------------------------------
   function renderResult(data){
     $("timeStep").hidden=true; $("intakeForm").hidden=true;
-    $("resultStep").hidden=false; $("doneStep").hidden=true;
+    $("resultStep").hidden=false;
     var mins=data.duration_min;
     var v = data.billable
       ? '~'+mins+'-min paid consult: <span class="price">$'+data.price.toFixed(2)+'</span>'
@@ -679,7 +675,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   $("confirmBtn").addEventListener("click",async function(){
     if(!state.slot) return;
     $("resultNote").hidden=true; setBusy("confirmBtn",true,"Working…");
-    var body={name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),duration_min:state.data.duration_min,startIso:state.slot};
+    var body={name:val("f-name"),email:val("f-email"),phone:val("f-phone"),medium:medium(),request:val("f-request"),nlma_check:val("f-check"),duration_min:state.data.duration_min,startIso:state.slot};
     try{
       // Both paths go through Stripe Checkout now: a free intro authorizes $112.50
       // and a billable consult authorizes its quoted fee. Neither is charged here.

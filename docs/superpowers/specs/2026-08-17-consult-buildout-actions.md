@@ -268,12 +268,12 @@ Small, independent, none of them blocking.
 |---|---|---|
 | L1 | ~~Delete the stale 8/20 4:00 PM event.~~ **Done.** It is gone from forrest@nlma.io as of 2026-08-17; the only consult on the calendar now is Charles Daucourt, 8/25 11:00. | — |
 | L2 | Availability is thin, and now measured rather than guessed. `/consult-slots` returns **12 open times across 18 days**: 8/20 has one (16:00), 8/25 has two, and everything before 8/20 is gone entirely. A visitor who wants this week sees nothing. Widen `HOURS` and `DOW`. | F decides, C edits |
-| L3 | Those constants now live in **two** nodes, `Parse+Slots` and `Slots Prep`, and must be changed together. Worth collapsing into one source. | C |
-| L4 | `/webhook/consult-book` is no longer called by the site. It still books without a card and is the rollback path. Retire it once item 1 passes. | C |
-| L5 | `doneStep` in consults.html is dead markup now that every path redirects to Stripe. | C |
-| L6 | nginx CSP: add `form-action 'self' https://checkout.stripe.com`; `frame-src calendar.google.com` is inert now and can go. | C |
-| L7 | nlma.io#5 can be closed: the $112.50 disclosure now has a collection point behind it. | C |
-| L8 | `Book Prep` and `Checkout Prep` still read only `company_website` for the honeypot. Harmless, since every frontend posts that key, but it is the last piece of nlma.io#4. | C |
+| L3 | ~~Slot constants duplicated across two nodes.~~ **Blocked, not done.** The fix is to make the intake path triage-only: it computes availability nobody reads, because the visitor already picked a time from `/consult-slots`. That deletes `HOURS`/`DOW`/`HORIZON`/`MINH` from `Parse+Slots`, leaves `Slots Prep` as the single source, and drops a wasted freeBusy call per intake. It needs a rewire (`Parse+Slots` to `Respond OK`, orphaning `FreeBusy` and `Filter Slots`), and code-only edits cannot do it: change the code without the rewire and `FreeBusy` gets an undefined `timeMin`. The n8n structural write was refused by the auto mode classifier. | C, needs one approval |
+| L4 | `/webhook/consult-book` is no longer called by the site. It still books without a card and is the rollback path. Retire it **after** item 1 passes, not before. | C |
+| L5 | ~~`doneStep` dead markup.~~ **Done 2026-08-18.** The block and its one reference are gone, along with the stale `#doneMsg` mention in the CSS comment. | — |
+| L6 | nginx CSP. **Staged, not live.** `form-action 'self' https://checkout.stripe.com` added and the inert `frame-src calendar.google.com` removed in `/etc/nginx/sites-available/nlma.io` (backup `nlma.io.bak-csp-formaction-*`); `nginx -t` passes. The reload could not be run: the Shell MCP chroot sits in a separate PID namespace, so `nginx -s reload` fails with `kill(...) No such process`, and SSH from here was refused by the classifier. **Needs one command on the host: `systemctl reload nginx`.** Nothing is broken meanwhile; the old policy stays live and blocks nothing the site does. | F, one command |
+| L7 | ~~Close nlma.io#5.~~ **Done 2026-08-18.** Closed as completed, with a comment recording that option 2 was built, that the CSP half is staged pending reload, and that the paid branch is still unexercised. | — |
+| L8 | ~~Honeypot key mismatch.~~ **Done 2026-08-18.** `Book Prep` and `Checkout Prep` now accept `nlma_check` or `company_website`, matching `Guard`. With all three accepting both, consults.html was switched to post `nlma_check` on the intake call, and the checkout call now sends it too (it previously sent no honeypot at all, so that check was dead code). Old cached pages still work. This closes nlma.io#4. | — |
 
 ---
 
