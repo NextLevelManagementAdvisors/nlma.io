@@ -423,7 +423,55 @@ left the credential unresolved.
   chain as wired has never run: it needs a confirmed consult that has actually happened and
   produced a Gemini notes doc. The first real one is the test.
 - **Forrest only:** click Retry on n8n credential `3siGSxiA9FloX0c1` so the Drive and Docs
-  calls can authenticate. Until that is done the capture sweep releases everything, because
-  a failed Drive lookup reads as "no notes doc", which is a release path by design.
+  calls can authenticate. Until that is done the capture sweep cannot settle anything: the
+  infrastructure guard below fails the execution and retries next hour rather than releasing,
+  so no money is at risk while it waits, but nothing gets captured either.
 - **Labor Day, Monday 9/7.** The widened grid offers five slots on it. Worth a calendar
   block if you would rather not work it.
+
+## Hardening pass, same day
+
+Two defects in the chain above, both found by review rather than by a failure, both fixed
+before the first real billable consult can reach them.
+
+### Retrying a money call without an idempotency key doubles it
+
+`Stripe Capture` and `New Auth` both carried `retryOnFail`, which is right, and neither
+carried an `Idempotency-Key`, which is wrong. A request that succeeds at Stripe and then
+times out on the way back is indistinguishable from one that never arrived, so the retry
+re-sends it:
+
+| Node | What the blind retry does |
+|---|---|
+| `New Auth` (`confirm=true`) | Takes a **second live hold** on the guest's card. The register keeps only the retry's PaymentIntent, so the orphan sits there for about seven days and the guest sees two pending lines. |
+| `Stripe Capture` | Hits "not in requires_capture", fails the node, leaves `settledAt` unwritten, and so re-attempts and fails **every hour forever** with no recovery short of hand-editing static data. |
+
+Both now send a key Stripe can dedupe on: `consult-capture-<token>` for the capture, which
+is stable for the life of the booking, and `consult-reauth-<token>-<YYYY-MM-DD>` for the
+renewal, date-suffixed because Stripe only remembers a key for 24 hours and the next
+renewal is a genuinely new request.
+
+### An infrastructure failure was being settled as a permanent release
+
+`Find Notes Doc` and `Read Notes Doc` run `onError: continueRegularOutput`, so a 401 from a
+credential awaiting re-authorisation, or a Drive blip, arrived downstream looking exactly
+like "no notes were produced". That is a release path: the authorization gets cancelled, the
+guest is emailed "nothing has been charged", and `settledAt` is written. All three are
+irreversible, and the credential is in exactly that state right now.
+
+`Pick Notes Doc` and `Parse Notes` now discriminate:
+
+| Signal | Reading | Outcome |
+|---|---|---|
+| `files: []` from a successful Drive call | genuinely no notes doc | release, as designed |
+| `error` from Drive | infrastructure | **throw**, execution fails, retried next hour |
+| `docId: 'MISSING'` then a Docs 404 | genuinely no notes doc | release, as designed |
+| a real `docId` that will not read | infrastructure | **throw**, retried next hour |
+
+Throwing is the whole mechanism: `settledAt` is only written after a Stripe call succeeds,
+so a failed execution leaves the booking due and the error workflow fires. The cost of the
+wrong call in the other direction is a consult given away for free with a receipt saying so.
+
+Verified with six assertions against the extracted node bodies: both error shapes throw on
+each node, an empty file list still reaches the release path, a name match still picks the
+right doc, and a Docs error on `MISSING` still releases.
