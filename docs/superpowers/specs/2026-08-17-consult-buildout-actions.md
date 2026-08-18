@@ -125,6 +125,7 @@ scopes requested."}
 ```
 
 - Service account: `gsuite-scheduler@gsuite-mcp-493905.iam.gserviceaccount.com`
+- Client ID (the number the Admin console asks for): `105046837924700815762`
 - Impersonating: `forrest@nlma.io`
 - Scopes requested: `https://www.googleapis.com/auth/drive.readonly,https://www.googleapis.com/auth/documents.readonly`
 
@@ -132,7 +133,7 @@ That error means exactly one thing: the service account impersonates a user, and
 Workspace has no domain-wide delegation grant covering those two scopes for that client.
 
 - [ ] Admin console, Security, Access and data control, API controls, Domain-wide delegation.
-- [ ] Find the client ID for `gsuite-scheduler` (the numeric `client_id`, visible on the service account's detail page in the Cloud console for project `gsuite-mcp-493905`).
+- [ ] Search the grant list for client ID `105046837924700815762`. That is `gsuite-scheduler`, read off `/opt/gsuite-mcp/scheduler-service-account.json` on the VPS, so no Cloud console trip is needed.
 - [ ] If that client already has an entry, **append** the two scopes to the existing list. Do not replace it: whatever else runs on that grant breaks silently if you do.
 - [ ] Back in n8n, reopen the credential and hit Retry. Green means item 7 is unblocked.
 
