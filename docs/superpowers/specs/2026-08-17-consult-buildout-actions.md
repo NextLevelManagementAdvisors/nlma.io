@@ -17,15 +17,19 @@ Live and verified today:
 |---|---|
 | Calendar-first booking, times inline in the grid | live |
 | `/webhook/consult-slots`, no LLM, filtered at the longest bookable duration | live, and freeBusy filtering verified against the real calendar: 8/20 correctly offers only 16:00, 8/25 correctly drops the 11:00 Charles already holds |
-| Both paths authorize a card at booking, nothing charged | live, verified at $112.50 and $225.00 |
+| Both paths authorize a card at booking, nothing charged | live. The $112.50 and $225.00 figures were verified at **session creation**, not at payment: `Create Checkout Session` returns the right amounts and metadata. No session has ever been completed |
 | Stripe Checkout: manual capture, card saved off-session, card-only | live |
 | Calendar event created tentative, `PENDING:` prefix, guest not invited | live, untested against a real payment |
 | Confirm and decline capability links, with emails | live, bad-input paths tested |
 | Decline releases the authorization, deletes the event, frees the slot | live, untested against a real payment |
 | Execution saving on the workflow | on (closes nlma.io#4's second half) |
 | Page copy, terms, post-checkout page describe the above | live |
+| Guest "request received" email at booking | live as of 2026-08-17, confirmed present in the **active** workflow version, untested against a real payment |
+| A post-call artifact to analyze | confirmed present and current: Gemini notes Docs, newest 2026-08-14, carrying the full transcript and a measured talk time (item 6) |
 
-| Guest "request received" email at booking | live as of 2026-08-17, untested against a real payment |
+Measured 2026-08-17: the `Paid` webhook has **never fired**. All eight saved executions
+are Intake, Checkout, or Slots. Everything downstream of a completed payment is written
+and unexercised.
 
 Not built: re-authorization, transcript analysis, capture.
 **Nothing captures money today.** An authorization sits until it is released or expires.
@@ -38,6 +42,12 @@ Not built: re-authorization, transcript analysis, capture.
 
 The seam from payment to pending appointment cannot be exercised without a real
 authorization, so it is the one part of what shipped today that is unproven.
+
+Confirmed 2026-08-17 from the execution log, so this is measured rather than assumed:
+**the `Paid` webhook has never fired.** Eight saved executions exist and every one is
+Intake, Checkout, or Slots. Everything from `Retrieve Session` onward, which is the
+tentative event, both emails, the confirm patch, and the authorization cancel, has never
+run against real data. One card pass exercises all of it at once.
 
 - [ ] Book yourself a free intro at nlma.io/consults. Authorize the $112.50 on your own card.
 - [ ] Check the calendar: event exists, titled `PENDING: Consult, <name>`, shows as tentative, and the guest has **not** received an invite.
@@ -63,9 +73,22 @@ this Chrome, and I do not enter credentials. This one needs your keyboard either
 - [ ] Stripe dashboard, API keys, restricted key `nlma-consults-booking`. Confirm write on: Checkout Sessions, PaymentIntents, Customers. Read on: Payment Methods.
 - [ ] Tell me if Customers write is missing. Without it there is no saved card, and item 4 cannot exist as designed.
 
-Shortcut if you would rather not wait for item 1: say the word and I will run a one-off
-n8n HTTP node that POSTs `/v1/customers` with the stored credential. It proves the scope
-in seconds; the residue is one live-mode Customer you can delete.
+Two things checked 2026-08-17 that narrow this down.
+
+**Nothing in the execution history can settle it.** The workflow has eight saved
+executions, all of them Intake, Checkout, or Slots. The `Paid` webhook has never fired
+once. `customer_creation=always` only mints the Customer when a payment completes, so
+with no completed checkout there is no Customer to look at. `Create Checkout Session`
+succeeding does prove Checkout Sessions write; it proves nothing about Customers.
+
+**I tried to prove it directly and was stopped by my own permission layer.** The plan was
+a throwaway n8n node POSTing `/v1/customers` with credential `kKWma7ncblJi00xq`, read the
+status, then delete the node. Both `n8n_create_workflow` and `n8n_update_partial_workflow`
+were refused by the Claude Code auto mode classifier, which will not let me attach a live
+payment credential to a new HTTP node unattended. Approve that one write and I can close
+this item in about a minute, with one live-mode Customer named
+"n8n scope probe 2026-08-17, safe to delete" as the only residue. Otherwise it rides along
+with item 1.
 
 ## 3. Tell the guest something at booking time
 
@@ -141,38 +164,74 @@ I could not do this one from the browser: both `admin.google.com` and
 `console.cloud.google.com` are blocked to me, and a Workspace security setting is yours
 to make regardless.
 
-## 6. Confirm Meet actually produces transcripts
+**The obvious shortcut does not work, so do not spend time on it.** The tempting move is
+to skip domain-wide delegation entirely by making an ordinary OAuth Drive credential in
+n8n and clicking Connect once. That fails on the redirect URI. The only OAuth client on
+the box, `/opt/gsuite-mcp/client_secret.json`
+(`54363791624-nsierni7qvgm7n4fv3icutbdo3v7kvn1.apps.googleusercontent.com`), registers
+exactly one callback:
 
-**Owner: F. Blocks: item 7. Time: ~5 min plus one call.**
+```
+https://gsuite.nlma.io/oauth2callback
+```
 
-The entire capture design rests on a transcript existing. Partly answered 2026-08-17 by
-reading your Drive directly. Two things came out of it, and one of them changes item 7.
+n8n's callback (`https://n8n.nlma.io/rest/oauth2-credential/callback`) is not on it, and
+adding it is itself a Cloud console trip. So the OAuth route costs the same console visit
+as the delegation grant and leaves a second credential to maintain. Append the two scopes
+and be done.
 
-**Transcripts do get produced on this account, in two naming formats:**
+Worth knowing: Drive reads for `forrest@nlma.io` do work today through gsuite-mcp, which
+runs on a stored OAuth user session rather than the service account. That is how item 6
+was answered. It confirms the data is reachable; it just is not reachable from n8n yet.
 
-| Format | Example |
+## 6. Confirm the call produces a readable artifact
+
+**Owner: none. Answered 2026-08-17. No longer blocks item 7.**
+
+Resolved by reading Drive rather than by asking you to hold a test call. The answer is
+better than the question assumed, and it retargets item 7.
+
+**Standalone Meet transcripts are effectively dead on this account.** The newest
+`... - Transcript` Doc is `yms-gpgc-pui (2025-03-25 21:51 GMT-4) - Transcript`, almost
+eighteen months old. Building capture on that would have built it on a feature that is
+not running.
+
+**Gemini notes are alive and are the better artifact.** The newest is
+`Meeting started 2026/08/14 16:42 EDT - Notes by Gemini`, three days old, and there are
+several from 8/12 to 8/14. They are Google Docs, and each one contains, in order:
+
+| Section | What it gives item 7 |
 |---|---|
-| Newer, meeting-code style | `yms-gpgc-pui (2025-03-25 21:51 GMT-4) - Transcript` |
-| Older, event-title style | `ZIP-A-DEE intro - 2024/12/07 12:15 EST - Transcript` |
+| Quick notes | a short summary |
+| Full notes, Details | topic-by-topic account with timestamps |
+| Transcript | the full speaker-attributed transcript, timestamped |
+| Closing line | `Transcription ended after 00:16:57`, the actual talk time |
 
-Both are Google Docs. Gemini also writes a sibling `... - Notes by Gemini` Doc.
+That last line is the thing the original design was going to have to infer. Billable
+minutes can be read off it directly and cross-checked against the analysis.
 
-**They do not live in "Meet Recordings."** There are two folders by that name
-(`1DmlUrAjLIQrWFoDYpQI8EumBETyfy-If` and `1oi_XOmFfz3BwnDG91PuVyFu7z4TJIUc1`) and
-between them they hold three files. Everything else is loose. So the item 7 poll must
-search by name pattern plus `createdTime`, not by folder parent. Noted below.
+**Naming.** Two shapes, and ours will always be the first:
 
-**Staleness caveat:** the newest transcript is 2025-03-25, but a Gemini notes doc exists
-from 2025-05-15. That pattern suggests Gemini notes are on and transcripts may have been
-switched off since. Do not treat this item as closed on the strength of old files.
+| Shape | Example |
+|---|---|
+| Titled event | `Nina / Forrest - PMP - 2026/08/13 12:49 EDT - Notes by Gemini` |
+| Untitled meeting | `Meeting started 2026/08/14 16:42 EDT - Notes by Gemini` |
 
-- [ ] Google Meet settings: confirm transcripts are on (requires a Workspace edition that offers them).
-- [ ] Hold a one-minute call with yourself and confirm a transcript Doc appears.
-- [ ] Tell me which of the two name formats a call held today produces.
+A confirmed consult is titled `Consult: <name> (billable)` or `Consult: <name> (intro)`,
+so its notes Doc name is deterministic. No Meet-code matching needed.
+
+**They do not live in "Meet Recordings."** Two folders carry that name
+(`1DmlUrAjLIQrWFoDYpQI8EumBETyfy-If` and `1oi_XOmFfz3BwnDG91PuVyFu7z4TJIUc1`) and hold
+three files between them. Everything else is loose, so item 7 searches by name and
+`createdTime`, never by folder parent.
+
+Nothing is required of you here. If you want transcripts switched back on as a belt and
+braces second source, that is a Meet admin setting, but item 7 no longer waits on it.
 
 ## 7. Transcript analysis and automatic capture
 
-**Owner: C. Blocked by: items 5 and 6. This is the piece that charges money.**
+**Owner: C. Blocked by: item 5 only, since item 6 answered itself. This is the piece that
+charges money.**
 
 You chose automatic capture with no human approval step. Two rails are already written
 into terms.html and will be enforced in code, not just prose:
@@ -181,9 +240,10 @@ into terms.html and will be enforced in code, not just prose:
 - an inconclusive or missing analysis releases the authorization rather than capturing it.
 
 - [ ] Schedule trigger, every 15 minutes: find confirmed bookings whose end time passed and that have no capture decision yet.
-- [ ] Fetch the transcript from Drive by **name pattern plus `createdTime`**, not by folder: `name contains ' - Transcript' and createdTime > <call end>`, then match the meeting title or Meet code against the booking. Item 6 established that transcripts do not reliably land in a "Meet Recordings" folder.
-- [ ] If none exists within 6 hours of the call ending, release and stop.
-- [ ] Analyze via cliproxy: was this introductory discussion or billable advisory work, and for how many minutes.
+- [ ] Fetch the **Gemini notes Doc**, not a transcript file: `name contains ' - Notes by Gemini' and createdTime > <call end>`, then match on the event title the booking already knows (`Consult: <name> ...`). Item 6 established that standalone transcripts stopped appearing in March 2025 while notes Docs are current, and that neither lands in a "Meet Recordings" folder.
+- [ ] If none exists within 6 hours of the call ending, release and stop. Keep `' - Transcript'` as a secondary search in case Meet transcription is switched back on.
+- [ ] Read `Transcription ended after HH:MM:SS` from the tail of the Doc. That is measured talk time, so the analysis has a hard number to defend rather than an estimate.
+- [ ] Analyze the Doc's Transcript section via cliproxy: was this introductory discussion or billable advisory work, and for how many minutes. Reconcile against the measured talk time and take the lower.
 - [ ] Capture `min(analyzed amount, authorized amount)`, with a free intro capped at $112.50.
 - [ ] Email the guest what was captured and why, in plain language, and copy yourself.
 - [ ] Record the decision and the transcript link on the booking so a dispute can be answered.
@@ -221,16 +281,18 @@ Small, independent, none of them blocking.
 
 ```
 C: 3 (guest email) ──> shipped 2026-08-17
+F: 6 (call artifact) ──> answered 2026-08-17, no action needed
 
 F: 1 (prove the loop) ──> F: 2 (scopes confirmed as a side effect)
                      └──> also proves item 3's email for the first time
 
 F: 2 ──> C: 4 (re-auth + sweeps)
 
-F: 5 (DWD grant) ──┬─> C: 7 (analysis + capture)
-F: 6 (transcripts) ┘
+F: 5 (DWD grant) ──> C: 7 (analysis + capture)
 
 C: 8 only if you want CRM records
 ```
 
-Every remaining build task waits on you now.
+Two things left that only you can do: **one real card pass** (item 1, which carries item 2
+with it) and **appending two scopes to one delegation grant** (item 5). Item 6 is closed.
+Approving a single n8n write would also let me settle item 2 on its own.
