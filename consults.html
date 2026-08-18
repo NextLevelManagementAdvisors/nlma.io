@@ -65,6 +65,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;line-height:1.03;letter-sp
 h2{font-size:clamp(2rem,4.6vw,3.4rem)}
 h3{font-size:clamp(1.3rem,2vw,1.55rem);line-height:1.12;letter-spacing:-.01em}
 .lede{color:var(--muted);font-size:clamp(1.05rem,1.5vw,1.22rem);line-height:1.55;max-width:62ch}
+.lede.after{margin-top:28px;font-size:1rem}
 /* HEADER */
 .site-head{position:fixed;top:0;left:0;right:0;z-index:60;
   transition:background .4s var(--ease),border-color .4s,backdrop-filter .4s;border-bottom:1px solid transparent;}
@@ -256,11 +257,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   <section class="wrap booking">
     <p class="eyebrow">Consult</p>
     <h1 class="display">Schedule a consult</h1>
-    <!-- Keep this short. Everything about authorization, capture, release and
-         Forrest confirming is stated per path in the step-2 disclosures below,
-         right before a card is involved, which is where it belongs. Repeating it
-         up here buried the calendar under a wall of text. -->
-    <p class="lede">Pick a time, then tell us what you need: an operations, software, or AI problem, especially in real estate or property management. We size the call from your description and show you the amount before your card is involved.</p>
 
     <!-- STEP 1: pick a time.
          Times load on page view from /webhook/consult-slots, which runs no LLM and
@@ -354,6 +350,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       </div>
       <p class="formnote" id="resultNote" hidden></p>
     </div>
+
+    <!-- Context, not instructions, and deliberately below the widget: a booking page
+         should open on the calendar, not on prose. Everything about authorization,
+         capture, release and Forrest confirming is stated per path in the step-2
+         disclosures, immediately above the button that authorizes the card. -->
+    <p class="lede after">Consults are for operations, software, or AI problems, especially in real estate or property management. We size the call from what you describe and show you the amount before your card is involved.</p>
 
     <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable. <a href="/#contact">Use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we&rsquo;ll set it up.</p>
   </section>
