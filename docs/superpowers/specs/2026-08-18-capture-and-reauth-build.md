@@ -415,9 +415,8 @@ left the credential unresolved.
 
 ### Still open
 
-- **RSVP watcher (L11 gap 2).** A guest declining the calendar invite still releases
-  nothing, because nothing watches RSVPs. That needs a new trigger, not a rewiring, so it
-  was left out rather than half-built.
+- **RSVP watcher (L11 gap 2).** Closed later the same day, as a third branch off
+  `Capture Cron` rather than a new trigger. See "RSVP watcher" below.
 - **Untested against a real call.** Every branch of the capture logic is proven by
   `capture-decide.test.js` (30 named assertions plus a 108-combination sweep), but the
   chain as wired has never run: it needs a confirmed consult that has actually happened and
@@ -475,3 +474,95 @@ wrong call in the other direction is a consult given away for free with a receip
 Verified with six assertions against the extracted node bodies: both error shapes throw on
 each node, an empty file list still reaches the release path, a name match still picks the
 right doc, and a Docs error on `MISSING` still releases.
+
+---
+
+# RSVP watcher, same day
+
+A guest could decline the calendar invitation and nothing happened: the hold stayed live,
+the meeting stayed on the calendar, and the money only came back when the capture sweep
+ran after the call time had passed and found no notes doc. That is the right answer arrived
+at far too late, and in the meantime the guest is looking at a pending line on their card
+for a meeting they already said no to.
+
+## Why a branch and not a trigger
+
+The earlier note said this needed a new trigger. It did not. A Google Calendar trigger
+fires on every update to every event on forrest@nlma.io, carries its own dedupe state, and
+can replay a backlog the first time it is switched on. A third branch off the existing
+hourly `Capture Cron` reuses the sweep machinery and the durable-field idempotency that
+the rest of this workflow already runs on.
+
+```
+Capture Cron  (existing, hourly, RSVP appended last of the three branches)
+  -> RSVP Sweep        (Code)   confirmed, unsettled bookings with an eventId whose call is still ahead
+  -> RSVP Fetch        (HTTP)   GET the calendar event
+  -> RSVP Declined     (Code)   keeps only the ones where the guest attendee said no
+  -> RSVP Release      (HTTP)   POST /v1/payment_intents/{id}/cancel   requested_by_customer
+  -> RSVP Released?    (Code)   keeps only the ones Stripe really cancelled
+  -> RSVP Delete Event (HTTP)   DELETE the event
+  -> RSVP Email        (Gmail)  tells the guest the hold is released, Forrest bcc'd
+  -> RSVP Store        (Code)   status cancelled, settledAt, settlement record, slot freed
+```
+
+## Only a positive signal moves money
+
+`RSVP Declined` acts on exactly one thing: an attendee matching the booking email whose
+`responseStatus` is `declined`. Everything else is a deliberate no-op.
+
+| Signal | Read as | Outcome |
+|---|---|---|
+| Guest attendee `responseStatus: declined` | the guest said no | release, delete, email |
+| `accepted`, `tentative`, `needsAction` | not a decline | nothing |
+| No attendees, or no attendee matching the booking email | nothing to read | nothing |
+| Fetch errored (401, 5xx, bare-string error) | infrastructure, not an answer | nothing, retried next hour |
+| Event `status: cancelled` | event deleted, ambiguous | nothing; the capture sweep releases once the call time passes |
+
+The email match is case-insensitive and trimmed, because Google echoes attendee addresses
+in whatever case they were entered.
+
+## The guest is only told what is true
+
+`RSVP Released?` exists because `RSVP Release` runs `onError: continueRegularOutput`, so a
+failed cancel arrives looking like any other item. Letting that through would delete the
+event and email the guest "nothing was charged" while the hold was still live at Stripe.
+
+Two shapes count as released: the intent coming back in `status: canceled`, and Stripe
+refusing because it is already canceled, which is the same end state and is exactly what a
+retry of a successful cancel looks like. Anything else throws, which leaves `settledAt`
+unwritten, fires the error workflow, and puts the booking in front of the next hourly run.
+
+The match is on the terminal state, never on the word "canceled" appearing in the message.
+Stripe's refusal for an already-captured intent reads "has a status of succeeded", which
+contains "canceled" nowhere but is close enough in shape that a loose `includes` on the
+word would be tempting. A guest who was legitimately charged must never receive the release
+email, so that comparison is pinned to `payment_intent.status === 'canceled'` or the exact
+phrase "status of canceled".
+
+## Three smaller decisions
+
+- **Disjoint predicates.** `RSVP Sweep` takes only bookings whose call is still ahead;
+  `Capture Sweep` takes only bookings past their end time plus the grace window. The two
+  branches run in the same execution and both write `settledAt`, so they must never be able
+  to see the same booking.
+- **RSVP is appended last of Capture Cron's three branches.** Branches run in connection
+  order, so the deliberate throw in `RSVP Released?` can only starve itself, never that
+  hour's capture or nudge run.
+- **`status: cancelled`, not a new status.** It was already in the vocabulary and nothing
+  reads it. `declined` means Forrest turned the request down and `lapsed` means nobody acted
+  at all, so the guest's own decision needed its own word.
+
+## Verification
+
+`rsvp.test.js` runs the two Code bodies the way an n8n Code node runs them, as functions
+whose only inputs are the `$` helpers. 21 assertions, all passing, covering every row of the
+table above plus: matching a response to its booking by event id when the API returns them
+out of order, the index fallback that error items force because they carry no id, the
+n8n double-wrapped error object, and the already-captured-intent trap.
+
+Workflow is 111 nodes, 8 triggers, 104 valid connections, 0 invalid. The six validator
+errors it reports are pre-existing complaints about `responseNode` mode on the six webhook
+nodes, none of them on this branch.
+
+Untested against a real decline, like the rest of the capture chain. The first real one is
+the test.
