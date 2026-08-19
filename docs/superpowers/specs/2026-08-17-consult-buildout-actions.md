@@ -370,9 +370,11 @@ Thirty-case harness passes, run against the node bodies with stubbed n8n globals
 new path, that the two pending paths are untouched, that `declined` and `cancelled` are terminal
 so nothing can be released twice, and that junk tokens and actions are still refused.
 
-**Gap 2 (RSVP) is not built.** A guest declining the calendar invite still releases nothing. It
-needs something watching calendar RSVPs, which is a new trigger rather than a rewiring, so it is
-a separate piece of work.
+**Gap 2 (RSVP) is built, 2026-08-18.** A guest declining the calendar invite now releases the
+hold within the hour, deletes the event, and gets a note saying nothing was charged. It did not
+need a new trigger after all: it is an eight-node third branch off the existing hourly
+`Capture Cron`, which reuses the sweep machinery and the durable-field idempotency the rest of
+the workflow runs on. See "RSVP watcher" in `2026-08-18-capture-and-reauth-build.md`.
 
 To release the stuck 8/20 booking:
 `https://n8n.nlma.io/webhook/consult-approve?t=msyv8neg1jny5w3l41&a=decline`

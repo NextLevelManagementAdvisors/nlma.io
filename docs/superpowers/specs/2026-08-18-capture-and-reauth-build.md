@@ -533,11 +533,11 @@ retry of a successful cancel looks like. Anything else throws, which leaves `set
 unwritten, fires the error workflow, and puts the booking in front of the next hourly run.
 
 The match is on the terminal state, never on the word "canceled" appearing in the message.
-Stripe's refusal for an already-captured intent reads "has a status of succeeded", which
-contains "canceled" nowhere but is close enough in shape that a loose `includes` on the
-word would be tempting. A guest who was legitimately charged must never receive the release
-email, so that comparison is pinned to `payment_intent.status === 'canceled'` or the exact
-phrase "status of canceled".
+Stripe's refusal for an already-captured intent reads "has a status of succeeded", and its
+cancel refusals commonly go on to name the states that can be cancelled, so the bare word
+turns up in exactly the message that must not pass. A guest who was legitimately charged
+must never receive the release email, so the comparison is pinned to
+`payment_intent.status === 'canceled'` or the exact phrase "status of canceled".
 
 ## Three smaller decisions
 
