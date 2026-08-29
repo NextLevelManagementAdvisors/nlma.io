@@ -214,6 +214,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .disclosure ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px}
 .disclosure li{color:var(--muted);font-size:14px;line-height:1.5}
 .disclosure strong{color:var(--paper);font-weight:600}
+/* Q&A block below the widget. Same card chrome as services.html's .qa/.qa-item,
+   but a single column, because this page's column is 760px wide (.booking) rather
+   than the 1180px .wrap the two-column grid on /services is sized for. */
+.qa-section{max-width:760px;padding-block:6px 0}
+.qa-head{margin:0 0 24px}
+.qa-head h2{font-size:clamp(1.6rem,3.2vw,2.15rem);margin:14px 0 12px}
+.qa{display:grid;grid-template-columns:1fr;gap:14px}
+.qa-item{border:1px solid var(--line);border-radius:var(--r);padding:24px 24px 22px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0))}
+.qa-item h3{font-family:var(--f-display);font-size:1.12rem;color:var(--paper);margin:0 0 9px;line-height:1.25}
+.qa-item p{color:var(--muted);font-size:.93rem;line-height:1.6;margin:0}
+.qa-item a{color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(122,194,161,.28)}
+.qa-item a:hover{border-bottom-color:var(--signal)}
+@media(max-width:900px){.qa-item{padding:20px 20px 18px}}
+.reviewed-stamp{margin:0 0 8px;color:var(--faint);font-size:.8rem;font-family:var(--f-mono);letter-spacing:.02em}
 
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
@@ -390,6 +405,44 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
     <p class="fallback muted" id="fallback" hidden>Booking is temporarily unavailable. <a href="/#contact">Use our contact form</a> or call <a href="tel:+15712002032">+1 571 200 2032</a> and we&rsquo;ll set it up.</p>
   </section>
+
+  <!-- Static prose only, below the widget. No ids, no name= attributes and no form
+       controls in here, so nothing the booking script queries can collide with it. -->
+  <section class="wrap qa-section">
+    <div class="qa-head">
+      <p class="eyebrow">Before you book</p>
+      <h2>What a consult actually is.</h2>
+      <p class="lede">Six answers worth reading first, so the hour goes to your problem.</p>
+    </div>
+    <div class="qa">
+      <div class="qa-item">
+        <h3>What happens on a consult call?</h3>
+        <p>A consult is a working session with Forrest Surprenant, who founded NLMA in 2018 and leads the engineering. You describe the situation and the call goes to it: what the system has to do, where your tools break, what an integration would take, and which parts you should not build. Calls default to Google Meet and are transcribed, so nothing has to be reconstructed from memory afterward. Phone is offered on paid consults.</p>
+      </div>
+      <div class="qa-item">
+        <h3>Who is a consult actually for, and who is it not for?</h3>
+        <p>A consult fits owners, operators, and technical leads holding a concrete problem: a process running on spreadsheets and copy-paste, platforms that will not talk to each other, an AI idea you are not sure is real, or a build you want stress-tested before you fund it. It is a poor fit if you want free spec work, a fixed price for something nobody has scoped, or a vendor to rubber-stamp a decision already made. If you are unsure which, start with the free intro.</p>
+      </div>
+      <div class="qa-item">
+        <h3>What should I prepare beforehand so the hour is not wasted?</h3>
+        <p>Specifics beat summaries. Bring the workflow as it actually runs today including the manual steps, the platforms of record and whether you have API access to them, rough volume, who touches the data, and what a good outcome looks like in one sentence. A screenshot, an export, or a live link beats a description. Put it in the &ldquo;What do you need?&rdquo; box when you book: that text sizes the call and gets read before it starts.</p>
+      </div>
+      <div class="qa-item">
+        <h3>How does billing work, and what does $450 an hour buy?</h3>
+        <p>Advisory time is $450 per hour, billed in 15-minute increments. This page sizes the call from what you describe and shows the amount before your card is involved. At booking your card is authorized rather than charged: an authorization reserves funds, nothing leaves your account. It is captured after the call, for the time actually spent, and never for more than the amount authorized. A free intro authorizes $112.50, one 15-minute increment at the standard rate, and it is released unless the call turns into paid advice.</p>
+      </div>
+      <div class="qa-item">
+        <h3>What happens after the call?</h3>
+        <p>You leave with the answer you came for. If the work is larger than an hour, the next artifact is a written scope, delivered within 48 hours rather than after a six-week discovery cycle, naming what gets built, what it depends on, and what we recommend against. None of it obligates you to continue, and anything NLMA does go on to build for you is self-hosted in accounts you own, with full source.</p>
+      </div>
+      <div class="qa-item">
+        <h3>Is a consult required before starting a project?</h3>
+        <p>No. A consult is one way in, not a gate. If you already know what you need built, the <a href="/contact">contact form</a> reaches the same person, and project work is scoped after a first call either way. A consult is the better route when the open question is what to build rather than who builds it, or when you want to judge the engineering first. You can also read the code: over 20 repositories are public under NextLevelManagementAdvisors on GitHub, including turno-mcp, vacourts-mcp, github-mcp-auth, and rag-mcp. Pricing detail lives on <a href="/services">services</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><p class="reviewed-stamp">Reviewed and current as of <time datetime="2026-08-29">August 29, 2026</time>.</p></div>
 </main>
 
 <footer class="foot">
