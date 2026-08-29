@@ -389,6 +389,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   .live .pulse,.sys-note .pulse,.foot-bot .sysline i,.scrollcue .rail::after{animation:none}
   .scrollcue{display:none}
 }
+
+/* ===== Q&A ===== */
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.qa-item{border:1px solid var(--line);border-radius:var(--r);padding:24px 24px 22px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0))}
+.qa-item h3{font-family:var(--f-display);font-size:1.12rem;color:var(--paper);margin:0 0 9px;line-height:1.25}
+.qa-item p{color:var(--muted);font-size:.93rem;line-height:1.6;margin:0}
+.qa-item a{color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(122,194,161,.28)}
+.qa-item a:hover{border-bottom-color:var(--signal)}
+@media(max-width:900px){.qa{grid-template-columns:1fr}}
+.reviewed-stamp{margin:0 0 8px;color:var(--faint);font-size:.8rem;font-family:var(--f-mono);letter-spacing:.02em}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
 <script type="application/ld+json">
@@ -541,7 +552,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div class="section-head">
         <span class="eyebrow reveal">The proof</span>
         <h2 class="reveal" data-d="1">Software we don't just pitch.<br>We run it in production.</h2>
-        <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates &mdash; dozens of services, AI agents, and integrations spanning finance, records, documents, comms, and operations, doing real work every day. This is what "we'll build it" actually looks like.</p>
+        <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates: dozens of services, AI agents, and integrations spanning finance, records, documents, comms, and operations, doing real work every day. This is what "we'll build it" actually looks like.</p>
       </div>
             <figure class="archfig reveal" data-d="3">
         <img src="/images/mcp-architecture.svg" width="1000" height="430" loading="lazy" decoding="async"
@@ -601,10 +612,40 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="wrap">
       <div class="ownline reveal">
         <span class="eyebrow">No lock-in</span>
-        <p>Everything we build is <span class="it">yours to keep</span> &mdash; the code, the data, the infrastructure it runs on. We operate it as long as it's useful, then hand you the keys.</p>
+        <p>Everything we build is <span class="it">yours to keep</span>: the code, the data, the infrastructure it runs on. We operate it as long as it's useful, then hand you the keys.</p>
       </div>
     </div>
   </section>
+
+  <!-- ===================== QUESTIONS ===================== -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow reveal">Before the first call</span>
+        <h2 class="reveal" data-d="1">Questions people ask us first.</h2>
+      </div>
+      <div class="qa">
+        <div class="qa-item reveal">
+          <h3>What does NLMA do?</h3>
+          <p>NLMA blends operations consulting, senior software engineering, and applied AI, turning operational complexity into systems that run themselves. The work covers four things: mapping how an operation actually runs, building custom applications shaped to real business logic instead of someone else's template, wiring the tools a company already pays for into one connected system, and running AI workflows that read, decide, and act. NLMA specializes deeply in real estate and property management, and everything it builds is yours to keep: the code, the data, and the infrastructure it runs on.</p>
+        </div>
+        <div class="qa-item reveal" data-d="1">
+          <h3>Who does NLMA work with?</h3>
+          <p>NLMA works with operators who have outgrown spreadsheets and off-the-shelf tools: short-term rental operators, long-term property management firms, real estate and deal operations, bookkeeping and finance teams, professional and legal services, multi-entity operators, and owner-operated small businesses. Real estate and property management is where NLMA goes deepest, because it runs those same systems on live portfolios itself. The work also reaches commercial and government workflows. The common thread is an operation carrying too many disconnected tools and too much manual hand-off between them.</p>
+        </div>
+        <div class="qa-item reveal" data-d="2">
+          <h3>What makes NLMA different from an agency or a staffing firm?</h3>
+          <p>An agency guesses at your workflow from the outside, and a staffing firm rents you hours. NLMA is operator-led: it builds the software it also runs itself, in production, every day. One team covers consulting, engineering, and applied AI, rather than handing you a consultant or an engineer or an AI vendor separately. There is no lock-in. The code, the data, and the infrastructure are yours to keep, and NLMA operates the system for as long as that is useful, then hands over the keys.</p>
+        </div>
+        <div class="qa-item reveal" data-d="3">
+          <h3>How do you start working with NLMA?</h3>
+          <p>Start by scheduling a consult with NLMA or sending a note through the contact form on this page. Advisory time is $450 per hour, and project work gets scoped and quoted after a first call. From there the engagement runs in four stages: map the operation and the constraints, build the software and automation around the real workflows, integrate it with existing systems and migrate the data, then operate it or hand over the keys. Each stage hands you something concrete, and you own the system at the end.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><p class="reviewed-stamp">Reviewed and current as of <time datetime="2026-08-29">August 29, 2026</time>.</p></div>
 
   <!-- ===================== CONTACT ===================== -->
   <section class="section contact" id="contact">
@@ -621,7 +662,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <span class="k">Phone</span>
             <a href="tel:+15712002032">+1 571 200 2032<span class="u"></span></a>
           </div>
-          <p class="meta">Next Level Management Advisors, LLC<br>Serving commercial &amp; government workflows<br>Your data stays on infrastructure you own &mdash; never shared with third parties.</p>
+          <p class="meta">Next Level Management Advisors, LLC<br>Serving commercial &amp; government workflows<br>Your data stays on infrastructure you own, never shared with third parties.</p>
         </div>
         <form class="form" id="contactForm" novalidate>
           <div class="fhead">Tell us what you're building</div>

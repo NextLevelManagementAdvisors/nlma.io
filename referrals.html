@@ -199,6 +199,17 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
 .cta-strip .btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
 @media(max-width:880px){.ref-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.ref-grid{grid-template-columns:1fr}}
+
+/* ===== Q&A ===== */
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.qa-item{border:1px solid var(--line);border-radius:var(--r);padding:24px 24px 22px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0))}
+.qa-item h3{font-family:var(--f-display);font-size:1.12rem;color:var(--paper);margin:0 0 9px;line-height:1.25}
+.qa-item p{color:var(--muted);font-size:.93rem;line-height:1.6;margin:0}
+.qa-item a{color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(122,194,161,.28)}
+.qa-item a:hover{border-bottom-color:var(--signal)}
+@media(max-width:900px){.qa{grid-template-columns:1fr}}
+.reviewed-stamp{margin:0 0 8px;color:var(--faint);font-size:.8rem;font-family:var(--f-mono);letter-spacing:.02em}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
 <script type="application/ld+json">
@@ -405,6 +416,32 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
 
   </div>
 </section>
+
+<!-- QUESTIONS -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Before you click</span>
+      <h2>Fair questions about this list.</h2>
+    </div>
+    <div class="qa">
+      <div class="qa-item reveal">
+        <h3>What are these referral links?</h3>
+        <p>The links on this page point to the platforms and programs NLMA uses in production every day: the same tools it builds on, integrates, and automates for clients. Many of them are referral or affiliate links, and several vendors attach a signup perk, such as a free strategy session, a refer-a-friend bonus, or a discount. Using any of them puts you under no obligation to NLMA. There is nothing to hire and no bundle to buy. Take the shortlist, skip the months of evaluating, and go set it up yourself.</p>
+      </div>
+      <div class="qa-item reveal" data-d="1">
+        <h3>Does NLMA get paid if I use them?</h3>
+        <p>Sometimes, yes, and this page says so plainly. Many of the links are referral or affiliate links. If you sign up through one, NLMA may earn a referral bonus or commission, at no extra cost to you. NLMA only lists tools it actually uses and runs in production. A referral fee never moves a tool up the page and never buys a mention that would not have been written anyway: the recommendation would read the same with no fee attached.</p>
+      </div>
+      <div class="qa-item reveal" data-d="2">
+        <h3>How does NLMA decide what to recommend?</h3>
+        <p>Nothing lands on this page because a program pays well. A tool earns its spot by surviving NLMA's own operations first: real properties, real books, real deadlines, and real deploys. If NLMA stops running it, it comes off the list. Where the page calls a platform the backbone of something, that is because it is holding that job up right now. The groups are ordered the way an operation actually gets built: money, tax, and legal structure first, then credit and funding, then the systems that run the doors, and finally data, infrastructure, and comms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><p class="reviewed-stamp">Reviewed and current as of <time datetime="2026-08-29">August 29, 2026</time>.</p></div>
 
 <!-- CTA -->
 <section class="cta-strip">

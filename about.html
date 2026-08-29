@@ -259,11 +259,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 }
 @media(max-width:560px){.proof{grid-template-columns:1fr}.proof .p{border-right:none}.proof .p:last-child{border-bottom:none}}
 
-</style>
-<noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}
+/* ===== Q&A ===== */
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.qa-item{border:1px solid var(--line);border-radius:var(--r);padding:24px 24px 22px;
+  background:linear-gradient(180deg,rgba(236,243,239,.022),rgba(236,243,239,0))}
+.qa-item h3{font-family:var(--f-display);font-size:1.12rem;color:var(--paper);margin:0 0 9px;line-height:1.25}
+.qa-item p{color:var(--muted);font-size:.93rem;line-height:1.6;margin:0}
+.qa-item a{color:var(--signal);text-decoration:none;border-bottom:1px solid rgba(122,194,161,.28)}
+.qa-item a:hover{border-bottom-color:var(--signal)}
+@media(max-width:900px){.qa{grid-template-columns:1fr}}
+.reviewed-stamp{margin:0 0 8px;color:var(--faint);font-size:.8rem;font-family:var(--f-mono);letter-spacing:.02em}
+
+
 .founder{margin:0 0 20px}
 .founder img{display:block;width:100%;height:auto;border-radius:var(--r);border:1px solid var(--line)}
-.founder figcaption{margin-top:10px;color:var(--faint);font-size:.85rem}</style></noscript>
+.founder figcaption{margin-top:10px;color:var(--faint);font-size:.85rem}
+</style>
+<noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://nlma.io/#organization","name":"Next Level Management Advisors","alternateName":"NLMA","url":"https://nlma.io","logo":"https://nlma.io/icon-512.png","email":"info@nlma.io","telephone":"+1-571-200-2032","address":{"@type":"PostalAddress","streetAddress":"21 N Broad St, Ste E","addressLocality":"Luray","addressRegion":"VA","postalCode":"22835","addressCountry":"US"},"areaServed":"US","description":"Custom software and AI automation that turns operational complexity into systems that run themselves.","founder":{"@id":"https://nlma.io/#person"}}
 </script>
@@ -427,6 +439,36 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     </div>
   </div>
 </section>
+
+<!-- QUESTIONS -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Straight answers</span>
+      <h2>What people want to know about us.</h2>
+    </div>
+    <div class="qa">
+      <div class="qa-item reveal">
+        <h3>Who runs NLMA?</h3>
+        <p>NLMA is run by Forrest Surprenant, who founded the firm in 2018 and leads the engineering. The entity is Next Level Management Advisors, LLC, based in Virginia. The approach is operator-led rather than delegated: the person advising on the system is the person who designs and builds it, and judgment is never outsourced to a subcontractor. Forrest's full background, including the work that came before NLMA, is published on the <a href="/resume">r&eacute;sum&eacute;</a> page, so you can read it before you ever pick up the phone.</p>
+      </div>
+      <div class="qa-item reveal" data-d="1">
+        <h3>Why does NLMA specialize in real estate and property management?</h3>
+        <p>NLMA began as a business-management and operations consultancy, and the work kept converging on one problem: off-the-shelf platforms handled about 80% of the job and left operators duct-taping the rest by hand. Rather than go shallow everywhere, NLMA went deep in a single domain: short-term and long-term rentals, HOAs, brokerage operations, foreclosure and loan servicing. The systems NLMA builds there, it also runs itself, on live portfolios, every day. That is why it knows where the edge cases hide and builds for them.</p>
+      </div>
+      <div class="qa-item reveal" data-d="2">
+        <h3>Does NLMA build software or just advise?</h3>
+        <p>Both, and that combination is the point. NLMA maps the process before touching a line of code, then builds the result: production-grade full-stack applications, internal tools, portals, APIs, and the integration middleware that turns siloed SaaS into one coherent system, plus LLM workflows and autonomous agents that run in production. Most firms give you a consultant or an engineer or an AI vendor. NLMA is one team doing all three, inside a domain it operates in, and the client owns the code and infrastructure that results.</p>
+      </div>
+      <div class="qa-item reveal" data-d="3">
+        <h3>Where is NLMA located?</h3>
+        <p>NLMA is based in Virginia. The business address is 21 N Broad St, Ste E, Luray, VA 22835, and the entity, Next Level Management Advisors, LLC, has operated since 2018. The work itself is not tied to that address: what NLMA builds is self-hosted software delivered remotely, serving commercial and government workflows across the United States. You can reach the firm at info@nlma.io or +1 571 200 2032, or <a href="/consults">schedule a consult</a> directly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><p class="reviewed-stamp">Reviewed and current as of <time datetime="2026-08-29">August 29, 2026</time>.</p></div>
 
 <!-- CTA -->
 <section class="cta-strip">
