@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nlma.io/</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://nlma.io/</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq>
+    <image:image><image:loc>https://nlma.io/images/mcp-architecture.svg</image:loc></image:image>
+  </url>
   <url><loc>https://nlma.io/about</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://nlma.io/services</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
-  <url><loc>https://nlma.io/portfolio</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
+  <url><loc>https://nlma.io/portfolio</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq>
+    <image:image><image:loc>https://nlma.io/images/work/fieldflow-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/flash-services-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/hostcart-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/hvac-front-royal-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/living-by-his-grace-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/living-nazareth-high-school-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/loanserv-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/megan-hart-notary-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/mount-carmel-home-services-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/nightclick-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/rural-waste-management-640.jpg</image:loc></image:image>
+    <image:image><image:loc>https://nlma.io/images/work/zip-a-dee-services-640.jpg</image:loc></image:image>
+  </url>
   <url><loc>https://nlma.io/referrals</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://nlma.io/referrals/get-fundable</loc><lastmod>2026-07-25</lastmod><changefreq>monthly</changefreq></url>
   <url><loc>https://nlma.io/resume</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq></url>
