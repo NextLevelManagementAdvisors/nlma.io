@@ -191,6 +191,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 .rowbtns{display:flex;gap:12px;flex-wrap:wrap}
 .linkbtn{background:none;border:none;color:var(--signal);cursor:pointer;font:inherit;padding:0}
 .formnote{margin-top:12px;color:#ff9b9b;font-size:14px}
+/* Reserves one line even when the text is cleared, so the status swap in step 1
+   (loading -> found/empty) can't collapse this line and shift the calendar below it. */
+.slots-status{min-height:1.4em}
 .sub{font-family:var(--f-display);font-size:1.15rem;margin:18px 0 4px}
 /* fixes for bugs found during Playwright verification (not in brief's verbatim CSS):
    1) .field{display:flex} above beats the UA [hidden]{display:none} rule at equal
@@ -266,16 +269,41 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div id="timeStep" class="card">
       <h2 class="sub">Pick a time <span class="muted" id="tzNote"></span></h2>
       <div aria-live="polite">
-        <p class="formnote muted" id="slotsLoading">Loading open times&hellip;</p>
-        <p class="formnote empty muted" id="slotsEmpty" hidden>No open times in the next few weeks. Email info@nlma.io and we&rsquo;ll find one.</p>
-        <div class="field" id="dateField" hidden><span class="label">Date</span>
+        <!-- One status line, never [hidden]: its text is swapped in place rather than
+             toggling a loading paragraph off and an empty-state paragraph on, which
+             used to collapse/expand this line and shift the calendar below it. -->
+        <p class="formnote muted slots-status" id="slotsStatus">Loading open times&hellip;</p>
+        <!-- Rendered visible (not [hidden]) from the start, with a 6-row skeleton grid
+             already in place: root cause of the CLS this replaces was JS inserting the
+             whole calendar into zero reserved space once slots resolved. renderCalendar()
+             below always emits the same 7-dow + 42-day-cell shape, so swapping the
+             skeleton's placeholder cells for real ones changes content, not geometry. -->
+        <div class="field" id="dateField"><span class="label">Date</span>
           <div class="cal" id="cal">
             <div class="cal-head">
-              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">&lsaquo;</button>
+              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month" disabled>&lsaquo;</button>
               <span class="cal-month" id="calMonth"></span>
-              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">&rsaquo;</button>
+              <button type="button" class="cal-nav" id="calNext" aria-label="Next month" disabled>&rsaquo;</button>
             </div>
-            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-grid" id="calGrid">
+              <div class="cal-dow">S</div><div class="cal-dow">M</div><div class="cal-dow">T</div>
+              <div class="cal-dow">W</div><div class="cal-dow">T</div><div class="cal-dow">F</div>
+              <div class="cal-dow">S</div>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+              <span class="cal-day pad"></span><span class="cal-day pad"></span><span class="cal-day pad"></span>
+            </div>
           </div>
         </div>
       </div>
@@ -331,7 +359,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <p class="disclosure-head">Before you request a free intro</p>
         <ul>
           <li>The call is held on Google Meet and transcribed.</li>
-          <li>A <strong>$112.50</strong> authorization is placed on your card, a 15-minute increment of advisory time at our standard rate. An authorization reserves funds; it is not a charge.</li>
+          <li>A <strong>$112.50</strong> authorization is placed on your card, a 15-minute increment of advisory time at our standard <strong>$450/hour</strong> rate. An authorization reserves funds; it is not a charge.</li>
           <li>It is <strong>released</strong> unless the call becomes paid advice.</li>
           <li>The time is held for you and confirmed by email once Forrest accepts it.</li>
         </ul>
@@ -496,6 +524,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       }
       grid.appendChild(btn);
     });
+    // Every month renders exactly 6 rows (42 day cells: leading pad + days + trailing
+    // pad), matching the skeleton grid shipped in the HTML. A variable row count here
+    // is what let the calendar's real height differ from the reserved space and
+    // reintroduce the layout shift the skeleton exists to prevent.
+    var trailing=42-offset-daysInMonth;
+    for(var j=0;j<trailing;j++){
+      var padEnd=document.createElement("span"); padEnd.className="cal-day pad"; grid.appendChild(padEnd);
+    }
 
     // Drop the time strip into the grid immediately after the selected day's week.
     // Nothing renders when the selection is in another month, which is what makes
@@ -563,13 +599,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   function renderSlots(slots){
     state.selectedDateKey=null; state.selectedTime=null; state.slot=null;
     $("toDetailsBtn").disabled=true;
-    $("slotsLoading").hidden=true;
 
     if(!slots.length){
-      $("slotsEmpty").hidden=false; $("dateField").hidden=true;
+      // dateField stays visible (it's never [hidden] now — see the HTML skeleton
+      // grid), showing the empty/disabled skeleton rather than collapsing it, so
+      // this branch causes no shift of its own either.
+      $("slotsStatus").textContent="No open times in the next few weeks. Email info@nlma.io and we’ll find one.";
       return;
     }
-    $("slotsEmpty").hidden=true; $("dateField").hidden=false;
+    $("slotsStatus").textContent="";
 
     // Group into a real calendar: pick a day first, then see just that
     // day's times, which reads lighter than a flat list of every open slot.
@@ -591,12 +629,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 
   async function loadSlots(){
     $("tzNote").textContent="("+tzLabel()+")";
-    $("slotsLoading").hidden=false; $("slotsEmpty").hidden=true; $("timeNote").hidden=true;
+    $("slotsStatus").textContent="Loading open times…"; $("timeNote").hidden=true;
     try{
       var d=await callBackend(CONFIG.slots,{});
       renderSlots(d.slots||[]);
     }catch(err){
-      $("slotsLoading").hidden=true;
+      $("slotsStatus").textContent="";
       note("timeNote","We couldn’t load open times just now. Please reload, or email info@nlma.io and we’ll book it for you.");
       showFallback();
     }
