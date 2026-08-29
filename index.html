@@ -401,7 +401,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 @media(max-width:900px){.qa{grid-template-columns:1fr}}
 .reviewed-stamp{margin:0 0 8px;color:var(--faint);font-size:.8rem;font-family:var(--f-mono);letter-spacing:.02em}
 </style>
-<noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
+<noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}
+.archfig .archsvg{display:block;width:100%;height:auto}
+</style></noscript>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://nlma.io/#organization","name":"Next Level Management Advisors","alternateName":"NLMA","url":"https://nlma.io","logo":"https://nlma.io/icon-512.png","email":"info@nlma.io","telephone":"+1-571-200-2032","address":{"@type":"PostalAddress","streetAddress":"21 N Broad St, Ste E","addressLocality":"Luray","addressRegion":"VA","postalCode":"22835","addressCountry":"US"},"areaServed":"US","description":"Custom software and AI automation that turns operational complexity into systems that run themselves.","founder":{"@id":"https://nlma.io/#person"}}
 </script>
@@ -555,8 +557,62 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates: dozens of services, AI agents, and integrations spanning finance, records, documents, comms, and operations, doing real work every day. This is what "we'll build it" actually looks like.</p>
       </div>
             <figure class="archfig reveal" data-d="3">
-        <img src="/images/mcp-architecture.svg" width="1000" height="430" loading="lazy" decoding="async"
-             alt="Diagram: AI clients authenticate over OAuth 2.1 into a self-hosted MCP layer that enforces per-tenant authorization and scoped tools, which in turn connects to live business systems including Guesty, DoorLoop, QuickBooks, Baselane, Turno, and court and property records.">
+        <svg id="mcpDiagram" class="archsvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" role="img" aria-labelledby="mcpTitle mcpDesc" preserveAspectRatio="xMidYMid meet">
+          <title id="mcpTitle">How NLMA connects AI agents to live business systems</title>
+          <desc id="mcpDesc">A three-stage diagram. On the left, AI clients such as Claude, ChatGPT, and custom agents. They authenticate with OAuth 2.1 into the middle stage, a self-hosted MCP layer running on NLMA infrastructure behind TLS, which enforces per-tenant authorization and scoped tools. That layer connects on the right to live business systems including Guesty, DoorLoop, QuickBooks, Baselane, Turno, and court and property records.</desc>
+
+          <defs>
+            <style>#mcpDiagram .bg { fill: #0B1418; }#mcpDiagram .panel { fill: #0E1E28; stroke: rgba(236,243,239,.12); stroke-width: 1; }#mcpDiagram .core { fill: #10212c; stroke: #2E6A55; stroke-width: 1.5; }#mcpDiagram .h { font-family: Georgia, "Times New Roman", serif; font-size: 19px; fill: #ECF3EF; }#mcpDiagram .lbl { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; fill: #4FC295; letter-spacing: .09em; }#mcpDiagram .item { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 13.5px; fill: #8AA39B; }#mcpDiagram .flow { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10.5px; fill: #728880; letter-spacing: .06em; }#mcpDiagram .arrow { stroke: #2E6A55; stroke-width: 1.6; fill: none; }#mcpDiagram .note { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #728880; }
+            </style>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#4FC295"/>
+            </marker>
+          </defs>
+
+          <rect class="bg" width="1000" height="430" rx="14"/>
+
+          <!-- LEFT: AI clients -->
+          <rect class="panel" x="34" y="96" width="236" height="238" rx="12"/>
+          <text class="lbl" x="54" y="130">AI CLIENTS</text>
+          <text class="h"   x="54" y="160">Agents that ask</text>
+          <text class="item" x="54" y="196">Claude / Claude Code</text>
+          <text class="item" x="54" y="222">ChatGPT</text>
+          <text class="item" x="54" y="248">Custom in-house agents</text>
+          <text class="item" x="54" y="274">Scheduled automations</text>
+          <text class="note" x="54" y="308">Each client carries its own identity.</text>
+
+          <!-- arrow 1 -->
+          <path class="arrow" d="M 282 215 L 372 215" marker-end="url(#ah)"/>
+          <text class="flow" x="286" y="203">OAuth 2.1</text>
+
+          <!-- MIDDLE: MCP layer -->
+          <rect class="core" x="384" y="76" width="232" height="278" rx="12"/>
+          <text class="lbl" x="404" y="112">SELF-HOSTED MCP LAYER</text>
+          <text class="h"   x="404" y="142">The gate</text>
+          <text class="item" x="404" y="178">TLS termination, nginx</text>
+          <text class="item" x="404" y="204">Per-tenant authorization</text>
+          <text class="item" x="404" y="230">Scoped, typed tools</text>
+          <text class="item" x="404" y="256">Audit logging</text>
+          <text class="item" x="404" y="282">Rate limiting</text>
+          <text class="note" x="404" y="318">Runs on infrastructure we own.</text>
+
+          <!-- arrow 2 -->
+          <path class="arrow" d="M 628 215 L 718 215" marker-end="url(#ah)"/>
+          <text class="flow" x="632" y="203">SCOPED CALLS</text>
+
+          <!-- RIGHT: business systems -->
+          <rect class="panel" x="730" y="96" width="236" height="238" rx="12"/>
+          <text class="lbl" x="750" y="130">YOUR LIVE SYSTEMS</text>
+          <text class="h"   x="750" y="160">Systems of record</text>
+          <text class="item" x="750" y="196">Guesty, DoorLoop, Turno</text>
+          <text class="item" x="750" y="222">QuickBooks, Baselane, Stripe</text>
+          <text class="item" x="750" y="248">Court and property records</text>
+          <text class="item" x="750" y="274">Docs, e-sign, comms</text>
+          <text class="note" x="750" y="308">Real data, not a sandbox.</text>
+
+          <!-- footer caption -->
+          <text class="flow" x="34" y="386">CREDENTIALS STAY SERVER-SIDE. THE GATE DECIDES WHAT EACH CLIENT IS ALLOWED TO CALL.</text>
+        </svg>
         <figcaption>Every integration we ship runs through a gate we own and operate.</figcaption>
       </figure>
       <div class="sys-grid">
