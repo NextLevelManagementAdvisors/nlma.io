@@ -26,9 +26,9 @@
 <meta property="og:title" content="Referrals · NLMA" />
 <meta property="og:description" content="The tools and programs we actually run in production — with referral offers." />
 <meta property="og:url" content="https://nlma.io/referrals" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="preload" href="/fonts/fraunces-roman.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/hanken-grotesk.woff2" as="font" type="font/woff2" crossorigin />
+<link href="/fonts.css" rel="stylesheet" />
 <style>
 
 /* ============================================================ TOKENS ============================================================ */
@@ -201,6 +201,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--signal);outline-off
 @media(max-width:560px){.ref-grid{grid-template-columns:1fr}}
 </style>
 <noscript><style>.reveal{opacity:1 !important;transform:none !important}[data-boot]{opacity:1 !important}</style></noscript>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://nlma.io/"},{"@type":"ListItem","position":2,"name":"Referrals","item":"https://nlma.io/referrals"}]}
+</script>
 </head>
 <body>
 
