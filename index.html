@@ -15,17 +15,17 @@
 <meta property="og:image:alt" content="NLMA - Systems that do the work" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Systems that do the work · NLMA" />
-<meta name="twitter:description" content="Consulting, software, and applied AI that turn operational complexity into systems that run themselves — specialized in real estate and property management." />
+<meta name="twitter:description" content="Consulting, software, and applied AI that turn operational complexity into systems that run themselves. Specialized in real estate and property management." />
 <meta name="twitter:image" content="https://nlma.io/og-image.png" />
 <title>NLMA · Next Level Management Advisors · Systems that do the work</title>
-<meta name="description" content="NLMA blends operations consulting, senior software engineering, and applied AI to turn operational complexity into systems that run themselves — with deep specialization in real estate and property management." />
+<meta name="description" content="NLMA blends operations consulting, senior software engineering, and applied AI to turn operational complexity into systems that run themselves, with deep specialization in real estate and property management." />
 <meta name="theme-color" content="#0B1418" />
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="NLMA · Next Level Management Advisors" />
 <meta property="og:title" content="Systems that do the work · NLMA" />
-<meta property="og:description" content="Consulting, software, and applied AI that turn operational complexity into systems that run themselves — specialized in real estate and property management." />
+<meta property="og:description" content="Consulting, software, and applied AI that turn operational complexity into systems that run themselves. Specialized in real estate and property management." />
 <meta property="og:url" content="https://nlma.io/" />
 <link rel="canonical" href="https://nlma.io/" />
 
@@ -243,6 +243,9 @@ body.menu-open .menu-toggle span::after{transform:rotate(-45deg) translateY(-1.5
   linear-gradient(180deg,transparent,rgba(15,61,86,.14) 40%,transparent),
   radial-gradient(700px 400px at 90% 30%,rgba(46,106,85,.10),transparent 60%)}
 .sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.archfig{margin:0 0 38px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--ink-2)}
+.archfig img{display:block;width:100%;height:auto}
+.archfig figcaption{padding:13px 18px;border-top:1px solid var(--line);color:var(--faint);font-size:.85rem;line-height:1.5}
 .syscard{border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px;
   background:rgba(236,243,239,.018);transition:border-color .35s,background .35s,transform .35s var(--ease)}
 .syscard:hover{border-color:var(--line-2);background:rgba(236,243,239,.035);transform:translateY(-3px)}
@@ -441,7 +444,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div class="hero-inner">
         <span class="eyebrow" data-boot>Next Level Management Advisors</span>
         <h1 data-boot>Systems that<br><span class="it">do the work.</span></h1>
-        <p class="lede" data-boot>NLMA blends operations consulting, senior software engineering, and applied AI&nbsp;— turning operational complexity into systems that run themselves, with deep specialization in real estate and property management.</p>
+        <p class="lede" data-boot>NLMA blends operations consulting, senior software engineering, and applied AI: turning operational complexity into systems that run themselves, with deep specialization in real estate and property management.</p>
         <div class="hero-cta" data-boot>
           <a class="btn btn-primary" href="/consults"><span class="dot"></span>Schedule a consult</a>
           <a class="btn btn-ghost" href="#systems">See what we run →</a>
@@ -540,6 +543,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <h2 class="reveal" data-d="1">Software we don't just pitch.<br>We run it in production.</h2>
         <p class="lede reveal" data-d="2">A live look at the platform NLMA builds and operates &mdash; dozens of services, AI agents, and integrations spanning finance, records, documents, comms, and operations, doing real work every day. This is what "we'll build it" actually looks like.</p>
       </div>
+            <figure class="archfig reveal" data-d="3">
+        <img src="/images/mcp-architecture.svg" width="1000" height="430" loading="lazy" decoding="async"
+             alt="Diagram: AI clients authenticate over OAuth 2.1 into a self-hosted MCP layer that enforces per-tenant authorization and scoped tools, which in turn connects to live business systems including Guesty, DoorLoop, QuickBooks, Baselane, Turno, and court and property records.">
+        <figcaption>Every integration we ship runs through a gate we own and operate.</figcaption>
+      </figure>
       <div class="sys-grid">
         <article class="syscard reveal" data-d="1">
           <div class="cat"><span class="glyph"></span><span>AI &amp; automation</span></div>

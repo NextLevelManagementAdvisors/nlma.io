@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" width="1000" height="430" role="img" aria-labelledby="mcpTitle mcpDesc" preserveAspectRatio="xMidYMid meet">
+  <title id="mcpTitle">How NLMA connects AI agents to live business systems</title>
+  <desc id="mcpDesc">A three-stage diagram. On the left, AI clients such as Claude, ChatGPT, and custom agents. They authenticate with OAuth 2.1 into the middle stage, a self-hosted MCP layer running on NLMA infrastructure behind TLS, which enforces per-tenant authorization and scoped tools. That layer connects on the right to live business systems including Guesty, DoorLoop, QuickBooks, Baselane, Turno, and court and property records.</desc>
+
+  <defs>
+    <style>
+      .bg    { fill: #0B1418; }
+      .panel { fill: #0E1E28; stroke: rgba(236,243,239,.12); stroke-width: 1; }
+      .core  { fill: #10212c; stroke: #2E6A55; stroke-width: 1.5; }
+      .h     { font-family: Georgia, "Times New Roman", serif; font-size: 19px; fill: #ECF3EF; }
+      .lbl   { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; fill: #4FC295; letter-spacing: .09em; }
+      .item  { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 13.5px; fill: #8AA39B; }
+      .flow  { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10.5px; fill: #728880; letter-spacing: .06em; }
+      .arrow { stroke: #2E6A55; stroke-width: 1.6; fill: none; }
+      .note  { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 12px; fill: #728880; }
+    </style>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4FC295"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1000" height="430" rx="14"/>
+
+  <!-- LEFT: AI clients -->
+  <rect class="panel" x="34" y="96" width="236" height="238" rx="12"/>
+  <text class="lbl" x="54" y="130">AI CLIENTS</text>
+  <text class="h"   x="54" y="160">Agents that ask</text>
+  <text class="item" x="54" y="196">Claude / Claude Code</text>
+  <text class="item" x="54" y="222">ChatGPT</text>
+  <text class="item" x="54" y="248">Custom in-house agents</text>
+  <text class="item" x="54" y="274">Scheduled automations</text>
+  <text class="note" x="54" y="308">Each client carries its own identity.</text>
+
+  <!-- arrow 1 -->
+  <path class="arrow" d="M 282 215 L 372 215" marker-end="url(#ah)"/>
+  <text class="flow" x="286" y="203">OAuth 2.1</text>
+
+  <!-- MIDDLE: MCP layer -->
+  <rect class="core" x="384" y="76" width="232" height="278" rx="12"/>
+  <text class="lbl" x="404" y="112">SELF-HOSTED MCP LAYER</text>
+  <text class="h"   x="404" y="142">The gate</text>
+  <text class="item" x="404" y="178">TLS termination, nginx</text>
+  <text class="item" x="404" y="204">Per-tenant authorization</text>
+  <text class="item" x="404" y="230">Scoped, typed tools</text>
+  <text class="item" x="404" y="256">Audit logging</text>
+  <text class="item" x="404" y="282">Rate limiting</text>
+  <text class="note" x="404" y="318">Runs on infrastructure we own.</text>
+
+  <!-- arrow 2 -->
+  <path class="arrow" d="M 628 215 L 718 215" marker-end="url(#ah)"/>
+  <text class="flow" x="632" y="203">SCOPED CALLS</text>
+
+  <!-- RIGHT: business systems -->
+  <rect class="panel" x="730" y="96" width="236" height="238" rx="12"/>
+  <text class="lbl" x="750" y="130">YOUR LIVE SYSTEMS</text>
+  <text class="h"   x="750" y="160">Systems of record</text>
+  <text class="item" x="750" y="196">Guesty, DoorLoop, Turno</text>
+  <text class="item" x="750" y="222">QuickBooks, Baselane, Stripe</text>
+  <text class="item" x="750" y="248">Court and property records</text>
+  <text class="item" x="750" y="274">Docs, e-sign, comms</text>
+  <text class="note" x="750" y="308">Real data, not a sandbox.</text>
+
+  <!-- footer caption -->
+  <text class="flow" x="34" y="386">CREDENTIALS STAY SERVER-SIDE. THE GATE DECIDES WHAT EACH CLIENT IS ALLOWED TO CALL.</text>
+</svg>
