@@ -36,6 +36,10 @@ the **`n8n-workflow-backups`** repo (`workflows/R0cMmqeBshPYpdqt.json`).
 - `nginx/nlma.io.consults-location.conf` — the exact-match `/consults` route (fixes the
   `consults/` directory shadowing `consults.html`) → paste into `/etc/nginx/sites-available/nlma.io`
   before `location / {`.
+- `nginx/nlma.io.headers-and-redirects.conf` — SEO/perf hardening for `nlma.io` (issue #6):
+  301 `*.html` → extensionless, HSTS `includeSubDomains; preload`, and tiered Cache-Control
+  (short for HTML, long+immutable for static assets). See the comments in the file for exact
+  paste locations — it touches three different spots in the server block, not just one.
 
 ## Redeploy after a VPS rebuild
 
@@ -50,6 +54,26 @@ the **`n8n-workflow-backups`** repo (`workflows/R0cMmqeBshPYpdqt.json`).
    (Note: after a reload the first request can race the old route — re-test after it settles.)
 5. Verify: `curl -o /dev/null -w '%{http_code}' -X POST https://n8n.nlma.io/webhook/consult-paid`
    with a bad `Stripe-Signature` → **400**; with no header → **400**.
+
+## Deploying the SEO/perf hardening (issue #6)
+
+1. Paste the three pieces of `nginx/nlma.io.headers-and-redirects.conf` into
+   `/etc/nginx/sites-available/nlma.io` per the comments in that file (rewrite rules at the
+   top of the server block, HSTS line replaces the existing one, the two Cache-Control
+   pieces go with the other `add_header`s / before `location /`).
+2. `nginx -t && systemctl reload nginx`.
+3. The IndexNow key file (`<key>.txt` at the repo root, e.g. `687da19aec9ab452a2bab512b3b8470a.txt`)
+   ships with the rest of the static site — no separate VPS step needed beyond the normal
+   site deploy/sync.
+4. Verify:
+   - `curl -sI https://nlma.io/about.html` → `301` with `Location: https://nlma.io/about`
+   - `curl -sI https://nlma.io/index.html` → `301` with `Location: https://nlma.io/` (not `/index`)
+   - `curl -sI https://nlma.io/` → `Cache-Control` with a nonzero `max-age`
+   - `curl -sI https://nlma.io/` → `Strict-Transport-Security` includes `includeSubDomains` and `preload`
+   - `curl -sI https://nlma.io/og-image.png` → `Cache-Control: public, max-age=31536000, immutable`
+     **and** still carries `Strict-Transport-Security`/CSP/etc. (catches the add_header-inheritance gotcha)
+   - `curl -sI https://nlma.io/consults` and `.../referrals` → still `200` (unaffected — the
+     rewrite only fires on `.html` URLs, and both are already `200` today with no `.html` suffix)
 
 ## n8n credentials used (ids on this instance)
 - Google Calendar OAuth2 `kKPeZuvma85RLakQ` (forrest@nlma.io primary)
