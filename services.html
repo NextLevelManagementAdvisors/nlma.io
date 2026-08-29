@@ -342,7 +342,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <h3>Custom Software Development</h3>
           </div>
           <div>
-            <p class="desc">We build production-grade internal tools, customer portals, data pipelines, and full-stack applications. No templates, no off-the-shelf compromises. Every project starts with what the business actually needs and works backward to the code.</p>
+            <p class="desc">We build production-grade internal tools, customer portals, data pipelines, and full-stack applications. No templates, no off-the-shelf compromises. Every project starts with what the business actually needs and works backward to the code. The data model comes first, because a bad schema is expensive to unwind later. Apps ship in Docker behind nginx with TLS, on servers you own.</p>
             <div class="chips">
               <span class="chip">Internal tools</span><span class="chip">Customer portals</span>
               <span class="chip">REST &amp; GraphQL APIs</span><span class="chip">Data pipelines</span>
@@ -360,7 +360,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <h3>AI Automation &amp; Agent Orchestration</h3>
           </div>
           <div>
-            <p class="desc">We design and deploy LLM-powered workflows that run in production: inbox triage, document processing, decision routing, multi-step agents with real tool access. We specialize in Model Context Protocol (MCP) infrastructure that connects AI to your live business systems.</p>
+            <p class="desc">We design and deploy LLM-powered workflows that run in production: inbox triage, document processing, decision routing, multi-step agents with real tool access. We specialize in Model Context Protocol (MCP) infrastructure that connects AI to your live business systems. An MCP server turns an API into scoped, typed tools an agent can call. You decide which tools exist, so the agent cannot reach past them. Every call is authorized per tenant, logged, and rate limited.</p>
             <div class="chips">
               <span class="chip">LLM workflow design</span><span class="chip">MCP server development</span>
               <span class="chip">Autonomous agents</span><span class="chip">Inbox &amp; comms triage</span>
@@ -378,7 +378,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <h3>Property Management Technology</h3>
           </div>
           <div>
-            <p class="desc">Deep integrations across the STR/LTR/MTR property management stack. We extend and connect platforms that do not talk to each other by default, build owner-facing portals, automate financial workflows, and eliminate the manual reconciliation that eats your team's time.</p>
+            <p class="desc">Deep integrations across the STR/LTR/MTR property management stack. We extend and connect platforms that do not talk to each other by default, build owner-facing portals, automate financial workflows, and eliminate the manual reconciliation that eats your team's time. Most of the work is in the seams. A booking channel, a trust account, and the ledger each hold a piece of the same dollar, and none of them agree on the date. We match on stable keys, never on amounts.</p>
             <div class="chips">
               <span class="chip">Guesty</span><span class="chip">DoorLoop</span>
               <span class="chip">Baselane</span><span class="chip">Turno</span>
@@ -397,7 +397,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <h3>Business Systems Integration</h3>
           </div>
           <div>
-            <p class="desc">Every business runs on a stack of SaaS tools that barely talk to each other. We build the connective tissue: API orchestration, event-driven sync, webhook pipelines, and custom middleware that turns siloed tools into a coherent system.</p>
+            <p class="desc">We build the connective tissue between the SaaS tools you already pay for: API orchestration, event-driven sync, webhook pipelines, and custom middleware that turns siloed tools into a coherent system. Where a platform sends webhooks, we listen and sync on the event. Where it does not, we poll on a schedule and track a cursor. Either way a write carries an idempotency key, so a retry cannot post the same charge twice.</p>
             <div class="chips">
               <span class="chip">API orchestration</span><span class="chip">Webhook pipelines</span>
               <span class="chip">QuickBooks Online</span><span class="chip">Google Workspace</span>
@@ -416,7 +416,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
             <h3>Consulting &amp; Technology Strategy</h3>
           </div>
           <div>
-            <p class="desc">Fractional CTO and systems-design work for teams that need senior technical guidance without a full-time hire. We audit your current stack, identify bottlenecks, map the build-vs-buy decision, and produce a roadmap you can actually execute against.</p>
+            <p class="desc">Fractional CTO and systems-design work for teams that need senior technical guidance without a full-time hire. We audit your current stack, identify bottlenecks, map the build-vs-buy decision, and produce a roadmap you can actually execute against. The audit is concrete: which system holds which data, where the API access is, and what each hand-off costs in hours. We also name what you should not build, because a bought tool is often cheaper.</p>
             <div class="chips">
               <span class="chip">Tech stack audit</span><span class="chip">Process mapping</span>
               <span class="chip">Build vs buy analysis</span><span class="chip">Fractional CTO</span>
@@ -437,7 +437,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
     <div class="section-head reveal">
       <span class="eyebrow">How we work</span>
       <h2>From brief to production, fast.</h2>
-      <p class="lede">We keep the process lean. No discovery theater. No six-week scoping cycles. We get into the work quickly and ship iteratively.</p>
+      <p class="lede">We keep the process lean. No discovery theater, no six-week scoping cycles.</p>
     </div>
     <div class="process">
       <div class="step reveal">
@@ -469,8 +469,37 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
 </section>
 
 
+<!-- HOW AN INTEGRATION IS BUILT -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Under the hood</span>
+      <h2>How an integration is <span class="it">actually built.</span></h2>
+      <p class="lede">The word integration hides a lot of decisions. Here is what actually gets built, where it runs, and what happens when a system on the other end misbehaves.</p>
+    </div>
+    <div class="qa">
+      <div class="qa-item reveal">
+        <h3>What is inside an MCP server</h3>
+        <p>An MCP server is a thin, typed layer over an API you already pay for. Each tool has a schema: named inputs, checked types, one job. The agent sees that list and nothing else. The Turno v2 API becomes 49 tools in <a href="https://github.com/NextLevelManagementAdvisors/turno-mcp" target="_blank" rel="noopener">turno-mcp</a>. Adding a tool is a deliberate act, and so is leaving one out.</p>
+      </div>
+      <div class="qa-item reveal" data-d="1">
+        <h3>What per-tenant authorization means</h3>
+        <p>Each client signs in with its own identity over OAuth 2.1 and gets its own token. That token maps to one tenant, and the tenant maps to one set of credentials held on our server. Your keys never reach the agent. Two clients on one server cannot read each other's data, because the lookup happens before the call is made.</p>
+      </div>
+      <div class="qa-item reveal" data-d="2">
+        <h3>Where it runs, and how it is watched</h3>
+        <p>Each server runs in Docker on infrastructure we own, behind nginx with TLS. Calls are rate limited per tenant, so one runaway agent cannot burn an API quota for everyone. Writes are logged with the caller, the arguments, and the result. A deploy is a git pull and a health check, with an automatic rollback if the check fails.</p>
+      </div>
+      <div class="qa-item reveal" data-d="3">
+        <h3>What actually breaks in a property data pipeline</h3>
+        <p>Webhooks arrive twice, out of order, or not at all. A retry with no idempotency key charges a card a second time. A rate-limited call that returns an empty list looks exactly like a day with no bookings, so a naive sync deletes real records. We make every write replayable, key it, and fail loudly rather than quietly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- QUESTIONS -->
-<section class="section">
+<section class="section" style="padding-top:0">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Before the first call</span>
@@ -499,8 +528,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
         <p>You keep it. Full ownership, full source, no per-seat licensing on what we build for you, and no dependency on NLMA to keep it running. That is the point of building instead of renting.</p>
       </div>
       <div class="qa-item reveal" data-d="2">
-        <h3>How fast can you start?</h3>
-        <p>One call to map the problem and define the outcome, then a scoping document within 48 hours. We do not run six-week discovery cycles. Staged delivery means you see working software in real environments early, rather than waiting on a single large launch.</p>
+        <h3>How is this different from hiring a contractor?</h3>
+        <p>A contractor builds what you specify and hands it back. Here the design is the work: we map the data, pick the integration points, and own whether it holds up in production. We also stay on after launch, so monitoring, upgrades, and the API change a vendor ships without warning are ours to handle.</p>
+      </div>
+      <div class="qa-item reveal">
+        <h3>What do the first two weeks look like?</h3>
+        <p>One call to map the problem, then a scoping document within 48 hours naming what gets built and what it depends on. Next is the data model and the integration map: which system owns each field, where the API access is, and what has to be backfilled. Then a first slice ships to a real environment with real data.</p>
       </div>
     </div>
   </div>

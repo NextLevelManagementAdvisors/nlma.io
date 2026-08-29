@@ -365,6 +365,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   </div>
 </section>
 
+<!-- FROM THE FOUNDER -->
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">From the founder</span>
+      <h2>Why I stopped writing recommendations and <span class="it">started writing software.</span></h2>
+    </div>
+    <div class="story-grid">
+      <div class="story-copy reveal">
+        <p>I did not set out to build software. NLMA started in 2018 as an operations consultancy. I would map how a company actually ran, find the bottlenecks, and hand over a better process. The process was usually right. It still broke, and it broke in the same place every time.</p>
+        <p>The platforms handled most of the job and stopped at their own edge. The last stretch landed on a person. Someone exported a report, pasted it into a spreadsheet, retyped it into a second system, and did the whole thing again next month. I kept writing recommendations that depended on that person never making a mistake.</p>
+        <p>What changed my mind was a month-end close. Owner statements were being assembled by hand over several days, and when they were finished they did not tie out to what had actually hit the bank. Nobody had done anything wrong. The booking channel, the bank, and the ledger simply held three versions of the same dollar, and no tool in the stack owned the job of reconciling them. That job did not exist in any product I could buy, so I wrote it.</p>
+      </div>
+      <div class="story-copy reveal" data-d="1">
+        <p>Once I knew the shape, I saw it everywhere. Rent roll and delinquencies tracked by hand across tools with no shared key to join on. Property research pulled site by site for every deal. Card spend and the general ledger drifting apart until someone re-keyed a month of transactions and went hunting for receipts. Court and registry lookups that were correct the day they were run and stale a week later.</p>
+        <p>What I know about these failure modes, I know because I still hit them. The systems described on this site are not demos. I run them on live portfolios, and I am the one who gets the alert when a webhook stops arriving or a vendor changes an API without notice. That is a slow way to learn, and it is why the software is built the way it is: keyed writes, replayable syncs, logs that can answer a question six weeks later, and infrastructure I own instead of rent.</p>
+        <p>I still do the consulting half. It is better now, because the advice and the thing that implements it come from the same person.</p>
+        <p><strong>Forrest Surprenant</strong>, founder. Virginia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- EXPERTISE -->
 <section class="section" style="padding-top:0">
   <div class="wrap">
@@ -463,6 +486,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
       <div class="qa-item reveal" data-d="3">
         <h3>Where is NLMA located?</h3>
         <p>NLMA is based in Virginia. The business address is 21 N Broad St, Ste E, Luray, VA 22835, and the entity, Next Level Management Advisors, LLC, has operated since 2018. The work itself is not tied to that address: what NLMA builds is self-hosted software delivered remotely, serving commercial and government workflows across the United States. You can reach the firm at info@nlma.io or +1 571 200 2032, or <a href="/consults">schedule a consult</a> directly.</p>
+      </div>
+      <div class="qa-item reveal">
+        <h3>What kept going wrong with off-the-shelf tools?</h3>
+        <p>Nothing dramatic. Each platform did its own job well and stopped at its own edge. The failures lived in between: systems holding versions of the same record with no shared key to join on, reports that had to be exported and retyped every month, and lookups that went stale quietly. None of that is a product defect. It is work no vendor is paid to own.</p>
+      </div>
+      <div class="qa-item reveal" data-d="1">
+        <h3>Can I see what NLMA has built?</h3>
+        <p>Some of it. Most of the work runs privately on client infrastructure, so the case studies on the <a href="/portfolio">work page</a> are anonymized by policy. The infrastructure pattern behind them is public: 20 repositories under <a href="https://github.com/NextLevelManagementAdvisors" target="_blank" rel="noopener">NextLevelManagementAdvisors</a> on GitHub, including turno-mcp, vacourts-mcp, github-mcp-auth, rag-mcp, qbo-mcp, and gbp-mcp-server. You can read the code and judge the engineering before you ever call.</p>
       </div>
     </div>
   </div>
